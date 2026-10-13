@@ -127,23 +127,25 @@ reutilizar código consumido. Volver a estado seguro y diagnóstico mínimo.
 
 ### Ensayo inicial con gate global desactivado: diseño del ejecutor
 
-Estado: diseño solicitado por A0; **sin implementación ni ejecución**. La API
+Estado: ejecutor implementado localmente bajo D-036; **sin inicialización real,
+configuración privada ni envío ejecutados**. La API
 actual bloquea registro/recuperación cuando `ABOGALIA_AUTH_EMAIL_READY=0`; un test
 SMTP genérico no demuestra la plantilla Confirm sign up ni OTP de seis dígitos.
 El conector Supabase disponible no expone signup: SQL, invitación administrativa,
 crear usuario confirmado o desplegar una Edge Function no sustituyen este flujo.
 No activar globalmente READY para salvar esa dependencia.
 
-Propuesta acotada: ejecutor local de **una operación** que use el adaptador GoTrue
+Implementación acotada: [run_identity_email_pilot.py](../../scripts/run_identity_email_pilot.py),
+ejecutor local de **una operación** que use el adaptador GoTrue
 ya existente para signup inicial, sin modificar runtime, rutas web o flags del
 servidor. Después del ensayo/entrega revisada, el recorrido API/web procede según
 su contrato. Recuperación se habilita como acción de ensayo únicamente si A0 la
-necesita dentro del mismo cupo. El ejecutor requiere revisión de estos controles
-antes de operar; no se añade código en esta orden:
+necesita dentro del mismo cupo. El ejecutor requiere revisión independiente de estos controles antes de operar:
 
 - Proyecto/origen y acción fijos; solo el buzón propio Resend ya autorizado.
-  Marcador privado `identity-pilot` fuera de Git, propiedad/permisos del operador,
-  con huella del destinatario autorizado, vencimiento y contador persistente del
+  Marcador privado `.identity-pilot/authorization.json` fuera de Git, directorio
+  0700 y archivos 0600, sin symlinks/hardlinks, del operador,
+  con huella del destinatario autorizado, vigencia de **24 horas** y contador persistente del
   cupo global de **seis**. No admitir destinatario arbitrario, reset automático
   de cupo, argumento con OTP o archivo público de autorización. La huella también
   es dato privado y no se publica.
@@ -165,10 +167,38 @@ antes de operar; no se añade código en esta orden:
   reserva concurrente, timeout sin retry ni recuperar cupo y respuesta con sesión
   inesperada; no confundir tests con prueba de entrega real.
 
-Las herramientas existentes pueden ejecutar código local revisado con salida
-saneada, pero hoy no hay ejecutor con estos controles. La intervención privada
-del operador es inevitable; no pegar un signup HTTP con contraseña en un tool.
-Este diseño mantiene `ABOGALIA_AUTH_EMAIL_READY=0` y no crea un bypass general.
+El operador usa **su propia terminal privada real**, sin pipelines o herramientas
+que escriban/observen stdin. No pasar datos como argumentos. La inicialización
+solicita el buzón oculto y confirmación oculta `LISTO` de la checklist: custom SMTP
+propio, buzón asociado, ambas plantillas solo Token y ajustes OTP600/6d/60/JWT900
+ya guardados y verificados privadamente. Si SMTP sigue sin configurar, **no
+inicializar ni enviar**. El marcador es una afirmación explícita del operador,
+no una comprobación automática de configuración remota.
+
+```sh
+apps/api/.venv/bin/python scripts/run_identity_email_pilot.py --initialize
+apps/api/.venv/bin/python scripts/run_identity_email_pilot.py --signup
+# Solo si el ensayo necesita recuperación y queda cupo/ventana de 60 segundos:
+apps/api/.venv/bin/python scripts/run_identity_email_pilot.py --recover
+```
+
+Cada operación pide el mismo buzón oculto; signup también contraseña oculta.
+El ejecutor rechaza entrada sin TTY antes de getpass y trata su fallback como
+fallo. Reutiliza supresión de streams/FD del launcher; obtiene únicamente el
+campo public publishable del archivo privado fijo `.env`, sin interpretar ni
+instalar el resto de sus valores. Archivo 0600, del operador, regular, sin enlaces
+ni más de 32 KiB. No leerlo desde el agente. TLS verificado, trust_env=False,
+sin redirect, timeout de 10 segundos y sin retry HTTP. Lock exclusivo no bloqueante;
+reserva/fsync antes de petición y no se restaura tras fallo. Rechaza inicializar
+sobre marcador existente incluso vencido: no reiniciar el cupo global borrándolo.
+
+Salida JSON fija `initialized`, `accepted`, `request_failed` o `pilot_unavailable`,
+con número reservado cuando corresponde y diagnostics suppressed; exit 0 solo
+initialized/accepted, exit 2 fallo. Accepted no acredita entrega ni verificación.
+No se imprimen respuestas, emails, passwords, códigos o tokens. Mantiene
+`ABOGALIA_AUTH_EMAIL_READY=0` global y no crea rutas de bypass ni sesión de API.
+El operador revisa entrega y comunica booleanos, luego A0 continúa activación
+según la guía. Este agente no inicializó marcador ni realizó peticiones reales.
 
 ## Retención en el host local, sin elegir hosting
 
@@ -250,3 +280,8 @@ capturas, cambios de env, hosting o publicación en esta entrega.
 Verificación local de esta entrega: las dos fuentes pasan el validador; **7 tests
 stdlib negativos pasan** y Ruff check/format pasan en los dos Python. Sin
 verificación de proveedor, instalación de job ni recorrido OTP real ejecutados.
+
+Ejecutor piloto: **17 pruebas sintéticas pasan** con httpx.MockTransport; cubren
+marcador ausente/vencido/ajeno, checklist SMTP, permisos/enlaces, cupo/lock, reserva
+durable previa a timeout, sin retry, respuesta con sesión descartada, TTY y
+expiración durante entrada. Ninguna prueba abre configuración real o envía correo.

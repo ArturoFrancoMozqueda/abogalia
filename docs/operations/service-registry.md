@@ -50,3 +50,12 @@ usuarios, sesiones o configuración Auth. La consulta de catálogo por conector 
 produjo evidencia interpretable: no se confirma estado nuevo de schema/grants.
 D-035 aprueba probar desde frontend local; D-034 selecciona Resend SMTP Free,
 sin sobrecostos automáticos. Recursos/configuración/envíos todavía no ejecutados.
+
+D-036 ejecutado parcialmente: esquema privado Identity aplicado mediante migración
+atómica identity_owner_runtime_private_schema; tres tablas con RLS FORCE y roles
+owner/runtime mínimos comprobados. [Verificación](identity-supabase-verification.md).
+Probe diferido: el operador postgres carece de USAGE grantable sobre Auth gestionado.
+Sin ampliación de roles administrados, contraseñas, clientes, SMTP o hosting.
+D-037: primer commit b30bf7b publicado en codex/identity-design, cabecera remota
+verificada. .env creado privado con variables vacías; plantilla pública revisada.
+Sin merge o CI remoto confirmado; no interpretar push como despliegue.
