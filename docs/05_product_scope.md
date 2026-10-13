@@ -196,6 +196,8 @@
 
 ## 15. Inteligencia artificial
 
+Alcance aprobado para la implementación actual: resumen de solicitud a petición del usuario y borrador de mensaje con información seleccionada por el abogado. Las siguientes capacidades describen posibilidades futuras, no trabajo autorizado para esta etapa. Ver [estrategia actual](13_ai_strategy.md) y [checkpoint](checkpoints/ai-assistance.md).
+
 - Clasificación.
 - Resumen.
 - Extracción.

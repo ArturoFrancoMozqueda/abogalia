@@ -1,10 +1,23 @@
 # Estrategia de Inteligencia Artificial
 
+## Alcance aprobado para la etapa actual
+
+Arturo decidió limitar la implementación actual de IA a estas dos funciones:
+
+1. **Resumir una solicitud cuando el usuario lo pide.**
+2. **Preparar un mensaje con información seleccionada por el abogado.**
+
+Estado del alcance: Approved, decisión D-019. Flujos funcionales: Approved, decisión D-020. React + FastAPI están aprobados en D-025; el repositorio sigue sin aplicación. La implementación, proveedor de IA, modelo de permisos, retención, presupuesto y tratamiento por terceros siguen pendientes.
+
+El [checkpoint de estas dos funciones](checkpoints/ai-assistance.md) contiene los flujos aprobados, criterios de aceptación y decisiones restantes. Las otras funciones de IA de este documento se conservan como posibilidades futuras y quedan fuera de la implementación actual. La decisión limita IA; no reduce el alcance de la plataforma completa ni redefine su primera entrega.
+
+Arturo aplazó explícitamente el procesamiento documental con IA en D-022: OCR, extracción e indexación. Las dos funciones de texto continúan aprobadas. La gestión básica de documentos del producto no se elimina por esta decisión.
+
 ## Objetivo
 
 Usar IA para reducir fricción y mejorar decisiones, sin reemplazar el criterio jurídico.
 
-## Casos de uso
+## Posibilidades futuras fuera de la implementación actual
 
 - Clasificación de situaciones.
 - Resumen de intake.
@@ -19,6 +32,8 @@ Usar IA para reducir fricción y mejorar decisiones, sin reemplazar el criterio 
 - Comunicaciones.
 - Análisis documental.
 - Búsqueda semántica.
+
+Resumen y comunicaciones de esta lista solo se incorporan ahora con el alcance específico de las dos funciones aprobadas arriba. Esta lista no es autorización para automatizar clasificación, seguimiento o envío.
 
 ## Límites
 

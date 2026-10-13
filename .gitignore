@@ -2,3 +2,25 @@
 .venv
 venv/
 
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+
+# Generated dependencies, builds and caches
+node_modules/
+dist/
+build/
+.react-router/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.DS_Store
+output/setup/
+
