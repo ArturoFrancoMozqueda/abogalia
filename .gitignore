@@ -24,3 +24,6 @@ htmlcov/
 .DS_Store
 output/setup/
 
+
+# Private bounded email pilot state
+/.identity-pilot/

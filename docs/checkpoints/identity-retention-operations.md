@@ -4,6 +4,18 @@ Fecha: 2026-10-12. Tanda 03, C02, A2/A3. Estado: implementación local sintétic
 autorizada por A0; operación real, eliminación de cuentas y scheduler pendientes.
 Base común `720c1cf`. Revisor independiente: A0. No cambios remotos.
 
+## Aprobación operativa vigente
+
+Arturo aprobó los tres paquetes y parámetros recomendados (D-036). Activación en
+proyecto existente, Resend SMTP Free, OTP600s/pausa60s/máximo6 mensajes de ensayo
+y tratamiento documentado quedan Approved; falta ejecución/verificación. Arturo
+es responsable de cierre/retiro Auth y fallos de retención. Se conservan los límites
+de permisos mínimos, sin hosting nuevo ni borrado sin evidencia. Los apartados
+Proposed siguientes describen preparación anterior; no reabren estas aprobaciones.
+La elección del mecanismo técnico de retirada/mantenimiento no admite credenciales
+amplias en runtime ni una lista de UUIDs como prueba. D-037 pide env privado y push
+revisado de fuentes; nunca valores privados en Git.
+
 ## Lo que entiendo
 
 D-032 aprueba cuenta cerrada/evidencia de membresía terminada a 30 días y auditoría

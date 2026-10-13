@@ -31,7 +31,9 @@ class ScannerTests(unittest.TestCase):
             ]
         ).encode()
         output = scanner.sanitized_findings(payload, {"docs/sample.md"})
-        self.assertEqual(output, [{"rule": "generic-api-key", "file": "docs/sample.md", "line": 3}])
+        self.assertEqual(
+            output, [{"rule": "generic-api-key", "file": "docs/sample.md", "line": 3}]
+        )
         self.assertNotIn(marker, json.dumps(output))
 
     def test_unexpected_report_fails_closed(self):
@@ -41,7 +43,9 @@ class ScannerTests(unittest.TestCase):
 
     def test_location_cannot_inject_or_escape(self):
         for name in ["../sample", "/tmp/sample", "sample\nINJECTED"]:
-            payload = json.dumps([{"RuleID": "test", "File": name, "StartLine": 1}]).encode()
+            payload = json.dumps(
+                [{"RuleID": "test", "File": name, "StartLine": 1}]
+            ).encode()
             with self.assertRaises(scanner.ScanError):
                 scanner.sanitized_findings(payload)
 
@@ -73,9 +77,29 @@ class ScannerTests(unittest.TestCase):
             self.assertTrue(scanner.private(Path(name)))
 
     def test_only_reviewed_example_is_included_in_scan(self):
+        self.assertFalse(scanner.private(Path(".env.example")))
         self.assertFalse(scanner.private(Path("apps/web/.env.example")))
         self.assertTrue(scanner.private(Path("apps/web/.env.local")))
         self.assertTrue(scanner.private(Path("docs/.env.example")))
+        self.assertTrue(scanner.private(Path("apps/api/.env.example")))
+        self.assertTrue(scanner.private(Path(".env.local")))
+
+    def test_root_empty_example_in_inventory_but_not_ignored_by_scanner(self):
+        with tempfile.TemporaryDirectory() as repo:
+            root = Path(repo)
+            (root / ".env.example").write_text("ABOGALIA_DATABASE_DSN=\n")
+            result = subprocess.CompletedProcess([], 0, b".env.example\0", b"")
+            with patch.object(scanner, "run", return_value=result):
+                self.assertEqual(scanner.inventory(root), [Path(".env.example")])
+
+    def test_root_other_env_names_tracked_fail_before_read(self):
+        for name in (".env", ".env.local", ".env.example.private", "docs/.env.example"):
+            result = subprocess.CompletedProcess([], 0, name.encode() + b"\0", b"")
+            with (
+                patch.object(scanner, "run", return_value=result),
+                self.assertRaises(scanner.ScanError),
+            ):
+                scanner.inventory(Path("/tmp"))
 
     def test_parent_symlink_cannot_read_external_fixture(self):
         with (
@@ -99,7 +123,9 @@ class ScannerTests(unittest.TestCase):
             [{"RuleID": "test", "File": "/tmp/source/docs/a.md", "StartLine": 1}]
         ).encode()
         self.assertEqual(
-            scanner.sanitized_findings(payload, {"docs/a.md"}, Path("/tmp/source"))[0]["file"],
+            scanner.sanitized_findings(payload, {"docs/a.md"}, Path("/tmp/source"))[0][
+                "file"
+            ],
             "docs/a.md",
         )
         with self.assertRaises(scanner.ScanError):

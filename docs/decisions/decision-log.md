@@ -39,6 +39,8 @@ Este registro distingue instrucciones y decisiones de Arturo de propuestas en di
 | D-033 | Continuar controles locales C01 y baseline seguro conforme a T04 entregado, preservando cambios locales | Approved | 2026-10-12 | No autoriza publicación, acceso remoto o gasto |
 | D-034 | Resend por SMTP en plan Free, sin sobrecostos automáticos, para confirmación/recuperación del piloto | Approved | 2026-10-12 | Dominio/remitente, cuenta por producto y tratamiento de correo pendientes; no implementado |
 | D-035 | Primera validación desde frontend local con Supabase real de Abogalia | Approved | 2026-10-12 | Sin hosting publicado; configuración/grants y pruebas reales pendientes |
+| D-036 | Activar plan C02 remoto en proyecto existente; OTP600s, pausa60s, máximo6 mensajes de ensayo; tratamiento SMTP aceptado; Arturo responsable cierre/retiro Auth y fallosretención | Approved | 2026-10-12 | Sin hosting nuevo; mínimos de roles y retirada verificada; operación pendiente |
+| D-037 | Crear .env local privado y hacer commits/push periódicos de cambios revisados en rama de trabajo | Approved | 2026-10-12 | .env excluido; nunca publicar valores secretos ni desplegar por inferencia |
 
 Morelia, especialidades, precios, primera entrega utilizable y reglas de cobro no han sido ratificados en esta conversación. React + FastAPI fue aprobado en D-025; servicios y detalles de arquitectura siguen pendientes. La investigación solicitada sobre Doctoralia no equivale a aprobar su modelo para Abogalia.
 
@@ -102,3 +104,13 @@ ni se interpreta esa respuesta como compra o permiso de envío a terceros. Se
 preparan checkpoints operativos y herramientas locales sin modificar recursos
 remotos. La política propia 30/90 permanece; tratamiento/retención del proveedor
 SMTP es un contrato separado pendiente de revisión.
+
+
+Arturo aprobó expresamente los tres paquetes operativos recomendados y asumió
+cierre/retiro Auth y fallos de retención. D-036 autoriza configuración y schema/grants
+mínimos revisados del proyecto Abogalia existente, piloto SMTP/OTP de máximo seis
+mensajes al buzón controlado indicado y tratamiento del proveedor documentado.
+No autoriza ampliación de privilegios para sortear un error ni elimina la necesidad
+de prueba confiable antes de borrar cuentas. D-037 solicita `.env` con variables y
+commit/push periódicos: archivo local privado excluido, plantilla pública vacía y
+publicación solo de fuentes revisadas sin credenciales. No compra dominio/hosting.

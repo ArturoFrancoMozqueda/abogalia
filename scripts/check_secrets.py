@@ -16,6 +16,7 @@ from pathlib import Path
 VERSION = "8.30.1"
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = {
+    ".env.example",
     ".gitignore",
     ".node-version",
     ".python-version",
@@ -29,7 +30,7 @@ ROOT_FILES = {
 }
 DIRECTORIES = {"apps", "docs", "scripts", ".github", "supabase"}
 PRIVATE_NAMES = {".mcp.json", ".netrc", ".npmrc", "credentials", "id_rsa", "id_ed25519"}
-PUBLIC_EXAMPLES = {Path("apps/web/.env.example")}
+PUBLIC_EXAMPLES = {Path(".env.example"), Path("apps/web/.env.example")}
 
 
 class ScanError(Exception):

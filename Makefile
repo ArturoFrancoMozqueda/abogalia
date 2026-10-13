@@ -9,7 +9,7 @@ api-install:
 	$(API_PYTHON) -m pip install --require-hashes -r apps/api/requirements-dev.txt
 
 dev-api:
-	$(API_PYTHON) -m uvicorn abogalia_api.main:app --app-dir apps/api/src --host 127.0.0.1 --port 8090 --no-access-log --reload --reload-dir apps/api/src
+	$(API_PYTHON) scripts/dev_identity_api.py
 
 dev-web:
 	pnpm dev:web

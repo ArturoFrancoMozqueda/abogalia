@@ -6,6 +6,18 @@ Supabase real. Approved no equivale a Implemented. Esta entrega prepara diseño
 y plantillas locales; no configura SMTP, DNS, destinatarios o recursos,
 no envía mensajes y no habilita `ABOGALIA_AUTH_EMAIL_READY`.
 
+## Aprobación operativa vigente
+
+Arturo aprobó los tres paquetes y parámetros recomendados (D-036). Activación en
+proyecto existente, Resend SMTP Free, OTP600s/pausa60s/máximo6 mensajes de ensayo
+y tratamiento documentado quedan Approved; falta ejecución/verificación. Arturo
+es responsable de cierre/retiro Auth y fallos de retención. Se conservan los límites
+de permisos mínimos, sin hosting nuevo ni borrado sin evidencia. Los apartados
+Proposed siguientes describen preparación anterior; no reabren estas aprobaciones.
+La elección del mecanismo técnico de retirada/mantenimiento no admite credenciales
+amplias en runtime ni una lista de UUIDs como prueba. D-037 pide env privado y push
+revisado de fuentes; nunca valores privados en Git.
+
 ## Lo que entiendo
 
 Registro y recuperación de Abogalia necesitan correo real que entregue códigos

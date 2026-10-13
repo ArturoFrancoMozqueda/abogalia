@@ -32,6 +32,16 @@ make dev-api
 make dev-web
 ```
 
+La API usa el launcher privado: lee `.env` únicamente dentro del proceso de runtime,
+con permisos 0600 y sin logs de configuración. El coordinador creó ese archivo con
+variables vacías y exclusión de Git. La plantilla pública [.env.example](.env.example)
+contiene solo nombres; no copiar valores privados a ella. El archivo vacío conserva
+Auth deshabilitado. No sobrescribir un `.env` existente. Formato restringido
+`NAME=valor`, sin expansión de shell ni valores entre comillas/multilínea;
+[contrato del launcher](docs/operations/identity-env-launcher.md).
+El launcher ejecuta un único proceso y no usa autoreload; reiniciar conscientemente
+tras editar código o configuración, respetando servicios existentes.
+
 Abrir http://127.0.0.1:5190. La API escucha en http://127.0.0.1:8090.
 `/dev/conexion` comprueba navegador → proxy Vite → FastAPI; esa ruta y su enlace
 no se incluyen en el build de producción. El endpoint `/api/health` confirma
