@@ -4,13 +4,13 @@ Actualizado: 2026-10-12, America/Mexico_City. Contiene destinos y estados compro
 
 | Servicio | Destino | Identificador comprobado | Estado |
 |---|---|---|---|
-| GitHub | ArturoFrancoMozqueda/abogalia | Repositorio público existente | Monorepo y contratos en baseline local 1eaf758; CI preparado, sin push |
-| Desarrollo local | React/FastAPI de Abogalia | Web 127.0.0.1:5190, API 127.0.0.1:8090 | Base técnica verificada; sin integración de Auth/base |
+| GitHub | ArturoFrancoMozqueda/abogalia | Repositorio público existente | Implementación local Identity en 720c1cf; CI preparado, sin push |
+| Desarrollo local | React/FastAPI de Abogalia | Web 127.0.0.1:5190, API 127.0.0.1:8090 | UX/API/sesiones PostgreSQL verificadas localmente; Auth real pendiente |
 | Supabase | Organización Abogalia | `jdmkzzkgnzwldthjqtgx` | Creada; Free, `tier_free`, comprobado por conector |
 | Supabase | Proyecto abogalia, Free, us-east-1 | `xggefantvuwpilksfdoy` | Creado por Arturo; organización, región y estado ACTIVE_HEALTHY verificados por conector |
 | Cloudflare | Cuenta y frontend propios | Pendiente | Sin configurar |
 | Fly | Organización y API propias | Pendiente | Sin configurar ni máquinas contratadas |
-| Resend | Equipo y dominio propios | Pendiente | Sin configurar |
+| Resend | SMTP Free propio de Abogalia | D-034 Approved; espacio/buzón pendientes | Arturo indicó que no existe dominio; piloto con remitente de prueba propuesto, sin configurar |
 | Vercel | Sin selección para Abogalia | No aplica | Panel disponible; no se interpreta como cambio de hosting |
 
 ## Acceso comprobado
@@ -25,7 +25,9 @@ Verificación posterior: `get_project` devolvió `xggefantvuwpilksfdoy`, nombre 
 
 `list_tables` para public devolvió cero tablas. Una consulta de catálogo confirmó el event trigger `ensure_rls` habilitado. La revisión de privilegios predeterminados encontró que postgres no concede SELECT/INSERT/UPDATE/DELETE a anon/authenticated para nuevas tablas public, pero conserva otros privilegios, incluidos TRUNCATE; supabase_admin conserva también permisos CRUD predeterminados. No interpretar el checkbox de exposición como eliminación de todos los permisos ni RLS como protección de todas las operaciones. Antes de crear tablas, el diseño de Identity y sus migraciones deben definir explícitamente propietario, grants/revokes y políticas, con pruebas de aislamiento. No se modificaron esos permisos en esta verificación.
 
-Supabase Auth aprobado como proveedor, D-028, todavía sin integración de aplicación. Proyecto vacío creado no equivale a conexión de la aplicación ni a autorización de usuarios.
+Supabase Auth aprobado como proveedor, D-028. Gateway, custodia y UX implementados
+localmente con proveedor sintético; integración y autorización reales siguen
+pendientes. Proyecto creado no equivale a aplicación conectada.
 
 ## Límites de operación
 
@@ -40,3 +42,11 @@ Lectura pública durante Identity (2026-10-12): endpoint JWKS del destino Abogal
 responde con una clave pública ES256. Se registró únicamente disponibilidad, cantidad
 y algoritmo; no se leyó material privado ni usuarios, sesiones o configuración Auth.
 Esto comprueba acceso a claves públicas, no login, correo, MFA o revocación real.
+
+Tanda 03 (2026-10-12): consulta directa confirmó otra vez Abogalia, organización
+jdmkzzkgnzwldthjqtgx, ref xggefantvuwpilksfdoy, us-east-1 y ACTIVE_HEALTHY.
+JWKS público respondió con una clave ES256. Sin lectura de claves privadas,
+usuarios, sesiones o configuración Auth. La consulta de catálogo por conector no
+produjo evidencia interpretable: no se confirma estado nuevo de schema/grants.
+D-035 aprueba probar desde frontend local; D-034 selecciona Resend SMTP Free,
+sin sobrecostos automáticos. Recursos/configuración/envíos todavía no ejecutados.

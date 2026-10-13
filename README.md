@@ -81,6 +81,15 @@ excluido de Git; la API no carga archivos dotenv ni imprime sus valores.
 | `ABOGALIA_AUTH_SESSION_CHECK_DSN` | Consulta limitada de sesiones Auth, rol probe separado |
 | `ABOGALIA_AUTH_EMAIL_READY` | `1` solo tras verificar entrega y plantillas OTP |
 
+El cierre operativo de C02 se prepara en el
+[checkpoint de activación real](docs/checkpoints/identity-real-activation.md).
+Arturo eligió Resend SMTP Free y frontend local con Supabase real. Todavía no hay
+dominio ni envío configurado; el ensayo sin dominio está limitado al buzón de la
+cuenta Resend y requiere verificarlo. `scripts/check_identity_readiness.py` imprime
+solo presencia de nombres por defecto; no acredita valores válidos ni conexiones.
+`scripts/run_identity_retention.py` hace preview por defecto y solo permite apply
+expreso dentro de la base sintética privada de pruebas; no opera cuentas reales.
+
 No colocar valores privados en comandos, URLs, variables `VITE_*` o documentación.
 La consulta de sesiones Auth requiere una conexión explícita con permisos mínimos;
 no usar `service_role`. Antes de habilitar operación real faltan validar correo OTP,

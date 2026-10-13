@@ -37,6 +37,8 @@ Este registro distingue instrucciones y decisiones de Arturo de propuestas en di
 | D-031 | Aprobar recomendaciones A IC-01–IC-06 y diseño/matriz de Identity; continuar proactivamente con implementación local coordinada | Approved | 2026-10-12 | [ADR-006](ADR-006-identity-api-and-sessions.md); no equivale a capacidad terminada |
 | D-032 | Retener cuenta cerrada/evidencia mínima de membresía terminada 30 días y auditoría 90 días, con eliminación o anonimización posterior | Approved | 2026-10-12 | Datos jurídicos y revisión legal pendientes |
 | D-033 | Continuar controles locales C01 y baseline seguro conforme a T04 entregado, preservando cambios locales | Approved | 2026-10-12 | No autoriza publicación, acceso remoto o gasto |
+| D-034 | Resend por SMTP en plan Free, sin sobrecostos automáticos, para confirmación/recuperación del piloto | Approved | 2026-10-12 | Dominio/remitente, cuenta por producto y tratamiento de correo pendientes; no implementado |
+| D-035 | Primera validación desde frontend local con Supabase real de Abogalia | Approved | 2026-10-12 | Sin hosting publicado; configuración/grants y pruebas reales pendientes |
 
 Morelia, especialidades, precios, primera entrega utilizable y reglas de cobro no han sido ratificados en esta conversación. React + FastAPI fue aprobado en D-025; servicios y detalles de arquitectura siguen pendientes. La investigación solicitada sobre Doctoralia no equivale a aprobar su modelo para Abogalia.
 
@@ -90,3 +92,13 @@ contratos, custodia de sesión, datos locales, API/web y pruebas, con revisión
 independiente. D-032 procede de su respuesta explícita a la pregunta de retención:
 «30 días para cuenta/membresía; 90 días para auditoría». El contenido jurídico no
 se incorpora a esta política ni se accede a clientes reales.
+
+
+Tanda 03 C02: Arturo ordenó continuar proactivamente con Supabase real, correo y
+retención y presentar decisiones. Eligió expresamente «Resend por SMTP, plan Free»
+y «Frontend local con Supabase real». Se registran D-034/D-035 Approved; informó
+«no tenemos dominio todavía». No se inventan dominio, remitente o buzón de prueba,
+ni se interpreta esa respuesta como compra o permiso de envío a terceros. Se
+preparan checkpoints operativos y herramientas locales sin modificar recursos
+remotos. La política propia 30/90 permanece; tratamiento/retención del proveedor
+SMTP es un contrato separado pendiente de revisión.
