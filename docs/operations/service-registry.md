@@ -4,7 +4,7 @@ Actualizado: 2026-10-12, America/Mexico_City. Contiene destinos y estados compro
 
 | Servicio | Destino | Identificador comprobado | Estado |
 |---|---|---|---|
-| GitHub | ArturoFrancoMozqueda/abogalia | Repositorio público existente | Monorepo implementado localmente; CI preparado, sin commit ni push |
+| GitHub | ArturoFrancoMozqueda/abogalia | Repositorio público existente | Monorepo y contratos en baseline local 1eaf758; CI preparado, sin push |
 | Desarrollo local | React/FastAPI de Abogalia | Web 127.0.0.1:5190, API 127.0.0.1:8090 | Base técnica verificada; sin integración de Auth/base |
 | Supabase | Organización Abogalia | `jdmkzzkgnzwldthjqtgx` | Creada; Free, `tier_free`, comprobado por conector |
 | Supabase | Proyecto abogalia, Free, us-east-1 | `xggefantvuwpilksfdoy` | Creado por Arturo; organización, región y estado ACTIVE_HEALTHY verificados por conector |
@@ -31,6 +31,12 @@ Supabase Auth aprobado como proveedor, D-028, todavía sin integración de aplic
 
 La pestaña Supabase original apuntaba al SQL Editor de Kova Production y la de Fly a secretos de `pos-project-backend`. No se ejecutaron consultas, cambios de secretos ni configuración en esos recursos. La sesión existente de Vercel no selecciona ese hosting para Abogalia. Arturo creó la contraseña y el proyecto vacío de Abogalia; el agente no leyó ni guardó esa contraseña. No se han creado invitaciones, integraciones de GitHub, máquinas ni despliegues.
 
-La aplicación local y su workflow de CI se prepararon tras aprobar D-030. [Verificación](local-foundation-verification.md). No se han publicado cambios ni ejecutado CI remoto; los costos de GitHub Actions se revisarán al operar, sin presumir que el cupo se multiplica por repositorio.
+La aplicación local y su workflow de CI se prepararon tras aprobar D-030. Tras D-031/D-033 se creó el baseline local 1eaf758, sin publicación. [Verificación](local-foundation-verification.md). No se han publicado cambios ni ejecutado CI remoto; los costos de GitHub Actions se revisarán al operar, sin presumir que el cupo se multiplica por repositorio.
 
 Guardar secretos únicamente en archivos locales excluidos o gestores del proveedor y CI. Este repositorio es público: nunca incorporar contraseñas, tokens, claves privadas ni información de clientes. No usar destinos de Kova como valor por defecto o sustitución cuando falte un recurso de Abogalia.
+
+
+Lectura pública durante Identity (2026-10-12): endpoint JWKS del destino Abogalia
+responde con una clave pública ES256. Se registró únicamente disponibilidad, cantidad
+y algoritmo; no se leyó material privado ni usuarios, sesiones o configuración Auth.
+Esto comprueba acceso a claves públicas, no login, correo, MFA o revocación real.

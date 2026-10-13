@@ -12,6 +12,20 @@ capacidad entrega UX, API, datos, permisos y excepciones verificadas. El trabajo
 se paraleliza después de acordar contratos y propiedad; las decisiones importantes
 siguen en manos de Arturo.
 
+## Avance registrado
+
+La descripción inicial conserva el estado de preparación del plan. Arturo aprobó
+las opciones recomendadas de Identity (D-031) y precisó retención de 30/90 días
+(D-032). Se inició una tanda de diseño y una de implementación con tres agentes
+coordinados. La fundación común quedó en un commit local revisado, sin publicación.
+
+C01 tiene controles locales y CI preparado; CI remoto no se ha ejecutado. C02 está
+en integración local: UX, API y almacenamiento de sesiones, con datos sintéticos.
+La verificación real del proveedor/correo y la operación de retención siguen
+pendientes; no se marca C02 Done. C03–C19 conservan sus decisiones pendientes.
+Consultar [tanda 02](operations/identity-implementation-batch-02.md) para evidencia
+actual y límites. Ningún recurso remoto fue provisionado o migrado en esta tanda.
+
 ## Punto de partida real
 
 | Elemento | Estado que deben respetar los agentes |
@@ -364,4 +378,7 @@ referencias para verificar prácticas; no aprueban nuevas decisiones del proyect
 Ejecución posterior, 2026-10-12: Arturo solicitó levantar agentes para desarrollar
 este plan. T01–T03 se entregaron en diseño con tres agentes; T04 fue preparado por
 coordinación. [Asignaciones, revisión y límites de la tanda 01](operations/agent-design-batch-01.md).
-Identity y su modelo siguen Awaiting decision; no se implementaron flujos o tablas.
+Al cerrar la tanda 01, Identity y su modelo quedaron Awaiting decision. Arturo
+aprobó después las opciones recomendadas (D-031) y la retención (D-032); se
+implementaron flujos y tablas locales en la tanda 02, con verificación y límites
+registrados en su evidencia. La capacidad completa conserva pendientes operativos.

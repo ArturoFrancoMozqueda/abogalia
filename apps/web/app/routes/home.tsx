@@ -17,6 +17,7 @@ export default function Home() {
       <header className="topline">
         <span className="brand">Abogalia</span>
         <span className="badge">En desarrollo</span>
+        <Link to="/acceso">Entrar</Link>
       </header>
       <section className="intro" aria-labelledby="titulo">
         <p className="eyebrow">Un camino más claro</p>
@@ -26,6 +27,9 @@ export default function Home() {
           entender las condiciones del servicio y saber qué sigue.
         </p>
         <p>Abogalia todavía no está disponible para contratar servicios.</p>
+        <p>
+          <Link to="/registro">Crear cuenta</Link>
+        </p>
       </section>
       {import.meta.env.DEV ? (
         <footer className="footer">

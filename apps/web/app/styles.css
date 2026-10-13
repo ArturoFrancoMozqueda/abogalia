@@ -101,3 +101,90 @@ button:disabled {
 .skip-link:focus {
   transform: translateY(0);
 }
+.auth-shell {
+  max-width: 44rem;
+}
+.auth-card {
+  margin: 3rem 0;
+}
+.auth-card h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+.auth-form {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.auth-field {
+  display: grid;
+  gap: 0.5rem;
+}
+.auth-field label,
+.auth-section > label {
+  font-weight: 650;
+}
+.auth-field input,
+.auth-section select {
+  width: 100%;
+  padding: 0.85rem;
+  border: 1px solid #52665d;
+  border-radius: 0.4rem;
+  background: #fff;
+  color: #18312c;
+  font: inherit;
+}
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 3px solid #9a6a20;
+  outline-offset: 3px;
+}
+.auth-links,
+.auth-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.secondary {
+  background: transparent;
+  border: 1px solid #245e50;
+  color: #245e50;
+}
+.auth-section {
+  border-top: 1px solid #d4dbd5;
+  margin: 2rem 0;
+  padding-top: 1rem;
+}
+.auth-message {
+  min-height: 1.5rem;
+  margin: 0;
+}
+.auth-message.error {
+  color: #8b2424;
+}
+.auth-confirm,
+.auth-setup {
+  border: 1px solid #d4dbd5;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.auth-secret {
+  display: block;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  padding: 0.75rem;
+  background: #fff;
+  margin: 1rem 0;
+}
+@media (max-width: 35rem) {
+  .auth-shell {
+    width: calc(100% - 2rem);
+  }
+  .topline {
+    flex-wrap: wrap;
+  }
+  .auth-actions {
+    flex-direction: column;
+  }
+}

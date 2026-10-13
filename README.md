@@ -52,9 +52,42 @@ tipos TypeScript y build con prerenderizado. CI ejecuta esos checks al recibir
 pushes o pull requests; todavía no se ha publicado este cambio ni ejecutado CI
 en GitHub. La prueba navegador/API se hace con servicios locales reales.
 
-Los flujos críticos de Identity y de negocio requieren sus contratos, pruebas y
-checkpoint antes de implementarse. Esta base no implementa login, roles, asuntos,
-reservas, pagos ni IA.
+Identity cuenta con implementación local de acceso, recuperación, MFA TOTP y
+sesiones custodiadas por API, conforme al checkpoint aprobado. La operación con
+Supabase y correo reales sigue pendiente de configuración y verificación. Roles,
+contextos profesionales, asuntos, reservas, pagos e IA no están implementados.
+
+`make test-api` ejecuta pruebas contra un PostgreSQL temporal aislado (requiere
+`initdb` y `pg_ctl`). Usa datos sintéticos y un transporte Auth simulado; nunca
+conecta a una base remota. La salida omite diagnósticos crudos.
+Consultar [evidencia de integración](docs/operations/identity-implementation-batch-02.md).
+
+## Configuración de Identity
+
+Por defecto Identity queda deshabilitada y los intentos de acceso reciben 503.
+La configuración se inyecta mediante un gestor de secretos o un mecanismo local
+excluido de Git; la API no carga archivos dotenv ni imprime sus valores.
+
+| Variable | Uso |
+|---|---|
+| `ABOGALIA_IDENTITY_ENABLED` | Activación explícita con `1` |
+| `ABOGALIA_ENVIRONMENT` | `development` permite únicamente origen local aprobado |
+| `ABOGALIA_WEB_ORIGIN` | Origen exacto; HTTPS en producción |
+| `ABOGALIA_SUPABASE_URL` | Destino Abogalia del registro de servicios |
+| `ABOGALIA_SUPABASE_PUBLISHABLE_KEY` | Clave pública publishable |
+| `ABOGALIA_CSRF_KEY` | Material privado de firma, al menos 32 bytes |
+| `ABOGALIA_DATABASE_DSN` | PostgreSQL propio, rol Identity runtime mínimo |
+| `ABOGALIA_SESSION_CIPHER_KEY` | Clave Fernet privada para credenciales almacenadas |
+| `ABOGALIA_AUTH_SESSION_CHECK_DSN` | Consulta limitada de sesiones Auth, rol probe separado |
+| `ABOGALIA_AUTH_EMAIL_READY` | `1` solo tras verificar entrega y plantillas OTP |
+
+No colocar valores privados en comandos, URLs, variables `VITE_*` o documentación.
+La consulta de sesiones Auth requiere una conexión explícita con permisos mínimos;
+no usar `service_role`. Antes de habilitar operación real faltan validar correo OTP,
+JWT de 15 minutos, roles/grants y migración en los destinos aprobados. No se aplicó
+ningún cambio remoto. Retención aprobada: 30 días para cuenta cerrada y evidencia
+de membresía terminada, 90 días de auditoría; la ejecución periódica y la retirada
+confirmada de la identidad del proveedor siguen pendientes. LEGAL REVIEW REQUIRED.
 
 ## Artefacto web
 

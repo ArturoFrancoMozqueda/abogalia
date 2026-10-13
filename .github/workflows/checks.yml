@@ -55,3 +55,4 @@ jobs:
           cache-dependency-path: apps/api/requirements-dev.txt
       - run: make api-install
       - run: make check-api
+      - run: make test-api
