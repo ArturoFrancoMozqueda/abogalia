@@ -11,7 +11,7 @@ import { authPost, readAccepted } from "../lib/auth";
 
 export function meta() {
   return [
-    { title: "Recuperar acceso | Abogalia" },
+    { title: "Recuperar acceso | Legalia" },
     { name: "robots", content: "noindex, nofollow" },
     { name: "referrer", content: "no-referrer" },
   ];

@@ -23,8 +23,19 @@ INACTIVE = timedelta(minutes=30)
 def _credentials(dsn: str) -> dict[str, str]:
     if not isinstance(dsn, str) or not dsn:
         raise StorageUnavailable
-    # Never consult .pgpass or fall back to an unrelated PGPASSWORD value.
-    return {"passfile": os.devnull, "password": conninfo_to_dict(dsn).get("password", "")}
+    try:
+        # sslcertmode exists in libpq16+. An older client must never silently
+        # connect with its default client certificate/private-key selection.
+        version = psycopg.pq.version()
+        if type(version) is not int or version < 160000:
+            raise StorageUnavailable
+        return {
+            "passfile": os.devnull,
+            "password": conninfo_to_dict(dsn).get("password", ""),
+            "sslcertmode": "disable",
+        }
+    except Exception:
+        raise StorageUnavailable from None
 
 
 def _uuid(value: str) -> str:

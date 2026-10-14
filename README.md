@@ -3,14 +3,14 @@
 Nombre anterior: Abogalia. Se conservan rutas de repositorio, paquetes y variables
 técnicas para evitar un renombrado general. El destino Supabase vigente es
 `spohytnxscljtitvmdab`; consultar la [instalación de Legalia](docs/operations/legalia-supabase-setup.md).
-El esquema privado está aplicado; Auth real sigue pendiente del probe y la
-configuración privada SMTP/DB. Las descripciones de destinos anteriores conservadas
-abajo son antecedentes, no configuración operativa vigente.
+El esquema privado está aplicado y SMTP/plantillas guardados. Auth real sigue
+pendiente de validación de revocación, configuración privada DB y entrega de correo.
+Las referencias históricas se conservan en los documentos de evidencia.
 
 Atención legal clara y continua. Producto en construcción para clientes, abogados
 independientes y despachos pequeños en México.
 
-Monorepo propio de Abogalia. Kova permanece en otro repositorio y no aporta datos,
+Monorepo propio de Legalia. Kova permanece en otro repositorio y no aporta datos,
 claves ni infraestructura de ejecución.
 
 | Ruta | Responsabilidad |
@@ -65,9 +65,9 @@ make check
 ```
 
 Incluye lint, formato, integridad de dependencias Python, importación de la API,
-tipos TypeScript y build con prerenderizado. CI ejecuta esos checks al recibir
-pushes o pull requests; todavía no se ha publicado este cambio ni ejecutado CI
-en GitHub. La prueba navegador/API se hace con servicios locales reales.
+tipos TypeScript y build con prerenderizado. El workflow está preparado para main
+y pull requests. La rama codex/identity-design ya fue publicada; no se ha confirmado
+CI remoto en esta entrega. La prueba navegador/API usa servicios locales reales.
 
 Identity cuenta con implementación local de acceso, recuperación, MFA TOTP y
 sesiones custodiadas por API, conforme al checkpoint aprobado. La operación con
@@ -90,7 +90,7 @@ excluido de Git; la API no carga archivos dotenv ni imprime sus valores.
 | `ABOGALIA_IDENTITY_ENABLED` | Activación explícita con `1` |
 | `ABOGALIA_ENVIRONMENT` | `development` permite únicamente origen local aprobado |
 | `ABOGALIA_WEB_ORIGIN` | Origen exacto; HTTPS en producción |
-| `ABOGALIA_SUPABASE_URL` | Destino Abogalia del registro de servicios |
+| `ABOGALIA_SUPABASE_URL` | Destino Legalia del registro de servicios |
 | `ABOGALIA_SUPABASE_PUBLISHABLE_KEY` | Clave pública publishable |
 | `ABOGALIA_CSRF_KEY` | Material privado de firma, al menos 32 bytes |
 | `ABOGALIA_DATABASE_DSN` | PostgreSQL propio, rol Identity runtime mínimo |
@@ -100,9 +100,9 @@ excluido de Git; la API no carga archivos dotenv ni imprime sus valores.
 
 El cierre operativo de C02 se prepara en el
 [checkpoint de activación real](docs/checkpoints/identity-real-activation.md).
-Arturo eligió Resend SMTP Free y frontend local con Supabase real. Todavía no hay
-dominio ni envío configurado; el ensayo sin dominio está limitado al buzón de la
-cuenta Resend y requiere verificarlo. `scripts/check_identity_readiness.py` imprime
+Arturo eligió Resend SMTP Free y frontend local con Supabase real. SMTP y plantillas
+están guardados; dominio y entrega real siguen pendientes. Sin dominio, el remitente
+de pruebas solo admite el buzón de la cuenta Resend. `scripts/check_identity_readiness.py` imprime
 solo presencia de nombres por defecto; no acredita valores válidos ni conexiones.
 `scripts/run_identity_retention.py` hace preview por defecto y solo permite apply
 expreso dentro de la base sintética privada de pruebas; no opera cuentas reales.
@@ -110,8 +110,8 @@ expreso dentro de la base sintética privada de pruebas; no opera cuentas reales
 No colocar valores privados en comandos, URLs, variables `VITE_*` o documentación.
 La consulta de sesiones Auth requiere una conexión explícita con permisos mínimos;
 no usar `service_role`. Antes de habilitar operación real faltan validar correo OTP,
-JWT de 15 minutos, roles/grants y migración en los destinos aprobados. No se aplicó
-ningún cambio remoto. Retención aprobada: 30 días para cuenta cerrada y evidencia
+revocación, conexiones privadas y entrega OTP real. JWT de 15 minutos y esquema
+privado ya están configurados en Legalia. Retención aprobada: 30 días para cuenta cerrada y evidencia
 de membresía terminada, 90 días de auditoría; la ejecución periódica y la retirada
 confirmada de la identidad del proveedor siguen pendientes. LEGAL REVIEW REQUIRED.
 
@@ -132,4 +132,5 @@ hosting elegido; esa configuración aún está pendiente.
 - [Reglas obligatorias para agentes](AGENTS.md).
 
 No guardar secretos ni información de clientes en este repositorio público.
-La identidad pública Abogalia sigue sujeta a la decisión de marca documentada.
+Nombre vigente aprobado por Arturo: Legalia. El nombre no constituye revisión
+jurídica de marca ni disponibilidad de dominio.

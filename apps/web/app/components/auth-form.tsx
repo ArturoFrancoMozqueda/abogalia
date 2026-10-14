@@ -30,7 +30,7 @@ export function AuthShell({
     <main id="contenido" className="shell auth-shell">
       <header className="topline">
         <Link className="brand" to="/">
-          Abogalia
+          Legalia
         </Link>
         <Link to="/acceso">Acceso</Link>
       </header>

@@ -17,7 +17,7 @@ import {
 
 export function meta() {
   return [
-    { title: "Mi cuenta | Abogalia" },
+    { title: "Mi cuenta | Legalia" },
     { name: "robots", content: "noindex, nofollow" },
     { name: "referrer", content: "no-referrer" },
   ];

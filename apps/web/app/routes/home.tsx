@@ -2,11 +2,11 @@ import { Link } from "react-router";
 
 export function meta() {
   return [
-    { title: "Abogalia | Atención legal clara y continua" },
+    { title: "Legalia | Atención legal clara y continua" },
     {
       name: "description",
       content:
-        "Estamos construyendo Abogalia para facilitar una atención legal clara y continua en México.",
+        "Estamos construyendo Legalia para facilitar una atención legal clara y continua en México.",
     },
   ];
 }
@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <main id="contenido" className="shell">
       <header className="topline">
-        <span className="brand">Abogalia</span>
+        <span className="brand">Legalia</span>
         <span className="badge">En desarrollo</span>
         <Link to="/acceso">Entrar</Link>
       </header>
@@ -26,7 +26,7 @@ export default function Home() {
           Estamos construyendo un espacio para encontrar atención profesional,
           entender las condiciones del servicio y saber qué sigue.
         </p>
-        <p>Abogalia todavía no está disponible para contratar servicios.</p>
+        <p>Legalia todavía no está disponible para contratar servicios.</p>
         <p>
           <Link to="/registro">Crear cuenta</Link>
         </p>

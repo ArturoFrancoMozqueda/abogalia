@@ -88,10 +88,11 @@ No se accedió o modificó Kova ni el Supabase anterior. No hosting, compra o up
 Los nombres técnicos de variables, cookies, roles y paquetes se conservan para
 evitar renombrado general. Launcher/Auth URL y pruebas ahora fijan Legalia y rechazan
 el proyecto anterior; `.env` queda para actualización privada del operador.
-El launcher es la entrada local aprobada y comprueba host/rol/puerto/TLS. El
-validador genérico de DSN, fuera del launcher, conserva soporte de fixtures y no
-garantiza el mismo confinamiento de hosts/TLS: endurecer la futura entrada de
-producción antes de desplegar; no arrancar por otra ruta para salvar sus gates.
+El launcher es la entrada local aprobada y comprueba host/rol/puerto/TLS. En la
+tanda de continuación el validador runtime quedó igualmente confinado, con fixtures
+locales solo mediante opt-in Python inaccesible por env/main. Storage también
+desactiva certificados de cliente implícitos y rechaza libpq incompatible antes
+de conectar. [Entrega y pruebas](legalia-agent-continuation.md).
 LEGAL REVIEW REQUIRED para el tratamiento jurídico y puesta en operación pública.
 
 ## Validación local y publicación

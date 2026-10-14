@@ -9,7 +9,7 @@ import { AuthError, authPost, readSession } from "../lib/auth";
 
 export function meta() {
   return [
-    { title: "Entrar | Abogalia" },
+    { title: "Entrar | Legalia" },
     { name: "robots", content: "noindex, nofollow" },
     { name: "referrer", content: "no-referrer" },
   ];

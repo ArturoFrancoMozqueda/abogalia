@@ -5,7 +5,7 @@ type Connection = "idle" | "checking" | "connected" | "failed";
 
 export function meta() {
   return [
-    { title: "Comprobación local | Abogalia" },
+    { title: "Comprobación local | Legalia" },
     { name: "robots", content: "noindex" },
   ];
 }
@@ -49,7 +49,7 @@ export default function ConnectionCheck() {
   return (
     <main id="contenido" className="shell">
       <Link to="/" className="brand">
-        Abogalia
+        Legalia
       </Link>
       <section className="intro" aria-labelledby="titulo">
         <p className="eyebrow">Solo en desarrollo</p>

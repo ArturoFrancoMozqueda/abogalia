@@ -41,7 +41,7 @@ export function ErrorBoundary() {
 
   return (
     <main id="contenido" className="shell">
-      <p className="brand">Abogalia</p>
+      <p className="brand">Legalia</p>
       <h1>
         {isNotFound
           ? "No encontramos esa página"
