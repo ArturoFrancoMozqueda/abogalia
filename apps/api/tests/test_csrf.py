@@ -84,7 +84,7 @@ def test_origin_and_destination_configuration_rejects_unsafe_values():
         {"origin": "http://other.example.invalid"},
         {"development_http": False},
         {"project_url": "https://kova.example.invalid"},
-        {"project_url": "https://xggefantvuwpilksfdoy.supabase.co@evil.example.invalid"},
+        {"project_url": "https://spohytnxscljtitvmdab.supabase.co@evil.example.invalid"},
         {"publishable_key": "sb_secret_public-marker"},
     ):
         with pytest.raises(ValueError):
@@ -110,3 +110,10 @@ def test_access_log_filter_drops_auth_queries_before_formatting():
     assert not AuthAccessFilter().filter(record)
     record.args = ("127.0.0.1", "GET", "/api/health", "1.1", 200)
     assert AuthAccessFilter().filter(record)
+
+
+def test_new_registered_project_accepted_and_retired_project_denied():
+    settings = Settings(project_url="https://spohytnxscljtitvmdab.supabase.co")
+    assert settings.issuer == "https://spohytnxscljtitvmdab.supabase.co/auth/v1"
+    with pytest.raises(ValueError):
+        Settings(project_url="https://xggefantvuwpilksfdoy.supabase.co")

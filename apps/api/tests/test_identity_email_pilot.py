@@ -83,8 +83,8 @@ def test_signup_recover_fixed_transport_and_no_global_ready(setup, monkeypatch):
     now[0] += 60
     assert invoke("recover", [MAIL]) == {"status": "accepted", "reserved": 2}
     assert [str(call.url) for call in calls] == [
-        pilot.PROJECT + "/auth/v1/signup",
-        pilot.PROJECT + "/auth/v1/recover",
+        "https://spohytnxscljtitvmdab.supabase.co/auth/v1/signup",
+        "https://spohytnxscljtitvmdab.supabase.co/auth/v1/recover",
     ]
     assert json.loads(calls[0].content) == {"email": MAIL, "password": PASSWORD}
     assert json.loads(calls[1].content) == {"email": MAIL}
@@ -281,3 +281,16 @@ def test_parent_sync_failure_closes_fd_and_blocks_marker_and_requests(setup, mon
     # Existing directory from the failed attempt must be synced on retry too.
     assert initialize(setup) == {"status": "initialized", "reserved": 0}
     assert len(parent_attempts) == 2 and not calls
+
+
+def test_retired_project_marker_rejected_before_request(setup):
+    directory, _, _, calls, invoke = setup
+    initialize(setup)
+    marker = directory / "authorization.json"
+    data = json.loads(marker.read_text())
+    data["project"] = "https://xggefantvuwpilksfdoy.supabase.co"
+    marker.write_text(json.dumps(data))
+    with pytest.raises(pilot.PilotUnavailable):
+        invoke("recover", [MAIL])
+    assert not calls
+    assert json.loads(marker.read_text())["reserved"] == 0

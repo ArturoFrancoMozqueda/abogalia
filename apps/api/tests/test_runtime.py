@@ -18,7 +18,7 @@ def configuration():
         "ABOGALIA_IDENTITY_ENABLED": "1",
         "ABOGALIA_ENVIRONMENT": "production",
         "ABOGALIA_WEB_ORIGIN": "https://public-synthetic.example.invalid",
-        "ABOGALIA_SUPABASE_URL": "https://xggefantvuwpilksfdoy.supabase.co",
+        "ABOGALIA_SUPABASE_URL": "https://spohytnxscljtitvmdab.supabase.co",
         "ABOGALIA_SUPABASE_PUBLISHABLE_KEY": "sb_publishable_" + MARKER,
         "ABOGALIA_CSRF_KEY": MARKER,
         "ABOGALIA_DATABASE_DSN": (
@@ -112,7 +112,7 @@ def test_probe_rejects_runtime_dsn_even_when_destination_matches():
 
 @pytest.mark.parametrize("role", ["abogalia_identity_runtime", "abogalia_identity_probe"])
 def test_only_approved_role_and_pooler_qualification_are_accepted(role):
-    for user in (role, role + ".xggefantvuwpilksfdoy"):
+    for user in (role, role + ".spohytnxscljtitvmdab"):
         assert (
             runtime.validate_dsn(
                 "host=/public/synthetic/socket dbname=synthetic user=" + user, role
@@ -168,3 +168,32 @@ def test_default_app_factory_does_not_swallow_invalid_enabled_runtime():
     ):
         create_app()
     assert bool(str(error.value) == "Identity runtime configuration unavailable")
+
+
+def test_retired_auth_project_fails_closed_without_connecting():
+    values = configuration()
+    values["ABOGALIA_SUPABASE_URL"] = "https://xggefantvuwpilksfdoy.supabase.co"
+    assert_closed(values)
+
+
+@pytest.mark.parametrize(
+    "field,role",
+    [
+        ("ABOGALIA_DATABASE_DSN", "abogalia_identity_runtime"),
+        ("ABOGALIA_AUTH_SESSION_CHECK_DSN", "abogalia_identity_probe"),
+    ],
+)
+@pytest.mark.parametrize("retired", ["direct", "pooler", "direct_uppercase", "host_list"])
+def test_retired_database_project_fails_closed(field, role, retired):
+    values = configuration()
+    host = "db.xggefantvuwpilksfdoy.supabase.co"
+    user = role
+    if retired == "pooler":
+        host = "aws-0-us-east-1.pooler.supabase.com"
+        user += ".xggefantvuwpilksfdoy"
+    elif retired == "direct_uppercase":
+        host = host.upper()
+    elif retired == "host_list":
+        host += ",db.spohytnxscljtitvmdab.supabase.co"
+    values[field] = f"host={host} dbname=postgres user={user}"
+    assert_closed(values)

@@ -114,3 +114,14 @@ No autoriza ampliación de privilegios para sortear un error ni elimina la neces
 de prueba confiable antes de borrar cuentas. D-037 solicita `.env` con variables y
 commit/push periódicos: archivo local privado excluido, plantilla pública vacía y
 publicación solo de fuentes revisadas sin credenciales. No compra dominio/hosting.
+
+D-038 — Arturo corrigió el nombre a Legalia, creó cuentas propias Google/Resend y
+un proyecto Supabase nuevo, y pidió revisar best practices e implementar lo ya
+aprobado. Destino vigente spohytnxscljtitvmdab / organización tagovxtvdicxjweeerwi,
+Free/us-east-1, verificado en panel. Su «HAZLO TODO» respondió a confirmación de
+roles/grants mínimos en el SQL Editor. Se conserva arquitectura y nombres técnicos;
+no transferencia/borrado del proyecto anterior ni reutilización de Kova. Dominio
+aplazado; no autoriza contratación, envío público sin dominio, eliminación de gates
+o ampliación de permisos por un error. Ya no denominar el producto piloto; el
+ejecutor histórico conserva límites de ensayo hasta contrato operativo distinto.
+[Evidencia](../operations/legalia-supabase-setup.md).

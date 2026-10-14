@@ -391,3 +391,179 @@ def test_probe_wrong_rls_blocks(bootstrap_db):
         bootstrap_db.execute(PROBE.read_text())
     bootstrap_db.rollback()
     assert bool(existing(bootstrap_db) == 2)
+
+
+def test_public_legalia_recipe_exact_with_nonsuper_postgres(bootstrap_db, bootstrap_cluster):
+    # Synthetic provider roles only in this module's private disposable cluster.
+    bootstrap_db.execute(
+        "CREATE ROLE postgres LOGIN CREATEROLE NOSUPERUSER "
+        "NOCREATEDB NOINHERIT NOREPLICATION NOBYPASSRLS"
+    )
+    bootstrap_db.execute("GRANT CREATE ON DATABASE postgres TO postgres WITH GRANT OPTION")
+    bootstrap_db.execute("CREATE ROLE anon NOLOGIN")
+    bootstrap_db.execute("CREATE ROLE authenticated NOLOGIN")
+    install = ROOT / "scripts/sql/install_identity_owner_runtime.sql"
+    verify = ROOT / "scripts/sql/verify_identity_owner_runtime.sql"
+    with role_connection(bootstrap_cluster, "postgres") as conn:
+        conn.execute(install.read_text())
+        with conn.transaction():
+            cursor = conn.execute(transaction_body(verify))
+            while cursor.description is None:
+                assert bool(cursor.nextset())
+            assert bool(all(cursor.fetchone()))
+        with pytest.raises(psycopg.Error):
+            conn.execute(install.read_text())
+        conn.rollback()
+    assert bool(existing(bootstrap_db) == 2)
+
+
+@pytest.mark.parametrize("approved_tags", [True, False])
+def test_default_rls_acl_exact_and_unreviewed_trigger_rejected(
+    bootstrap_db, bootstrap_cluster, approved_tags
+):
+    for name, options in (
+        ("postgres", "LOGIN CREATEROLE NOSUPERUSER NOINHERIT"),
+        ("anon", "NOLOGIN"),
+        ("authenticated", "NOLOGIN"),
+    ):
+        if not bootstrap_db.execute(
+            "SELECT EXISTS(SELECT 1 FROM pg_roles WHERE rolname=%s)", (name,)
+        ).fetchone()[0]:
+            bootstrap_db.execute(
+                sql.SQL("CREATE ROLE {} {}").format(sql.Identifier(name), sql.SQL(options))
+            )
+    bootstrap_db.execute("DROP EVENT TRIGGER IF EXISTS ensure_rls")
+    bootstrap_db.execute("DROP FUNCTION IF EXISTS public.rls_auto_enable()")
+    # Harmless synthetic body only. The actual provider body is never inspected.
+    bootstrap_db.execute(
+        "CREATE FUNCTION public.rls_auto_enable() RETURNS event_trigger "
+        "LANGUAGE plpgsql SECURITY DEFINER AS 'BEGIN RETURN; END'"
+    )
+    bootstrap_db.execute("ALTER FUNCTION public.rls_auto_enable() OWNER TO postgres")
+    bootstrap_db.execute(
+        "GRANT EXECUTE ON FUNCTION public.rls_auto_enable() TO PUBLIC, anon, authenticated"
+    )
+    tags = "'CREATE TABLE','CREATE TABLE AS','SELECT INTO'" if approved_tags else "'CREATE TABLE'"
+    bootstrap_db.execute(
+        sql.SQL(
+            "CREATE EVENT TRIGGER ensure_rls ON ddl_command_end "
+            "WHEN TAG IN ({}) EXECUTE FUNCTION public.rls_auto_enable()"
+        ).format(sql.SQL(tags))
+    )
+    recipe = ROOT / "scripts/sql/harden_default_rls_function.sql"
+    with role_connection(bootstrap_cluster, "postgres") as conn:
+        if approved_tags:
+            cursor = conn.execute(recipe.read_text())
+            while cursor.description is None:
+                assert bool(cursor.nextset())
+            assert bool(cursor.fetchone() == (True,))
+        else:
+            with pytest.raises(psycopg.Error):
+                conn.execute(recipe.read_text())
+            conn.rollback()
+        assert bool(
+            conn.execute(
+                "SELECT has_function_privilege('anon','public.rls_auto_enable()','EXECUTE'), "
+                "has_function_privilege('authenticated','public.rls_auto_enable()','EXECUTE')"
+            ).fetchone()
+            == ((False, False) if approved_tags else (True, True))
+        )
+
+
+@pytest.mark.parametrize("drift", [False, True])
+def test_rls_upgrade_same_authorization_and_drift_rollback(bootstrap_db, bootstrap_cluster, drift):
+    for name, options in (("postgres", "LOGIN CREATEROLE NOSUPERUSER NOINHERIT"),):
+        if not bootstrap_db.execute(
+            "SELECT EXISTS(SELECT 1 FROM pg_roles WHERE rolname=%s)", (name,)
+        ).fetchone()[0]:
+            bootstrap_db.execute(
+                sql.SQL("CREATE ROLE {} {}").format(sql.Identifier(name), sql.SQL(options))
+            )
+    bootstrap_db.execute("GRANT CREATE ON DATABASE postgres TO postgres WITH GRANT OPTION")
+    legacy = (ROOT / "scripts/sql/install_identity_owner_runtime.sql").read_text()
+    for key in ("subject", "digest"):
+        legacy = legacy.replace(
+            f"(SELECT current_setting('abogalia.{key}', true))",
+            f"current_setting('abogalia.{key}', true)",
+        )
+    with role_connection(bootstrap_cluster, "postgres") as conn:
+        conn.execute(legacy)
+    bootstrap_db.execute(
+        "INSERT INTO identity.users(subject,created_at) VALUES "
+        "('00000000-0000-0000-0000-000000000001',now()),"
+        "('00000000-0000-0000-0000-000000000002',now())"
+    )
+    before = bootstrap_db.execute(
+        "SELECT c.oid,c.relacl,c.relrowsecurity,c.relforcerowsecurity "
+        "FROM pg_class c WHERE c.relnamespace='identity'::regnamespace ORDER BY c.oid"
+    ).fetchall()
+    if drift:
+        bootstrap_db.execute("ALTER POLICY users_runtime ON identity.users USING (true)")
+    with role_connection(bootstrap_cluster, "postgres") as conn:
+        source = (ROOT / "scripts/sql/optimize_identity_rls.sql").read_text()
+        if drift:
+            with pytest.raises(psycopg.Error):
+                conn.execute(source)
+            conn.rollback()
+        else:
+            conn.execute(source)
+        assert bool(
+            conn.execute(
+                "SELECT pg_has_role('postgres','abogalia_identity_owner','SET'),"
+                "pg_has_role('postgres','abogalia_identity_owner','USAGE')"
+            ).fetchone()
+            == (False, False)
+        )
+    assert bool(
+        before
+        == bootstrap_db.execute(
+            "SELECT c.oid,c.relacl,c.relrowsecurity,c.relforcerowsecurity "
+            "FROM pg_class c WHERE c.relnamespace='identity'::regnamespace ORDER BY c.oid"
+        ).fetchall()
+    )
+    if not drift:
+        with role_connection(bootstrap_cluster, ROLES[1]) as conn:
+            assert bool(conn.execute("SELECT count(*) FROM identity.users").fetchone() == (0,))
+            with conn.transaction():
+                conn.execute(
+                    "SELECT set_config('abogalia.subject',%s,true)",
+                    ("00000000-0000-0000-0000-000000000001",),
+                )
+                assert bool(conn.execute("SELECT count(*) FROM identity.users").fetchone() == (1,))
+                assert bool(
+                    conn.execute(
+                        "SELECT count(*) FROM identity.users WHERE subject=%s",
+                        ("00000000-0000-0000-0000-000000000002",),
+                    ).fetchone()
+                    == (0,)
+                )
+                # InitPlan caches only one statement, never a whole transaction.
+                conn.execute(
+                    "SELECT set_config('abogalia.subject',%s,true)",
+                    ("00000000-0000-0000-0000-000000000002",),
+                )
+                assert bool(
+                    conn.execute(
+                        "SELECT count(*) FROM identity.users WHERE subject=%s",
+                        ("00000000-0000-0000-0000-000000000002",),
+                    ).fetchone()
+                    == (1,)
+                )
+                assert bool(
+                    conn.execute(
+                        "SELECT count(*) FROM identity.users WHERE subject=%s",
+                        ("00000000-0000-0000-0000-000000000001",),
+                    ).fetchone()
+                    == (0,)
+                )
+                conn.execute(
+                    "SELECT set_config('abogalia.subject',%s,true)",
+                    ("00000000-0000-0000-0000-000000000001",),
+                )
+                with pytest.raises(psycopg.errors.InsufficientPrivilege):
+                    conn.execute(
+                        "INSERT INTO identity.audit(subject,action,occurred_at) "
+                        "VALUES(%s,'session_deleted',now())",
+                        ("00000000-0000-0000-0000-000000000002",),
+                    )
+            assert bool(conn.execute("SELECT count(*) FROM identity.users").fetchone() == (0,))

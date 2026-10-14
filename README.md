@@ -1,4 +1,11 @@
-# Abogalia
+# Legalia
+
+Nombre anterior: Abogalia. Se conservan rutas de repositorio, paquetes y variables
+técnicas para evitar un renombrado general. El destino Supabase vigente es
+`spohytnxscljtitvmdab`; consultar la [instalación de Legalia](docs/operations/legalia-supabase-setup.md).
+El esquema privado está aplicado; Auth real sigue pendiente del probe y la
+configuración privada SMTP/DB. Las descripciones de destinos anteriores conservadas
+abajo son antecedentes, no configuración operativa vigente.
 
 Atención legal clara y continua. Producto en construcción para clientes, abogados
 independientes y despachos pequeños en México.

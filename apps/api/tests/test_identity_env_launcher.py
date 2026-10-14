@@ -50,11 +50,11 @@ def synthetic_values():
         "ABOGALIA_CSRF_KEY": "PUBLIC_SYNTHETIC_ONLY_" * 2,
         "ABOGALIA_SESSION_CIPHER_KEY": Fernet.generate_key().decode(),
         "ABOGALIA_DATABASE_DSN": (
-            "host=db.xggefantvuwpilksfdoy.supabase.co port=5432 dbname=postgres "
+            "host=db.spohytnxscljtitvmdab.supabase.co port=5432 dbname=postgres "
             "user=abogalia_identity_runtime sslmode=verify-full sslrootcert=system"
         ),
         "ABOGALIA_AUTH_SESSION_CHECK_DSN": (
-            "host=db.xggefantvuwpilksfdoy.supabase.co port=5432 dbname=postgres "
+            "host=db.spohytnxscljtitvmdab.supabase.co port=5432 dbname=postgres "
             "user=abogalia_identity_probe sslmode=verify-full sslrootcert=system"
         ),
     }
@@ -208,7 +208,7 @@ def test_invalid_configuration_fail_closed(mutation):
         dsn = values["ABOGALIA_DATABASE_DSN"]
         replacements = {
             "role": ("abogalia_identity_runtime", "postgres"),
-            "host": ("db.xggefantvuwpilksfdoy.supabase.co", "unapproved.invalid"),
+            "host": ("db.spohytnxscljtitvmdab.supabase.co", "unapproved.invalid"),
             "tls": ("verify-full", "require"),
             "transaction_port": ("5432", "6543"),
         }
@@ -329,7 +329,7 @@ def test_session_pooler_role_bound_to_project(hostname):
     ):
         values[name] = (
             f"host={hostname} port=5432 dbname=postgres "
-            f"user={role}.xggefantvuwpilksfdoy sslmode=verify-full"
+            f"user={role}.spohytnxscljtitvmdab sslmode=verify-full"
         )
     launcher.validate_private_configuration(launcher.PrivateConfiguration(values))
 
@@ -358,3 +358,21 @@ def test_native_fd_diagnostics_suppressed(private_file, monkeypatch, capfd):
     assert json.loads(output.out) == {"status": "launcher_unavailable"}
     os.write(1, b"PUBLIC_SYNTHETIC_RESTORED\n")
     assert capfd.readouterr().out == "PUBLIC_SYNTHETIC_RESTORED\n"
+
+
+@pytest.mark.parametrize("kind", ["auth", "direct", "pooler"])
+def test_retired_project_cannot_be_launched(kind):
+    values = synthetic_values()
+    if kind == "auth":
+        values["ABOGALIA_SUPABASE_URL"] = "https://xggefantvuwpilksfdoy.supabase.co"
+    elif kind == "direct":
+        values["ABOGALIA_DATABASE_DSN"] = values["ABOGALIA_DATABASE_DSN"].replace(
+            "spohytnxscljtitvmdab", "xggefantvuwpilksfdoy"
+        )
+    else:
+        values["ABOGALIA_AUTH_SESSION_CHECK_DSN"] = (
+            "host=aws-0-us-east-1.pooler.supabase.com port=5432 dbname=postgres "
+            "user=abogalia_identity_probe.xggefantvuwpilksfdoy sslmode=verify-full"
+        )
+    with pytest.raises(launcher.LaunchUnavailable):
+        launcher.validate_private_configuration(launcher.PrivateConfiguration(values))

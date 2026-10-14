@@ -13,8 +13,11 @@ def validate_dsn(value: str, role: str) -> None:
         raise ValueError
     if any(name in parts for name in ("service", "options", "passfile")):
         raise ValueError
-    # Direct connections or the explicitly qualified Abogalia pooler user.
-    if parts["user"] not in (role, role + ".xggefantvuwpilksfdoy"):
+    # Explicitly retired project must never be selected by a direct DSN.
+    if "xggefantvuwpilksfdoy" in parts["host"].lower():
+        raise ValueError
+    # Direct connections or the explicitly qualified current project pooler user.
+    if parts["user"] not in (role, role + ".spohytnxscljtitvmdab"):
         raise ValueError
 
 

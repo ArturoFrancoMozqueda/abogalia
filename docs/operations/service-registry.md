@@ -1,5 +1,31 @@
 # Registro de servicios de Abogalia
 
+## Destino vigente: Legalia (2026-10-13)
+
+Arturo cambió el nombre del producto a **Legalia**, creó cuentas independientes
+y pidió implementar el esquema aprobado en el proyecto nuevo. Las entradas
+Abogalia siguientes conservan evidencia histórica y **no son destinos de runtime**.
+
+| Recurso | Destino vigente | Estado comprobado |
+|---|---|---|
+| Supabase organización | `tagovxtvdicxjweeerwi`, LEGALIA | Free, panel de Arturo |
+| Supabase proyecto | `spohytnxscljtitvmdab`, legalia | Healthy; us-east-1; PostgreSQL 17.11 |
+| Auth URL | `https://spohytnxscljtitvmdab.supabase.co` | Destino público; runtime reconciliado sin leer `.env` |
+| Identity PostgreSQL | Esquema privado `identity` | Instalado desde SQL Editor; once controles de roles/RLS/grants true |
+| Probe Auth | Rol independiente pendiente | `postgres` carece de USAGE grantable sobre `auth`; no elevar permisos |
+| Resend | Cuenta independiente de Legalia creada por Arturo | Sin dominio; SMTP preparado en formulario, clave y guardado privados pendientes |
+
+Security Advisor muestra cero errores y advertencias tras restringir EXECUTE de la
+función preexistente `public.rls_auto_enable()`. No se leyó su definición ni se
+alteró el trigger. JWT 900 s, OTP 600 s/6 dígitos y Site URL local guardados.
+Confirmación de correo requerida; acceso anónimo y linking manual desactivados.
+El conector Supabase de esta sesión no pudo acceder al proyecto nuevo; no confundir
+la sesión del panel con una nueva conexión MCP autorizada.
+Los nombres técnicos ABOGALIA_* y abogalia_identity_* se mantienen por compatibilidad;
+no representan reutilización de credenciales. [Evidencia vigente](legalia-supabase-setup.md).
+
+## Evidencia histórica de Abogalia
+
 Actualizado: 2026-10-12, America/Mexico_City. Contiene destinos y estados comprobados, sin secretos. Identidad administrativa aprobada: posprojectsupport; en GitHub se conserva la cuenta personal existente.
 
 | Servicio | Destino | Identificador comprobado | Estado |

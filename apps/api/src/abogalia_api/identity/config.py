@@ -39,7 +39,7 @@ class Settings:
                 raise ValueError("Invalid identity destination")
             allowed = (
                 target.scheme == "https"
-                and target.hostname == "xggefantvuwpilksfdoy.supabase.co"
+                and target.hostname == "spohytnxscljtitvmdab.supabase.co"
                 and target.port is None
             )
             local = (

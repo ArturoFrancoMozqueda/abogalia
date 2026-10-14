@@ -64,16 +64,16 @@ ALTER TABLE identity.audit ENABLE ROW LEVEL SECURITY;
 ALTER TABLE identity.audit FORCE ROW LEVEL SECURITY;
 
 CREATE POLICY users_runtime ON identity.users TO abogalia_identity_runtime
-    USING (subject::text = NULLIF(current_setting('abogalia.subject', true), ''))
-    WITH CHECK (subject::text = NULLIF(current_setting('abogalia.subject', true), ''));
+    USING (subject::text = NULLIF((SELECT current_setting('abogalia.subject', true)), ''))
+    WITH CHECK (subject::text = NULLIF((SELECT current_setting('abogalia.subject', true)), ''));
 CREATE POLICY sessions_runtime ON identity.app_sessions TO abogalia_identity_runtime
     USING (
-        digest = NULLIF(current_setting('abogalia.digest', true), '')
-        OR subject::text = NULLIF(current_setting('abogalia.subject', true), '')
+        digest = NULLIF((SELECT current_setting('abogalia.digest', true)), '')
+        OR subject::text = NULLIF((SELECT current_setting('abogalia.subject', true)), '')
     )
-    WITH CHECK (subject::text = NULLIF(current_setting('abogalia.subject', true), ''));
+    WITH CHECK (subject::text = NULLIF((SELECT current_setting('abogalia.subject', true)), ''));
 CREATE POLICY audit_runtime_insert ON identity.audit FOR INSERT TO abogalia_identity_runtime
-    WITH CHECK (subject::text = NULLIF(current_setting('abogalia.subject', true), ''));
+    WITH CHECK (subject::text = NULLIF((SELECT current_setting('abogalia.subject', true)), ''));
 
 CREATE POLICY users_maintenance ON identity.users TO abogalia_identity_owner
     USING (true) WITH CHECK (true);

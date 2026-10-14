@@ -447,7 +447,7 @@ def test_cookie_secure_production_flags(rig):
     settings = Settings(
         origin="https://abogalia.example.invalid",
         development_http=False,
-        project_url="https://xggefantvuwpilksfdoy.supabase.co",
+        project_url="https://spohytnxscljtitvmdab.supabase.co",
         publishable_key="sb_publishable_synthetic",
         csrf_key=secrets.token_bytes(32),
     )

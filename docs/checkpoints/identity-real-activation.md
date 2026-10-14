@@ -1,5 +1,16 @@
 # Checkpoint — Activación real de Identity C02
 
+## Actualización vigente D-038: Legalia
+
+Arturo aprobó el nuevo destino `spohytnxscljtitvmdab`, organización
+`tagovxtvdicxjweeerwi`, y pidió instalar lo ya aprobado. Owner/runtime y esquema
+privado están implementados y verificados por once controles de catálogo. Auth
+JWT900/OTP600/6d y origen local guardados. Probe y SMTP/credenciales aún bloquean
+activación. [Evidencia vigente](../operations/legalia-supabase-setup.md).
+Los destinos y términos piloto siguientes son históricos; no son configuración
+vigente ni autorización para modificar el proyecto anterior. El producto se llama
+Legalia; no se eliminaron controles de seguridad por el cambio de nombre.
+
 Fecha: 2026-10-12. Estado: Proposed / Awaiting decision para la operación remota.
 Base local revisada: `720c1cf`, rama `codex/identity-design`. La petición de Arturo
 ordena avanzar con Supabase real, correo y retención y presentar decisiones;

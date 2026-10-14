@@ -27,7 +27,7 @@ NAMES = frozenset(
     )
 )
 REQUIRED = NAMES - {"ABOGALIA_AUTH_EMAIL_READY"}
-PROJECT = "https://xggefantvuwpilksfdoy.supabase.co"
+PROJECT = "https://spohytnxscljtitvmdab.supabase.co"
 
 
 class LaunchUnavailable(Exception):
@@ -141,7 +141,7 @@ def validate_private_configuration(configuration):
             validate_dsn(value, role)
             parts = conninfo_to_dict(value)
             direct = (
-                parts.get("host") == "db.xggefantvuwpilksfdoy.supabase.co"
+                parts.get("host") == "db.spohytnxscljtitvmdab.supabase.co"
                 and parts.get("user") == role
             )
             pooled = (
@@ -150,7 +150,7 @@ def validate_private_configuration(configuration):
                     "aws-0-us-east-1.pooler.supabase.com",
                     "aws-1-us-east-1.pooler.supabase.com",
                 )
-                and parts.get("user") == role + ".xggefantvuwpilksfdoy"
+                and parts.get("user") == role + ".spohytnxscljtitvmdab"
             )
             if (
                 not (direct or pooled)

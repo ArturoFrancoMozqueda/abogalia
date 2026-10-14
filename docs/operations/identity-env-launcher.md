@@ -1,5 +1,14 @@
 # Launcher privado de Identity — piloto local C02
 
+Actualización D-038 (2026-10-13): producto **Legalia**, destino vigente
+`https://spohytnxscljtitvmdab.supabase.co`; conexión directa
+`db.spohytnxscljtitvmdab.supabase.co`, sufijo de usuario pooler
+`.spohytnxscljtitvmdab`. El código rechaza el destino anterior. Nombres ABOGALIA_*
+y roles técnicos conservados por compatibilidad. No leer ni sustituir un `.env`
+existente para actualizarlo: Arturo cambia los valores mediante su editor privado.
+Las referencias Abogalia siguientes son evidencia histórica de implementación.
+[Estado vigente](legalia-supabase-setup.md).
+
 Base común: 98dd4fa. Alcance aprobado: piloto local con Supabase Abogalia real,
 operación por Arturo y carga privada de configuración únicamente en runtime.
 Este artefacto no provisiona roles, aplica migraciones, modifica Auth/SMTP ni opera

@@ -17,7 +17,7 @@ from contextlib import contextmanager
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PROJECT = "https://xggefantvuwpilksfdoy.supabase.co"
+PROJECT = "https://spohytnxscljtitvmdab.supabase.co"
 CAP = 6
 TTL = 86400
 
