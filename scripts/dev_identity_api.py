@@ -1,4 +1,4 @@
-"""Private, fixed-file launcher for the approved local Abogalia Identity pilot."""
+"""Private, fixed-file launcher for approved local Legalia Identity development."""
 
 import contextlib
 import importlib
@@ -26,7 +26,7 @@ NAMES = frozenset(
         "ABOGALIA_AUTH_EMAIL_READY",
     )
 )
-REQUIRED = NAMES - {"ABOGALIA_AUTH_EMAIL_READY"}
+REQUIRED = NAMES - {"ABOGALIA_AUTH_EMAIL_READY", "ABOGALIA_AUTH_SESSION_CHECK_DSN"}
 PROJECT = "https://spohytnxscljtitvmdab.supabase.co"
 
 
@@ -133,10 +133,7 @@ def validate_private_configuration(configuration):
             email_enabled=values.get("ABOGALIA_AUTH_EMAIL_READY") == "1",
         )
         Fernet(values["ABOGALIA_SESSION_CIPHER_KEY"].encode())
-        for name, role in (
-            ("ABOGALIA_DATABASE_DSN", "abogalia_identity_runtime"),
-            ("ABOGALIA_AUTH_SESSION_CHECK_DSN", "abogalia_identity_probe"),
-        ):
+        for name, role in (("ABOGALIA_DATABASE_DSN", "abogalia_identity_runtime"),):
             value = values[name]
             validate_dsn(value, role)
             parts = conninfo_to_dict(value)
@@ -181,7 +178,13 @@ def install_environment(configuration, environment=None):
         if name.startswith(("ABOGALIA_", "PG")):
             del environment[name]
     if configuration.enabled:
-        environment.update(configuration.values)
+        environment.update(
+            {
+                name: value
+                for name, value in configuration.values.items()
+                if name != "ABOGALIA_AUTH_SESSION_CHECK_DSN"
+            }
+        )
     else:
         environment["ABOGALIA_IDENTITY_ENABLED"] = "0"
     environment["PGPASSFILE"] = os.devnull

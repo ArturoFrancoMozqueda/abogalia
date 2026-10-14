@@ -78,3 +78,16 @@ def test_parser_and_version_errors_sanitized_without_connection():
         ):
             operate("probe")
         assert bool(not connect.called and str(error.value) == "")
+
+
+def test_sql_probe_compatibility_bearer_never_enters_connection_or_sql():
+    captured = []
+    marker = "PUBLIC_SYNTHETIC_BEARER"
+
+    def fail(*args, **kwargs):
+        captured.append((args, kwargs))
+        raise psycopg.OperationalError("PUBLIC_SYNTHETIC_DIAGNOSTIC")
+
+    with patch.object(storage.psycopg, "connect", fail), pytest.raises(StorageUnavailable):
+        storage.PostgresSessionProbe(DSN).active(SID, SUBJECT, access_token=marker)
+    assert bool(len(captured) == 1 and marker not in str(captured))

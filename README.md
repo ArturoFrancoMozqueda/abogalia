@@ -42,7 +42,8 @@ make dev-web
 La API usa el launcher privado: lee `.env` únicamente dentro del proceso de runtime,
 con permisos 0600 y sin logs de configuración. El coordinador creó ese archivo con
 variables vacías y exclusión de Git. La plantilla pública [.env.example](.env.example)
-contiene solo nombres; no copiar valores privados a ella. El archivo vacío conserva
+contiene solo nombres; no copiar valores privados a ella.
+Para la publishable, seguir la [guía privada](docs/operations/legalia-private-publishable-setup.md). El archivo vacío conserva
 Auth deshabilitado. No sobrescribir un `.env` existente. Formato restringido
 `NAME=valor`, sin expansión de shell ni valores entre comillas/multilínea;
 [contrato del launcher](docs/operations/identity-env-launcher.md).
@@ -95,7 +96,7 @@ excluido de Git; la API no carga archivos dotenv ni imprime sus valores.
 | `ABOGALIA_CSRF_KEY` | Material privado de firma, al menos 32 bytes |
 | `ABOGALIA_DATABASE_DSN` | PostgreSQL propio, rol Identity runtime mínimo |
 | `ABOGALIA_SESSION_CIPHER_KEY` | Clave Fernet privada para credenciales almacenadas |
-| `ABOGALIA_AUTH_SESSION_CHECK_DSN` | Consulta limitada de sesiones Auth, rol probe separado |
+| `ABOGALIA_AUTH_SESSION_CHECK_DSN` | Legado SQL opcional; no se usa ni se inyecta en el modo HTTP aprobado |
 | `ABOGALIA_AUTH_EMAIL_READY` | `1` solo tras verificar entrega y plantillas OTP |
 
 El cierre operativo de C02 se prepara en el
@@ -108,8 +109,8 @@ solo presencia de nombres por defecto; no acredita valores válidos ni conexione
 expreso dentro de la base sintética privada de pruebas; no opera cuentas reales.
 
 No colocar valores privados en comandos, URLs, variables `VITE_*` o documentación.
-La consulta de sesiones Auth requiere una conexión explícita con permisos mínimos;
-no usar `service_role`. Antes de habilitar operación real faltan validar correo OTP,
+La validación activa usa la API Auth con el token custodiado, conforme a D-039.
+No requiere acceso SQL a auth ni `service_role`; no permite fallback a JWT local. Antes de habilitar operación real faltan validar correo OTP,
 revocación, conexiones privadas y entrega OTP real. JWT de 15 minutos y esquema
 privado ya están configurados en Legalia. Retención aprobada: 30 días para cuenta cerrada y evidencia
 de membresía terminada, 90 días de auditoría; la ejecución periódica y la retirada

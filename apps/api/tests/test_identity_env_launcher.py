@@ -53,10 +53,6 @@ def synthetic_values():
             "host=db.spohytnxscljtitvmdab.supabase.co port=5432 dbname=postgres "
             "user=abogalia_identity_runtime sslmode=verify-full sslrootcert=system"
         ),
-        "ABOGALIA_AUTH_SESSION_CHECK_DSN": (
-            "host=db.spohytnxscljtitvmdab.supabase.co port=5432 dbname=postgres "
-            "user=abogalia_identity_probe sslmode=verify-full sslrootcert=system"
-        ),
     }
 
 
@@ -323,10 +319,7 @@ def test_fresh_real_app_with_empty_file_ignores_inherited_identity(
 )
 def test_session_pooler_role_bound_to_project(hostname):
     values = synthetic_values()
-    for name, role in (
-        ("ABOGALIA_DATABASE_DSN", "abogalia_identity_runtime"),
-        ("ABOGALIA_AUTH_SESSION_CHECK_DSN", "abogalia_identity_probe"),
-    ):
+    for name, role in (("ABOGALIA_DATABASE_DSN", "abogalia_identity_runtime"),):
         values[name] = (
             f"host={hostname} port=5432 dbname=postgres "
             f"user={role}.spohytnxscljtitvmdab sslmode=verify-full"
@@ -370,9 +363,20 @@ def test_retired_project_cannot_be_launched(kind):
             "spohytnxscljtitvmdab", "xggefantvuwpilksfdoy"
         )
     else:
-        values["ABOGALIA_AUTH_SESSION_CHECK_DSN"] = (
+        values["ABOGALIA_DATABASE_DSN"] = (
             "host=aws-0-us-east-1.pooler.supabase.com port=5432 dbname=postgres "
-            "user=abogalia_identity_probe.xggefantvuwpilksfdoy sslmode=verify-full"
+            "user=abogalia_identity_runtime.xggefantvuwpilksfdoy sslmode=verify-full"
         )
     with pytest.raises(launcher.LaunchUnavailable):
         launcher.validate_private_configuration(launcher.PrivateConfiguration(values))
+
+
+def test_http_launcher_accepts_legacy_name_but_never_injects_its_value():
+    values = synthetic_values()
+    values["ABOGALIA_AUTH_SESSION_CHECK_DSN"] = "PUBLIC_SYNTHETIC_UNUSED"
+    configuration = launcher.PrivateConfiguration(values)
+    launcher.validate_private_configuration(configuration)
+    environment = {"ABOGALIA_AUTH_SESSION_CHECK_DSN": "PUBLIC_SYNTHETIC_INHERITED"}
+    launcher.install_environment(configuration, environment)
+    assert "ABOGALIA_AUTH_SESSION_CHECK_DSN" not in environment
+    assert environment["ABOGALIA_IDENTITY_ENABLED"] == "1"

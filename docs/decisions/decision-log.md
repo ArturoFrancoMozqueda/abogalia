@@ -125,3 +125,16 @@ aplazado; no autoriza contratación, envío público sin dominio, eliminación d
 o ampliación de permisos por un error. Ya no denominar el producto piloto; el
 ejecutor histórico conserva límites de ensayo hasta contrato operativo distinto.
 [Evidencia](../operations/legalia-supabase-setup.md).
+
+D-039 — Approved (2026-10-14): Arturo aprobó validación activa por API Auth
+GET /auth/v1/user con token custodiado, conforme al checkpoint revisado. Preservar
+JWT/sub/session_id y fronteras, fail-closed sin caché ni fallback. La aprobación
+habilita implementación local; demostrar revocación en la versión real de Legalia
+sigue siendo requisito previo a activación. No nuevos permisos SQL Auth.
+
+D-040 — Approved (2026-10-14): Arturo aprobó las opciones A de PC-01..PC-05 en
+C03: contexto propio/despacho, revisión manual/publicación, capacidades/membresía,
+salida/relevo y minimización/plazos nuevos 30/90 de datos e historia C03. Concretar
+contratos/modelo/matriz y revisar antes de tablas; sedes, suplantación, revisión
+jurídica y decisiones ajenas a esos paquetes no se resuelven por inferencia.
+No autoaprobación del revisor ni acceso jurídico universal. Asked no equivale a Done.

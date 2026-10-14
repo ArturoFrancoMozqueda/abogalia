@@ -90,7 +90,7 @@ class Probe:
         self.sessions = {}
         self.unavailable = False
 
-    def active(self, session_id, subject):
+    def active(self, session_id, subject, *, access_token):
         if self.unavailable:
             raise StorageUnavailable()
         return self.sessions.get(session_id) == subject
@@ -724,14 +724,14 @@ def test_mfa_verify_frontier_revoke_after_rotation_deletes_current_digest(rig):
     original = probe.active
     calls = 0
 
-    def active(session_id, subject):
+    def active(session_id, subject, *, access_token):
         nonlocal calls
         calls += 1
         if calls == 3:
             # Initial load and elevated JWT/probe succeed, then revoke at the
             # post-provider frontier AFTER tx.save changed the session digest.
             probe.sessions.clear()
-        return original(session_id, subject)
+        return original(session_id, subject, access_token=access_token)
 
     probe.active = active
     response = client.post(
@@ -798,12 +798,12 @@ def test_global_logout_frontier_revocation_preserves_other_session(rig):
     original = probe.active
     calls = 0
 
-    def active(session_id, subject):
+    def active(session_id, subject, *, access_token):
         nonlocal calls
         calls += 1
         if calls == 2:
             probe.sessions.pop(session_a)
-        return original(session_id, subject)
+        return original(session_id, subject, access_token=access_token)
 
     probe.active = active
     response = client.post("/api/auth/logout", headers=headers, json={"scope": "global"})

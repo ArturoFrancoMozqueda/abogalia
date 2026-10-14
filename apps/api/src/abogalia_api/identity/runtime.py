@@ -94,15 +94,14 @@ def load_runtime():
         "ABOGALIA_CSRF_KEY",
         "ABOGALIA_DATABASE_DSN",
         "ABOGALIA_SESSION_CIPHER_KEY",
-        "ABOGALIA_AUTH_SESSION_CHECK_DSN",
     )
     if not all(os.environ.get(name) for name in required):
         raise RuntimeError("Identity runtime configuration unavailable")
     try:
-        from abogalia_api.identity.storage import PostgresSessionProbe, PostgresSessionStore
+        from abogalia_api.identity.session_probe import ApiSessionProbe
+        from abogalia_api.identity.storage import PostgresSessionStore
 
         validate_dsn(os.environ["ABOGALIA_DATABASE_DSN"], "abogalia_identity_runtime")
-        validate_dsn(os.environ["ABOGALIA_AUTH_SESSION_CHECK_DSN"], "abogalia_identity_probe")
         settings = Settings(
             origin=os.environ["ABOGALIA_WEB_ORIGIN"],
             development_http=os.environ.get("ABOGALIA_ENVIRONMENT") == "development",
@@ -115,7 +114,8 @@ def load_runtime():
             os.environ["ABOGALIA_DATABASE_DSN"],
             os.environ["ABOGALIA_SESSION_CIPHER_KEY"].encode(),
         )
-        probe = PostgresSessionProbe(os.environ["ABOGALIA_AUTH_SESSION_CHECK_DSN"])
+        # D-039 explicitly selects provider validation, never a missing-DSN fallback.
+        probe = ApiSessionProbe(settings)
         return settings, store, probe
     except Exception:
         raise RuntimeError("Identity runtime configuration unavailable") from None

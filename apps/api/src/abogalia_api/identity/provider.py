@@ -1,5 +1,6 @@
 """GoTrue gateway: public project key, private session bearer, no diagnostic bodies."""
 
+import json
 from dataclasses import dataclass
 from typing import Protocol
 from uuid import UUID
@@ -25,6 +26,7 @@ class ProviderTokens:
 
 class Provider(Protocol):
     def jwks(self) -> dict: ...
+    def session_subject(self, access_token: str) -> str | None: ...
     def login(self, email: str, password: str) -> ProviderTokens: ...
     def refresh(self, refresh_token: str) -> ProviderTokens: ...
     def logout(self, access_token: str, scope: str) -> None: ...
@@ -36,7 +38,7 @@ class Provider(Protocol):
     def enroll(self, access_token: str) -> dict: ...
     def challenge(self, access_token: str, factor: str) -> dict: ...
     def verify_mfa(
-        self, access_token: str, factor: str, challenge: str, code: str
+        self, access_token: str, factor: str, challenge: str, code: str, *, subject: str, email: str
     ) -> ProviderTokens: ...
 
 
@@ -105,6 +107,62 @@ class SupabaseProvider:
             raise
         except Exception:
             raise ProviderFailure() from None
+
+    def session_subject(self, access_token: str) -> str | None:
+        """One bounded isolated request; only allowlisted absence codes prove revocation."""
+        if (
+            self.settings.project_url != "https://spohytnxscljtitvmdab.supabase.co"
+            or not self.settings.configured
+            or not isinstance(access_token, str)
+            or not 0 < len(access_token) <= 16384
+        ):
+            raise ProviderFailure()
+        response = None
+        try:
+            request = httpx.Request(
+                "GET",
+                self.settings.issuer + "/user",
+                headers={
+                    "apikey": self.settings.publishable_key,
+                    "Authorization": "Bearer " + access_token,
+                },
+                extensions={"timeout": httpx.Timeout(10).as_dict()},
+            )
+            response = self.client.send(request, stream=True, follow_redirects=False)
+            if response.status_code not in (200, 401, 403) or response.headers.get(
+                "content-encoding", "identity"
+            ) not in ("", "identity"):
+                raise ProviderFailure()
+            payload = bytearray()
+            bound = 8192 if response.status_code in (401, 403) else 65536
+            for chunk in response.iter_bytes():
+                if len(payload) + len(chunk) > bound:
+                    raise ProviderFailure()
+                payload.extend(chunk)
+            data = json.loads(payload)
+            if not isinstance(data, dict):
+                raise ProviderFailure()
+            if response.status_code in (401, 403):
+                code = data.get("code", data.get("error_code"))
+                if code in ("session_not_found", "user_not_found"):
+                    return None
+                raise ProviderFailure()
+            subject = data.get("id")
+            if (
+                not isinstance(subject, str)
+                or str(UUID(subject)) != subject
+                or UUID(subject).int == 0
+            ):
+                raise ProviderFailure()
+            return subject
+        except Exception:
+            raise ProviderFailure() from None
+        finally:
+            if response is not None:
+                try:
+                    response.close()
+                except Exception:
+                    raise ProviderFailure() from None
 
     @staticmethod
     def _tokens(data: dict) -> ProviderTokens:
@@ -189,15 +247,21 @@ class SupabaseProvider:
         return self._request("POST", f"/factors/{factor}/challenge", token=access_token, payload={})
 
     def verify_mfa(
-        self, access_token: str, factor: str, challenge: str, code: str
+        self, access_token: str, factor: str, challenge: str, code: str, *, subject: str, email: str
     ) -> ProviderTokens:
-        # GoTrue verify response may omit user: fetch it using the elevated token.
+        # Trusted caller supplies the already verified record identity. No GET
+        # can consume a rotated pair before the service persists its custody.
         data = self._request(
             "POST",
             f"/factors/{factor}/verify",
             token=access_token,
             payload={"challenge_id": challenge, "code": code},
         )
-        if "user" not in data:
-            data["user"] = self._request("GET", "/user", token=data.get("access_token"))
-        return self._tokens(data)
+        if "user" in data:
+            return self._tokens(data)
+        access, refresh = data.get("access_token"), data.get("refresh_token")
+        if not all(
+            isinstance(value, str) and 0 < len(value) <= 16384 for value in (access, refresh)
+        ):
+            raise ProviderFailure()
+        return ProviderTokens(access, refresh, subject, email)

@@ -1,6 +1,12 @@
 # Checkpoint — Profesionales y contextos de Legalia (C03)
 
 Fecha: 2026-10-13. Estado: **Proposed / Awaiting decision** para C03.
+
+Actualización 2026-10-14: **Approved, PC-01..PC-05 A (D-040)** por Arturo.
+Avanzar modelo/contratos/matriz y su implementación revisada con las dependencias
+vigentes. No reabrir las cinco opciones aprobadas. Sedes, entrega de invitaciones,
+procedimiento antisuplantación y revisión jurídica conservan límites explícitos.
+Estado Approved no significa operación profesional real verificada o C03 Done.
 Orden A1 producto/datos; base `eba6cbedb631`, checkout del coordinador.
 Revisor A0. Único entregable propio: este checkpoint; no tablas, migraciones,
 backend, pantallas, permisos nuevos, datos reales o cambios remotos.

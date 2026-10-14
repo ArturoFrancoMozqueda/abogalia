@@ -7,7 +7,8 @@ import pytest
 from cryptography.fernet import Fernet
 
 from abogalia_api.identity import runtime
-from abogalia_api.identity.storage import PostgresSessionProbe, PostgresSessionStore
+from abogalia_api.identity.session_probe import ApiSessionProbe
+from abogalia_api.identity.storage import PostgresSessionStore
 from abogalia_api.main import create_app
 
 pytest_plugins = ["storage_fixtures"]
@@ -26,10 +27,6 @@ def configuration():
         "ABOGALIA_DATABASE_DSN": (
             "host=db.spohytnxscljtitvmdab.supabase.co dbname=postgres "
             "user=abogalia_identity_runtime sslmode=verify-full"
-        ),
-        "ABOGALIA_AUTH_SESSION_CHECK_DSN": (
-            "host=db.spohytnxscljtitvmdab.supabase.co dbname=postgres "
-            "user=abogalia_identity_probe sslmode=verify-full"
         ),
         "ABOGALIA_SESSION_CIPHER_KEY": Fernet.generate_key().decode(),
     }
@@ -72,7 +69,6 @@ def test_disabled_identity_ignores_other_product_variables_and_returns_no_custod
         "ABOGALIA_CSRF_KEY",
         "ABOGALIA_DATABASE_DSN",
         "ABOGALIA_SESSION_CIPHER_KEY",
-        "ABOGALIA_AUTH_SESSION_CHECK_DSN",
     ],
 )
 def test_missing_required_configuration_raises_fixed_redacted_error(missing):
@@ -108,10 +104,15 @@ def test_runtime_dsn_rejects_missing_explicit_destination_elevation_and_external
     assert_closed(values)
 
 
-def test_probe_rejects_runtime_dsn_even_when_destination_matches():
+def test_http_mode_ignores_legacy_probe_configuration_without_sql_connection():
     values = configuration()
-    values["ABOGALIA_AUTH_SESSION_CHECK_DSN"] = values["ABOGALIA_DATABASE_DSN"]
-    assert_closed(values)
+    values["ABOGALIA_AUTH_SESSION_CHECK_DSN"] = MARKER
+    with (
+        patch.object(runtime.os, "environ", values),
+        patch.object(psycopg, "connect", side_effect=AssertionError("No connection permitted")),
+    ):
+        _, _, probe = runtime.load_runtime()
+    assert isinstance(probe, ApiSessionProbe)
 
 
 @pytest.mark.parametrize("role", ["abogalia_identity_runtime", "abogalia_identity_probe"])
@@ -154,7 +155,7 @@ def test_enabled_runtime_constructs_separate_dependencies_without_connecting_or_
         settings, store, probe = runtime.load_runtime()
     assert settings.configured and not settings.development_http
     assert isinstance(store, PostgresSessionStore)
-    assert isinstance(probe, PostgresSessionProbe)
+    assert isinstance(probe, ApiSessionProbe)
     assert bool(MARKER not in repr(settings) + repr(store) + repr(probe))
 
 
@@ -188,7 +189,6 @@ def test_retired_auth_project_fails_closed_without_connecting():
     "field,role",
     [
         ("ABOGALIA_DATABASE_DSN", "abogalia_identity_runtime"),
-        ("ABOGALIA_AUTH_SESSION_CHECK_DSN", "abogalia_identity_probe"),
     ],
 )
 @pytest.mark.parametrize("retired", ["direct", "pooler", "direct_uppercase", "host_list"])
@@ -207,7 +207,7 @@ def test_retired_database_project_fails_closed(field, role, retired):
     assert_closed(values)
 
 
-@pytest.mark.parametrize("field", ["ABOGALIA_DATABASE_DSN", "ABOGALIA_AUTH_SESSION_CHECK_DSN"])
+@pytest.mark.parametrize("field", ["ABOGALIA_DATABASE_DSN"])
 @pytest.mark.parametrize(
     "change",
     [

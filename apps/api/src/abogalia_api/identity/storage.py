@@ -384,7 +384,11 @@ class PostgresSessionProbe:
     def __init__(self, dsn: str):
         self._dsn = dsn
 
-    def active(self, provider_session_id: str, subject: str) -> bool:
+    def active(
+        self, provider_session_id: str, subject: str, *, access_token: str | None = None
+    ) -> bool:
+        # Compatibility for the explicit SQL mechanism and legacy SQL fixtures.
+        # Auth bearer is not needed by this adapter and never enters SQL/config.
         sid, principal = _uuid(provider_session_id), _uuid(subject)
         try:
             with psycopg.connect(

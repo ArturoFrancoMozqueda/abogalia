@@ -44,7 +44,7 @@ class SessionStore(Protocol):
 
 
 class SessionProbe(Protocol):
-    def active(self, provider_session_id: str, subject: str) -> bool: ...
+    def active(self, provider_session_id: str, subject: str, *, access_token: str) -> bool: ...
 
 
 Clock = Callable[[], datetime]

@@ -32,8 +32,32 @@ make check-api pasa. Interfaz: doce sustituciones de nombre visible en ocho arch
 sin modificar autenticación/rutas/contratos; A1 comparó contra HEAD y confirmó
 alcance. pnpm check pasa (lint, tipos, build). No cambios de dependencias o lockfiles.
 
-Checkpoint de validación activa de sesiones y C03 preparados/revisados. Se
-presentaron dos decisiones a Arturo; mientras no responda, permanecen Proposed,
+Checkpoint de validación activa de sesiones y C03 preparados/revisados en la tanda
+anterior. Se presentaron dos decisiones a Arturo; entonces permanecían Proposed,
 sin código GET/user ni tablas/permisos/contextos profesionales. Publishable privada
 continúa pendiente del operador, según su respuesta de esta tanda. No pruebas de
 correo/login real, operación de retención, CI remoto o despliegue atribuidos.
+
+## Nueva orden aprobada — 2026-10-14
+
+Arturo aprobó validación activa HTTP D-039 y PC-01..PC-05 A de C03 D-040.
+Base publicada al iniciar: 338617a91589. La tabla anterior es histórica.
+
+- A4: gateway/probe HTTP y fronteras Identity; pruebas firmadas sintéticas +
+  PostgreSQL aislado. A2 revisa revocación/rotación/fallos antes de integrar.
+- A2/A3: modelo de datos y matriz C03; único responsable de futuras migraciones.
+  Shim SQL limitado a fixtures legados, sin usarlo como fallback runtime.
+- A1/A5: contratos API/UX C03 y primer modelo de dominio privado, tras revisión
+  de campos/propiedad/estados/retención. Invitaciones, concesión del revisor y
+  relevo requieren sus precisiones; no inventar TTL, capacidades o responsables.
+- A0: integración runtime/launcher explícitamente HTTP, documentación privada
+  de publishable, verificación, escaneo redactado y publicación por archivos.
+
+C03 no habilita datos reales por aprobar sus paquetes. C02 conserva la prueba real
+obligatoria de revocación y entrega; no requerir permisos SQL Auth adicionales
+para el mecanismo HTTP aprobado. No leer valores del .env o secretos de proveedor.
+
+Revisión independiente A2 del mecanismo HTTP completada sin bloqueantes en el
+ámbito Identity; 396 pruebas API/SQL pasaron en la integración de A0 antes del
+dominio C03. El runtime no requiere SQL auth ni credenciales probe. El resultado
+final de toda esta tanda se conserva en [informe integrado](legalia-approved-implementation-batch.md).

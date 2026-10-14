@@ -171,7 +171,9 @@ class IdentityService:
         ):
             raise AuthError(403, "REQUEST_FORBIDDEN")
 
-    def _validate_tokens(self, tokens, *, expected_subject=None, expected_session=None):
+    def _validate_tokens(
+        self, tokens, *, expected_subject=None, expected_session=None, check_active=True
+    ):
         try:
             identity = self.verifier.verify(tokens.access_token, self.clock())
             if (
@@ -183,20 +185,44 @@ class IdentityService:
                 )
             ):
                 raise InvalidToken()
-            if not self.probe.active(identity.provider_session_id, identity.subject):
-                raise InvalidToken()
-            return identity
         except (InvalidToken, VerificationUnavailable, StorageUnavailable):
             raise unavailable() from None
+        if not check_active:
+            return identity
+        try:
+            if not self.probe.active(
+                identity.provider_session_id, identity.subject, access_token=tokens.access_token
+            ):
+                raise ProviderFailure("rejected")
+        except StorageUnavailable:
+            raise unavailable() from None
+        return identity
+
+    def _active_record(self, record, now):
+        try:
+            identity = self.verifier.verify(record.access_token, now)
+            if (
+                identity.subject != record.subject
+                or identity.provider_session_id != record.provider_session_id
+                or identity.assurance != record.assurance
+            ):
+                return False
+        except InvalidToken:
+            return False
+        except VerificationUnavailable:
+            raise StorageUnavailable from None
+        return self.probe.active(
+            record.provider_session_id, record.subject, access_token=record.access_token
+        )
 
     def login(self, reference, email, password):
         self.require_dependencies()
         started = self.clock()  # Must precede provider call / global-revocation cutoff.
         try:
             tokens = self.provider.login(email, password)
+            identity = self._validate_tokens(tokens)
         except ProviderFailure as exc:
             raise self._map_failure(exc) from None
-        identity = self._validate_tokens(tokens)
         new_reference = random_reference()
         record = SessionRecord(
             digest=digest_reference(new_reference),
@@ -235,9 +261,11 @@ class IdentityService:
     def authenticated(self, reference, *, touch=False, revoke=False):
         self.require_dependencies()
         pending_error = None
+        infrastructure_error = None
         completed = False
         with self._transaction(reference) as tx:
             record = tx.record
+            original_digest = record.digest if record is not None else None
             now = self.clock()
             if record is None or not self._alive(record, now):
                 tx.delete()
@@ -245,43 +273,32 @@ class IdentityService:
                 result = None
             else:
                 try:
-                    if not self.probe.active(record.provider_session_id, record.subject):
-                        tx.delete()
-                        result = None
-                    else:
-                        changed = False
-                        if record.token_expires_at <= now + timedelta(seconds=30):
-                            tokens = self.provider.refresh(record.refresh_token)
-                            identity = self._validate_tokens(
-                                tokens,
-                                expected_subject=record.subject,
-                                expected_session=record.provider_session_id,
-                            )
-                            changed = True
-                            record = replace(
-                                record,
-                                access_token=tokens.access_token,
-                                refresh_token=tokens.refresh_token,
-                                email=tokens.email,
-                                assurance=identity.assurance,
-                                token_expires_at=identity.expires_at,
-                            )
-                        else:
-                            identity = self.verifier.verify(record.access_token, now)
-                            if (
-                                identity.subject != record.subject
-                                or identity.provider_session_id != record.provider_session_id
-                                or identity.assurance != record.assurance
-                            ):
-                                raise InvalidToken()
-                        if changed:
-                            tx.save(record)
-                        result = record
+                    if record.token_expires_at <= now + timedelta(seconds=30):
+                        tokens = self.provider.refresh(record.refresh_token)
+                        identity = self._validate_tokens(
+                            tokens,
+                            expected_subject=record.subject,
+                            expected_session=record.provider_session_id,
+                            check_active=False,
+                        )
+                        record = replace(
+                            record,
+                            access_token=tokens.access_token,
+                            refresh_token=tokens.refresh_token,
+                            email=tokens.email,
+                            assurance=identity.assurance,
+                            token_expires_at=identity.expires_at,
+                        )
+                        tx.save(record)
+                    if not self._active_record(record, self.clock()):
+                        raise InvalidToken()
+                    result = record
                 except InvalidToken:
                     tx.delete()
                     result = None
                 except (VerificationUnavailable, StorageUnavailable):
-                    raise unavailable() from None
+                    infrastructure_error = unavailable()
+                    result = None
                 except ProviderFailure as exc:
                     if exc.kind == "rejected":
                         # A definitive refresh rejection purges custodied tokens;
@@ -303,10 +320,11 @@ class IdentityService:
                         current is not None
                         and self._alive(current, self.clock())
                         and current.token_expires_at > self.clock()
-                        and self.probe.active(current.provider_session_id, current.subject)
+                        and self._active_record(current, self.clock())
                     )
                 except StorageUnavailable:
-                    raise unavailable() from None
+                    infrastructure_error = unavailable()
+                    valid = None
                 if valid:
                     completed = True
                     if pending_error is None:
@@ -321,9 +339,15 @@ class IdentityService:
                             # Global logout finalizer runs after both checks and
                             # commits local revocation before external signout.
                             tx.revoke_subject(current.subject)
-                else:
+                elif valid is False:
                     tx.delete()
+                elif current is not None and current.digest != original_digest:
+                    # MFA consumed/rotated credentials, but no new cookie can be
+                    # delivered on 503. Preserve the existing opaque reference.
+                    tx.save(replace(current, digest=original_digest))
         # Raising inside the SQL context would roll back a necessary refresh.
+        if infrastructure_error is not None:
+            raise infrastructure_error from None
         if completed:
             if pending_error is not None:
                 raise pending_error from None
@@ -402,7 +426,10 @@ class IdentityService:
             tokens = self.provider.verify_code(email, code, "recovery")
         except ProviderFailure as exc:
             raise self._map_failure(exc, "INVALID_CODE") from None
-        identity = self._validate_tokens(tokens)
+        try:
+            identity = self._validate_tokens(tokens)
+        except ProviderFailure as exc:
+            raise self._map_failure(exc, "INVALID_CODE") from None
         try:
             self.provider.update_password(tokens.access_token, password)
         except ProviderFailure as exc:
@@ -487,12 +514,18 @@ class IdentityService:
                     # Consume before provider request, including failed attempts.
                     self._challenges.pop(body["challenge_id"])
                 tokens = self.provider.verify_mfa(
-                    record.access_token, body["factor_id"], body["challenge_id"], body["code"]
+                    record.access_token,
+                    body["factor_id"],
+                    body["challenge_id"],
+                    body["code"],
+                    subject=record.subject,
+                    email=record.email,
                 )
                 identity = self._validate_tokens(
                     tokens,
                     expected_subject=record.subject,
                     expected_session=record.provider_session_id,
+                    check_active=False,
                 )
                 if identity.assurance != "aal2":
                     raise unavailable()

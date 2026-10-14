@@ -17,7 +17,7 @@ NAMES = (
     "ABOGALIA_AUTH_SESSION_CHECK_DSN",
     "ABOGALIA_AUTH_EMAIL_READY",
 )
-JWKS_URL = "https://xggefantvuwpilksfdoy.supabase.co/auth/v1/.well-known/jwks.json"
+JWKS_URL = "https://spohytnxscljtitvmdab.supabase.co/auth/v1/.well-known/jwks.json"
 OWNER = "abogalia_identity_owner"
 RUNTIME = "abogalia_identity_runtime"
 PROBE = "abogalia_identity_probe"

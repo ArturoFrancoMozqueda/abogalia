@@ -1,6 +1,11 @@
 # Checkpoint — Validación activa de sesiones Identity
 
 Fecha: 2026-10-13. C02, A2/A3. Estado **Proposed / Awaiting decision**.
+
+Actualización 2026-10-14: **Approved, alternativa A HTTP (D-039)** por Arturo.
+Se autoriza implementación y pruebas locales; aceptación de revocación real y
+configuración privada siguen pendientes. Las alternativas/preguntas siguientes
+conservan contexto de preparación, no requieren volver a pedir esta aprobación.
 Base eba6cbedb631; nombres técnicos preservados. Revisor independiente A4.
 La aprobación IC-05 exige revocación efectiva en la siguiente petición privada;
 esta propuesta cambia la fuente técnica de esa comprobación, no su garantía.
@@ -71,12 +76,21 @@ No duplicar un GET dentro de una misma comprobación. Timeout/429/5xx/JSON invá
 redirect o respuesta excesiva nunca permiten acceso; distinguir sesión rechazada
 de proveedor indisponible con categorías fijas. Conserva rechazo antes de devolver
 contenido y semántica transaccional/refresh del servicio.
-Solo códigos definitivos de sesión/usuario ausentes en allowlist, sobre token
-verificado, pueden limpiar custody; un 403 genérico no es prueba de revocación.
+Solo respuestas 401/403 con códigos `session_not_found` o `user_not_found`, sobre
+token verificado, pueden limpiar custody. Upstream Auth emplea 403 para esos
+códigos; no asumir que la ausencia siempre llega como 401. Un 403 genérico,
+`bad_jwt` inesperado o cualquier código no aprobado es infraestructura/indeterminado
+y nunca prueba de revocación definitiva para borrar la sesión local.
 Conservar la sesión local ante errores de infraestructura, denegando la operación.
 No callback asíncrono que
 considere válida una operación mientras sigue consultando Auth. Respuestas y trazas
 no incluyen payload del proveedor. Sin reintentos automáticos de refresh/logouts.
+
+Refresh/MFA pueden consumir un par de tokens antes de que falle una comprobación
+HTTP. Preservar el nuevo par criptográficamente ligado al mismo sub/SID bajo lock,
+sin ampliar actividad, aun si luego se responde503; no devolver una cookie nueva
+o contenido/permiso hasta validar la frontera. Separar conservación de custody
+de commit de negocio: esto no autoriza efectos C03 si Auth está indeterminado.
 
 La [documentación de sesiones](https://supabase.com/docs/guides/auth/sessions)
 relaciona session_id con auth.sessions y explica que cierre elimina las filas

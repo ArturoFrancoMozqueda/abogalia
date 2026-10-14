@@ -1,10 +1,10 @@
 # Plan de desarrollo de Legalia por agentes
 
-## Estado vigente y reactivación (2026-10-13)
+## Estado vigente y reactivación (2026-10-14)
 
 Nombre vigente Legalia (D-038). Las secciones de preparación y destinos anteriores
 se conservan abajo como antecedentes; no representan el estado actual.
-Referencia común publicada: `eba6cbedb631`, rama `codex/identity-design`.
+Referencia común publicada al inicio de esta tanda: `338617a91589`, rama `codex/identity-design`.
 Arturo pidió reactivar los agentes para continuar el plan completo. Se asignan
 tres trabajos con archivos exclusivos y revisión independiente, sin ampliar
 decisiones de negocio ni acceder a secretos o clientes.
@@ -14,7 +14,7 @@ decisiones de negocio ni acceder a secretos o clientes.
 | C00 Fundación | Implementada localmente | Conservar React Router/Vite + FastAPI y dependencias fijadas |
 | C01 Desarrollo seguro | Scanner y controles locales verificados; CI remoto pendiente | Revisión redactada antes de commit/push; integración por coordinador |
 | C02 Identity | API/web/SQL local; schema privado y Auth/SMTP/plantillas en Legalia | Endurecer runtime; resolver revocación/probe; verificar correo real y retención |
-| C03 Contextos profesionales | Diseño pendiente de aprobación | Checkpoint conceptual con propiedad, roles, verificación, salida y retención |
+| C03 Contextos profesionales | PC-01..PC-05 A aprobados (D-040); contratos en revisión | Modelo/matriz/API/UX y primer incremento privado; detalles de invitación/revisor/relevo pendientes |
 | C04–C12, C14–C17 | Secuencia funcional pendiente de checkpoints propios | Contratos/diseños según dependencias; no iniciar tablas o UX sustantiva por inferencia |
 | C13 IA | Dos recorridos funcionales delimitados; proveedor/tratamiento/límites pendientes | Conservar petición expresa y revisión humana; no transmitir datos jurídicos |
 | C18–C19 Ampliaciones | Visión futura | No forman parte de una implementación automática |
@@ -27,11 +27,15 @@ nuevos sin uso conservados. SMTP guardado por Arturo y dos plantillas OTP instal
 entrega real pendiente. 299 pruebas API/SQL y 31 pruebas de herramientas pasaron
 en la tanda anterior; no atribuirlas a cambios posteriores sin volver a comprobar.
 
-C02 todavía no Done: publishable del `.env` privado pendiente de Arturo, grants
-Auth limitados no disponibles para el operador, conexiones/TLS/recorrido real,
+C02 todavía no Done: publishable del `.env` privado pendiente de Arturo, validación
+HTTP aprobada (D-039) en implementación local, conexiones/TLS/recorrido real,
 evidencia de retiro Auth y scheduler de retención pendientes. Dominio aplazado;
 remitente de prueba del proveedor no habilita correo a usuarios generales. No
 presentar la construcción del producto como piloto. [Evidencia vigente](operations/legalia-supabase-setup.md).
+
+Tanda D-039/D-040: validación HTTP implementada localmente y dominio puro C03
+inicial, sin endpoints/persistencia profesionales. 416 pruebas API/SQL/dominio y
+31 de herramientas pasan; ver [informe integrado](operations/legalia-approved-implementation-batch.md).
 
 Órdenes activas: [tanda de continuación](operations/legalia-agent-continuation.md).
 El coordinador integra y publica los cambios revisados; las decisiones aplicables

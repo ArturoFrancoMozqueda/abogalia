@@ -1,4 +1,4 @@
-# Launcher privado de Identity — piloto local C02
+# Launcher privado de Identity — desarrollo local C02
 
 Actualización D-038 (2026-10-13): producto **Legalia**, destino vigente
 `https://spohytnxscljtitvmdab.supabase.co`; conexión directa
@@ -9,7 +9,7 @@ existente para actualizarlo: Arturo cambia los valores mediante su editor privad
 Las referencias Abogalia siguientes son evidencia histórica de implementación.
 [Estado vigente](legalia-supabase-setup.md).
 
-Base común: 98dd4fa. Alcance aprobado: piloto local con Supabase Abogalia real,
+Base histórica: 98dd4fa. Alcance vigente: desarrollo local con Supabase Legalia real,
 operación por Arturo y carga privada de configuración únicamente en runtime.
 Este artefacto no provisiona roles, aplica migraciones, modifica Auth/SMTP ni opera
 cuentas. Implementación: [dev_identity_api.py](/Users/arturo/Documents/repos/abogalia/scripts/dev_identity_api.py).
@@ -65,21 +65,23 @@ Allowlist exacta; cualquier otro nombre falla, incluso vacío:
 - ABOGALIA_AUTH_EMAIL_READY
 
 IDENTITY_ENABLED y AUTH_EMAIL_READY aceptan 0/1 o ausencia. Habilitación exige todos
-los restantes nombres con valor y ENVIRONMENT=development; EMAIL_READY no se exige
+los restantes nombres salvo AUTH_SESSION_CHECK_DSN, con ENVIRONMENT=development.
+D-039 selecciona validación HTTP explícita: el nombre SQL legado sigue aceptado
+para compatibilidad, pero no se requiere, valida, inyecta ni usa su valor. EMAIL_READY no se exige
 para importar el runtime, pero debe seguir 0 hasta verificar entrega OTP real.
 No incluir SMTP, admin/migración, tokens de sesiones o datos de cuentas en este
 archivo de runtime API. Esos mecanismos conservan sus responsables y contratos.
 
 ## Validación y confinamiento
 
-URL Auth exacta `https://xggefantvuwpilksfdoy.supabase.co`; ningún otro proyecto,
+URL Auth exacta `https://spohytnxscljtitvmdab.supabase.co`; ningún otro proyecto,
 localhost alternativo o fallback a Kova. Usa los validadores existentes Settings,
 validate_dsn y Fernet; exige publishable, firma CSRF y clave de cifrado de formato
 aprobado, sin imprimirlos. No agrega ni modifica dependencias, runtime/main o locks.
 
-DSNs de runtime/probe separados con sus roles mínimos: base postgres, port 5432,
-sslmode=verify-full. Directo exige `db.xggefantvuwpilksfdoy.supabase.co` y usuario de
-rol sin sufijo. Session pooler requiere usuario `rol.xggefantvuwpilksfdoy`; allowlist
+DSN de runtime con su rol mínimo: base postgres, port 5432,
+sslmode=verify-full. Directo exige `db.spohytnxscljtitvmdab.supabase.co` y usuario de
+rol sin sufijo. Session pooler requiere usuario `rol.spohytnxscljtitvmdab`; allowlist
 preparada únicamente para `aws-0-us-east-1.pooler.supabase.com` y
 `aws-1-us-east-1.pooler.supabase.com`. **No se verificó cuál corresponde al proyecto**:
 el operador debe confirmar el hostname no secreto proporcionado por Supabase,
