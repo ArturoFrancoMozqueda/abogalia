@@ -13,7 +13,7 @@ Abogalia siguientes conservan evidencia histórica y **no son destinos de runtim
 | Auth URL | `https://spohytnxscljtitvmdab.supabase.co` | Destino público; runtime reconciliado sin leer `.env` |
 | Identity PostgreSQL | Esquema privado `identity` | Instalado desde SQL Editor; once controles de roles/RLS/grants true |
 | Probe Auth | Rol independiente pendiente | `postgres` carece de USAGE grantable sobre `auth`; no elevar permisos |
-| Resend | Cuenta independiente de Legalia creada por Arturo | Sin dominio; SMTP preparado en formulario, clave y guardado privados pendientes |
+| Resend | Cuenta independiente de Legalia creada por Arturo | SMTP guardado privadamente por Arturo; plantillas instaladas y verificadas en panel; entrega y dominio pendientes |
 
 Security Advisor muestra cero errores y advertencias tras restringir EXECUTE de la
 función preexistente `public.rls_auto_enable()`. No se leyó su definición ni se

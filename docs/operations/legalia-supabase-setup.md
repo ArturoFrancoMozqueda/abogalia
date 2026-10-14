@@ -57,12 +57,20 @@ TOTP Enabled verificado; SMS MFA Disabled. Limit duration of AAL1 sessions activ
 con ventana de quince minutos; no se alteraron estos valores. JWKS público del
 proyecto devolvió una clave ES256; se registró únicamente cantidad y algoritmo.
 
-SMTP aún **no guardado**: formulario preparado con remitente de prueba público
-onboarding@resend.dev, nombre Legalia, smtp.resend.com, puerto 465, usuario resend,
-intervalo 60 s. Arturo debe introducir la clave y guardar privadamente. No se leyó
-clave, contraseña, `.env` real ni correo; no hubo envíos. El panel bloquea editar
-plantillas hasta guardar Custom SMTP. Las dos fuentes del repositorio ya dicen Legalia
-y conservan únicamente {{ .Token }}. Dominio verificado pendiente para enviar a usuarios.
+Arturo confirmó que introdujo y guardó la clave SMTP privadamente. El panel
+desbloqueó la edición de plantillas, corroborando Custom SMTP configurado, sin
+abrir su campo Password. Formulario preparado anteriormente: remitente de prueba
+público onboarding@resend.dev, nombre Legalia, smtp.resend.com, puerto 465, usuario
+resend e intervalo 60 s. No se leyó clave, contraseña, `.env` real ni correo.
+
+Se instalaron y guardaron Confirm sign up y Reset password con las fuentes del
+repositorio y asuntos «Confirma tu correo en Legalia» / «Recupera tu acceso a Legalia».
+El panel confirmó guardado; la vista previa de recuperación muestra Legalia,
+código {{ .Token }} en cuerpo y ningún enlace. Sin envíos ni OTP reales. Guardar
+SMTP no acredita que la clave sea válida, TLS efectivo o entrega; faltan ensayos
+controlados. Dominio verificado pendiente para enviar a usuarios. Arturo confirmó
+el destinatario propio asociado a la nueva cuenta Resend; su dirección se conserva
+solo en el contexto privado de operación, sin publicarla en el repositorio.
 
 ## Bloqueos reales y operación
 
