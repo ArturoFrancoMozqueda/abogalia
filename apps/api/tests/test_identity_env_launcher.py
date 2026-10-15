@@ -5,6 +5,7 @@ import importlib.util
 import json
 import logging
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -161,6 +162,34 @@ def test_enabled_configuration_validates_without_network(monkeypatch):
 
     monkeypatch.setattr(psycopg, "connect", forbidden)
     launcher.validate_private_configuration(launcher.PrivateConfiguration(synthetic_values()))
+
+
+def test_enabled_launcher_from_clean_shell_without_pythonpath(private_file, tmp_path):
+    values = synthetic_values()
+    path = private_file("\n".join(name + "=" + value for name, value in values.items()))
+    program = """
+import importlib.util
+import sys
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('clean_launcher', sys.argv[1])
+module = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = module
+spec.loader.exec_module(module)
+raise SystemExit(module.main([], env_file=Path(sys.argv[2]),
+                             factory=lambda: object(), serve=lambda _: None))
+"""
+    result = subprocess.run(
+        [sys.executable, "-c", program, str(SPEC.origin), str(path)],
+        cwd=tmp_path,
+        env={"PATH": os.defpath},
+        capture_output=True,
+        text=True,
+        timeout=20,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert json.loads(result.stdout) == {"status": "stopped"}
+    assert result.stderr == ""
 
 
 @pytest.mark.parametrize(

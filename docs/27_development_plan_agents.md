@@ -2,6 +2,13 @@
 
 ## Estado vigente al 2026-10-15
 
+Arturo autorizó habilitar registro y acceso desde UI local antes de completar
+pruebas reales. Identity/correo activos en API8090 + web5190, solo127.0.0.1;
+confirmación/CSRF/MFA y comprobación HTTP Auth conservados. Flujo HTTP anónimo y
+rechazos verifican servidor/proxy; registro/correo/MFA/revocación reales pendientes.
+533 pruebas pasan; corregido arranque del launcher sinPYTHONPATH. Los estados
+anteriores de flags desactivados siguientes conservan evidencia histórica.
+
 Cuenta APP de ensayo: buzón controlado confirmado por Arturo. Registro privado
 por TTY preparado, con presupuesto SMTP original y veinte pruebas sintéticas;
 revisión A2 sin bloqueantes. Integración API/SQL:532 pruebas pasan. Ejecución humana

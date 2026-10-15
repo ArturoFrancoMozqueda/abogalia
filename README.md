@@ -1,5 +1,11 @@
 # Legalia
 
+Registro y acceso habilitados localmente por instrucción expresa de Arturo:
+http://127.0.0.1:5190/registro. API8090 y frontend5190 usan Supabase real;
+confirmación de correo, CSRF y MFA permanecen activos. Esta habilitación no
+acredita entrega de correo o revocación real ni publicación en Internet.
+Ver [estado de activación](docs/checkpoints/identity-real-activation.md).
+
 Nombre anterior: Abogalia. Se conservan rutas de repositorio, paquetes y variables
 técnicas para evitar un renombrado general. El destino Supabase vigente es
 `spohytnxscljtitvmdab`; consultar la [instalación de Legalia](docs/operations/legalia-supabase-setup.md).
@@ -101,7 +107,7 @@ excluido de Git; la API no carga archivos dotenv ni imprime sus valores.
 | `ABOGALIA_DATABASE_DSN` | PostgreSQL propio, rol Identity runtime mínimo |
 | `ABOGALIA_SESSION_CIPHER_KEY` | Clave Fernet privada para credenciales almacenadas |
 | `ABOGALIA_AUTH_SESSION_CHECK_DSN` | Legado SQL opcional; no se usa ni se inyecta en el modo HTTP aprobado |
-| `ABOGALIA_AUTH_EMAIL_READY` | `1` solo tras verificar entrega y plantillas OTP |
+| `ABOGALIA_AUTH_EMAIL_READY` | Habilita correo con `1`; activado localmente por instrucción expresa antes de validar entrega, según checkpoint vigente |
 
 El cierre operativo de C02 se prepara en el
 [checkpoint de activación real](docs/checkpoints/identity-real-activation.md).

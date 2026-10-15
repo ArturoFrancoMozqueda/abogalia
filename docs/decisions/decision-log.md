@@ -155,3 +155,13 @@ no se publica la dirección ni se renueva presupuesto por esta confirmación.
 La herramienta de registro no activa flags ni acredita ejecución real por estar
 probada con transporte sintético. La cuenta APP no es una cuenta administrativa
 del proveedor y no recibe capacidades profesionales.
+
+2026-10-15 — Arturo indicó «No importa que habilites el acceso general ya hazlo».
+Autoriza activar registro/acceso/correo desde la UI local con Supabase real antes
+de completar aceptación de entrega y revocación. Se activaron flags privados y
+servidores ligados a127.0.0.1; no publicación en Internet ni cambio de proveedor,
+grants o gasto. Se preservan confirmación, comprobación activa de sesión, CSRF,
+MFA y RLS. El flag legado AUTH_EMAIL_READY habilita correo por esta instrucción;
+no acredita entrega probada. Registro/correo/MFA/revocación y retención reales
+siguen pendientes y no se declara C02 Done. La herramienta TTY deja de ser requisito
+para crear la cuenta. Ver checkpoint de activación actualizado.

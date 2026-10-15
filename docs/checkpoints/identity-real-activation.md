@@ -1,5 +1,28 @@
 # Checkpoint — Activación real de Identity C02
 
+## Activación local por instrucción expresa — 2026-10-15
+
+Arturo indicó «No importa que habilites el acceso general ya hazlo». Esta instrucción
+posterior permite activar ahora registro/acceso/correo en la UI local con Supabase
+real, antes de completar la aceptación remota. Se activaron los dos flags privados
+Identity/email y se arrancaron API8090 y web5190 ligados a127.0.0.1. El nombre
+legado AUTH_EMAIL_READY expresa aquí habilitación solicitada, no entrega probada.
+Las condiciones históricas de esperar esa prueba antes de activar quedan
+sustituidas solo para esta operación local. C02 no está operativamente cerrado.
+
+Se mantienen validación activa de sesión, confirmación de correo, MFA profesional,
+CSRF, custodia cifrada, TLS y permisos/RLS. No se cambian grants o configuración
+del proveedor ni se publica un despliegue. El remitente del proveedor mantiene sus
+restricciones de destinatario; activar UI no elimina esa restricción.
+
+Comprobación ejecutada por HTTP local: página /registro200, bootstrapCSRF200 con
+origen correcto, sesión anónima200, mutación sinCSRF403 y formulario vacío con
+CSRF422. Sin envíos de correo ni creación de cuenta en esta comprobación. Entrega,
+OTP/MFA, revocación real, retención periódica y migración C03 remota pendientes.
+Launcher corregido para cargar src antes de validar configuración activada;
+regresión en shell sinPYTHONPATH pasa. Integración533 pruebas pasan y revisión
+independiente A2 sin bloqueantes. Los estados desactivados siguientes son históricos.
+
 ## Estado vigente — 2026-10-15
 
 Este apartado prevalece sobre las descripciones históricas siguientes, que se

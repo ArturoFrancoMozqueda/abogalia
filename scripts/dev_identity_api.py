@@ -248,6 +248,7 @@ def main(argv=None, *, env_file=ENV_FILE, factory=None, serve=None):
         logging.disable(sys.maxsize)
         with silent_diagnostics():
             configuration = parse_private_file(env_file)
+            sys.path.insert(0, str(ROOT / "apps/api/src"))
             validate_private_configuration(configuration)
             install_environment(configuration)
             app = (factory or build_app)()
