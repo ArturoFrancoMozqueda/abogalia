@@ -29,7 +29,7 @@ Este registro distingue instrucciones y decisiones de Arturo de propuestas en di
 | D-023 | Preparar una suite propia de servicios para Abogalia, con recursos, credenciales y costos separados de Kova | Approved | 2026-10-12 | No aprueba proveedores, tiers ni contratación |
 | D-024 | Propuesta anterior de backend TypeScript integrado en Workers; conservada como alternativa tras elegir React + FastAPI | Proposed | 2026-10-12 | No fue aprobada; selección posterior en D-025 |
 | D-025 | React para frontend y FastAPI sobre Python como backend central | Approved | 2026-10-12 | [ADR-001](ADR-001-react-fastapi.md) |
-| D-026 | Suite en comparación para React + FastAPI: propuesta vigente Cloudflare frontend Free, API pequeña Fly y Supabase/Resend Free con recursos propios | Discussing | 2026-10-12 | Hosting, identidad, tiers, presupuesto y contratación pendientes |
+| D-026 | Cloudflare Workers Static Assets para React y Fly.io para FastAPI, con Supabase/Resend propios | Approved | 2026-10-15 | UnaVM1GB Virginia US$6.70/30d más transferencia/impuestos aprobada; cuentas/destinos/build y despliegue pendientes |
 | D-027 | Usar posprojectsupport para administrar servicios con espacios propios por producto y conexiones reutilizables en Codex; conservar identidad personal de GitHub | Approved | 2026-10-12 | [ADR-002](ADR-002-administration-and-product-isolation.md); configuración y alcance de conexiones pendientes |
 | D-028 | Supabase Auth como proveedor de identidad de usuarios de Abogalia | Approved | 2026-10-12 | [ADR-003](ADR-003-supabase-auth.md); flujos, permisos y sesiones por diseñar |
 | D-029 | Proyecto vacío abogalia en organización Abogalia Free y región us-east-1 | Implemented | 2026-10-12 | [ADR-004](ADR-004-empty-supabase-project.md); creado por Arturo y verificado; sin conexión de aplicación |
@@ -165,3 +165,17 @@ MFA y RLS. El flag legado AUTH_EMAIL_READY habilita correo por esta instrucción
 no acredita entrega probada. Registro/correo/MFA/revocación y retención reales
 siguen pendientes y no se declara C02 Done. La herramienta TTY deja de ser requisito
 para crear la cuenta. Ver checkpoint de activación actualizado.
+
+2026-10-15 — Tras recordar la propuesta Cloudflarefrontend/Flybackend con
+Supabase y Resend existentes, Arturo respondió «Si me gusta esa así que sigamos
+esa». D-026 queda Approved para esta selección e implementación de su preparación.
+No se vuelve a proponer Vercel ni se reabre el stack. La aprobación no registra
+por sí sola organización/cuenta real, hostname disponible o presupuesto concreto;
+se prepara paquete verificable y se presenta costo antes de contratar cómputo.
+No se modifican recursos Kova, secretos locales, Auth remoto o DNS por esta decisión.
+
+Autorización posterior2026-10-15: Arturo respondió «Sí, autorizo esa configuración
+y costo» a una única máquinaFly sharedcpu1x/1GB en Virginia, baseUS$6.70 por30d
+encendida más transferencia/impuestos, con CloudflareFree y sin réplicas ni
+servicios pagados extra. Presupuesto de esta configuración Approved; no se vuelve
+a preguntar por ese mismo gasto. No acredita aprovisionamiento o despliegue.

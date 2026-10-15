@@ -1,5 +1,32 @@
 # Checkpoint — Suite inicial pequeña, con recursos propios de Abogalia
 
+## Aprobación vigente — 2026-10-15
+
+Arturo autorizó después expresamente una única máquina Fly1GB en Virginia:
+US$6.70 por30d encendida más transferencia/impuestos, sin réplicas ni servicios
+pagados extra; CloudflareFree. Esta configuración ya no requiere volver a aprobar
+el gasto. Cuentas/destinos, accesos y verificaciones reales siguen pendientes.
+
+Arturo aprobó expresamente seguir Cloudflare Workers Static Assets para frontend
+y Fly.io para FastAPI, con Supabase y Resend ya propios de Legalia (D-026).
+Se prepara configuración, proxy de mismo origen, contenedor y pruebas; no se
+reabre elección de hosting o framework. Cuentas/organización/URLs reales y
+destinos reales siguen pendientes de comprobación; el presupuesto concreto
+posteriormente aprobado se registra arriba.
+No se ha desplegado por esta aprobación. Los apartados Discussing siguientes
+conservan el historial previo y no sustituyen esta decisión.
+
+Tarifa oficial consultada2026-10-15: shared-cpu-1x/1GB en iad/ewr se publica a
+US$6.70 por30d encendida; transferencia y recursos adicionales aparte, mes31d
+distinto. [Precios Fly](https://docs.fly.io/about/pricing).
+Cloudflare Free dentro de cuota: configuración inicial Worker-first ejecuta el
+Worker incluso para assets; no atribuirle peticiones estáticas ilimitadas sin
+consumo Worker. No cambio automático a Paid. [Facturación Cloudflare](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/).
+
+Órdenes asignadas: A4 contenedor/entrypointFly; A1 proxy/assetsCloudflare; A2 límites
+de seguridad y revisión independiente. A0 integra configuración global, escanea
+fuentes/artefactos y registra destino antes de cualquier operación externa.
+
 Fecha: 2026-10-12. React + FastAPI Approved, D-025. Hosting y gasto Discussing, D-026. Suite propia Approved, D-023. Administración con posprojectsupport y espacios propios Approved, D-027. Supabase Auth Approved, D-028; proyecto vacío propio Free/us-east-1 Implemented, D-029. Organización Abogalia Free creada y monorepo local implementado, D-030; integración de aplicación y hosting pendientes. Esta es la recomendación vigente; el checkpoint anterior conserva alternativas con Vercel y servicios pagados.
 
 ## Lo que entiendo

@@ -1,5 +1,31 @@
 # Legalia — órdenes de continuación por agentes
 
+## Hosting aprobado — 2026-10-15, base4d0b227c0618
+
+Arturo eligió Cloudflare Workers Static Assets para frontend y Fly.io para FastAPI.
+Después aprobó una solaVM1GB en Virginia aUS$6.70/30d más transferencia/impuestos,
+CloudflareFree, sin réplicas o servicios pagados extra. No volver a pedir aprobación
+de esa configuración/costo. Cuentas y destinos reales todavía sin confirmar.
+
+Tanda entregada: A4 Dockerfile/ignore/templateFly/entrypoint y43 pruebas nuevas;
+A1 Worker proxy/assets y30 pruebas Node; A2 frontera de seguridad y revisión
+independiente de ambos, sin bloqueantes en fuentes. A0 integra comandos globales,
+Wrangler4.151.0 conlockfile/instalaciónsinscripts y compilación deploy--dry-run sin
+subir recursos, con dotenv apagado y envfiledevnull. CLI Fly0.4.118 verificado por
+SHA256 oficial, ayuda consultada en entorno aislado sincredenciales.
+
+Verificación:576 pruebas API/SQL y30 Worker pasan, lint/tipos/build web pasan.
+Scanner de fuentes/historial,17 archivos web y3 archivos de bundleWorker sin
+hallazgos. Sin build Linux de imagen (Docker no instalado), publicación, cuenta,
+máquina, secretos remotos o URL pública creados. CLIcompilación no prueba edge.
+Siguiente paso: acceso a cuentas propias, fijar hostnames reales, construir imagen
+en entorno aprobado e inyectar secretos privadamente antes de desplegar/verificar.
+Los flags locales activos no se copian al proveedor de frontend ni a un build.
+
+Evidencia: [Fly](legalia-fly-deployment.md),
+[Cloudflare](legalia-cloudflare-deployment.md),
+[seguridad](../security/legalia-hosting-boundaries.md).
+
 ## Orden de implementación — 2026-10-15, base fe75a8b1f17b
 
 Arturo pidió continuar con agent teams. Checkout compartido en codex/identity-design;

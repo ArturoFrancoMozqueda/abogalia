@@ -1,5 +1,11 @@
 # Legalia
 
+Hosting elegido: Cloudflare Workers Static Assets para frontend y Fly.io para
+FastAPI, con Supabase/Resend existentes. Paquete de despliegue preparado y probado
+localmente; cuentas/destinos, build de contenedor y despliegue remoto pendientes.
+Ver [Cloudflare](docs/operations/legalia-cloudflare-deployment.md) y
+[Fly](docs/operations/legalia-fly-deployment.md). La URL siguiente sigue siendo local.
+
 Registro y acceso habilitados localmente por instrucción expresa de Arturo:
 http://127.0.0.1:5190/registro. API8090 y frontend5190 usan Supabase real;
 confirmación de correo, CSRF y MFA permanecen activos. Esta habilitación no

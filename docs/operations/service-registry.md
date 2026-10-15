@@ -2,6 +2,14 @@
 
 ## Destino vigente: Legalia (2026-10-13)
 
+Actualización hosting2026-10-15: Arturo eligió Cloudflare Workers Static Assets
+para frontend y Fly.io para FastAPI. Configuración y pruebas locales preparadas;
+cuenta Cloudflare, organización/appFly y hostnames reales todavía no confirmados.
+No despliegue realizado ni recursos contratados. CLI Fly0.4.118 obtenido del
+release oficial y verificado por SHA256 en directorio temporal, ayuda consultada
+con HOME vacío; no login ni lectura de credenciales existentes. Las entradas
+históricas de hosting propuesto no reabren esta selección.
+
 Arturo cambió el nombre del producto a **Legalia**, creó cuentas independientes
 y pidió implementar el esquema aprobado en el proyecto nuevo. Las entradas
 Abogalia siguientes conservan evidencia histórica y **no son destinos de runtime**.

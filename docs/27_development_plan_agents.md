@@ -2,6 +2,14 @@
 
 ## Estado vigente al 2026-10-15
 
+Hosting D-026 aprobado: Cloudflarefrontend/Flybackend. Paquete local con proxy
+same-origin, plantillaCloudflare cerrada hasta registrar destino real y contenedor
+FastAPI de un proceso/unaVM. 576 pruebas API/SQL y30 pruebas del Worker pasan;
+lint/tipos/build web pasan. Orígenes/cuentas reales, buildLinux/escaneoimagen,
+despliegue remoto pendientes; sin recursos externos provisionados. Arturo aprobó
+el costo de unaVM1GB en Virginia US$6.70/30d más transferencia/impuestos, sinextras
+pagados ni réplicas; CloudflareFree. No volver a solicitar esa autorización.
+
 Arturo autorizó habilitar registro y acceso desde UI local antes de completar
 pruebas reales. Identity/correo activos en API8090 + web5190, solo127.0.0.1;
 confirmación/CSRF/MFA y comprobación HTTP Auth conservados. Flujo HTTP anónimo y

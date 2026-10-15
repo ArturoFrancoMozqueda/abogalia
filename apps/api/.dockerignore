@@ -1,0 +1,16 @@
+# Build context MUST be apps/api. Everything denied except reviewed sources and public CA.
+**
+!Dockerfile
+!.dockerignore
+!requirements.txt
+!src
+!src/abogalia_api
+!src/abogalia_api/*.py
+!src/abogalia_api/identity
+!src/abogalia_api/identity/*.py
+!src/abogalia_api/professional_contexts
+!src/abogalia_api/professional_contexts/*.py
+!src/abogalia_api/routes
+!src/abogalia_api/routes/*.py
+!certificates
+!certificates/supabase-prod-ca-2021.crt

@@ -1,0 +1,35 @@
+# TEMPLATE ONLY. Coordinator must set real app + primary_region in a private deployment copy.
+# No organization/app/origin has been invented. Do not deploy this template unchanged.
+kill_signal = "SIGTERM"
+kill_timeout = "15s"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  ABOGALIA_ENVIRONMENT = "production"
+  ABOGALIA_IDENTITY_ENABLED = "0"
+  # ABOGALIA_WEB_ORIGIN must be the exact approved Cloudflare HTTPS origin.
+  # No credentials in this file: inject runtime values through the app secret manager.
+
+[deploy]
+  strategy = "immediate"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = false
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "15s"
+    interval = "30s"
+    timeout = "5s"
+    method = "GET"
+    path = "/api/health"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "1gb"

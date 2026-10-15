@@ -23,6 +23,8 @@ __pycache__/
 htmlcov/
 .DS_Store
 output/setup/
+.wrangler/
+.dev.vars*
 
 
 # Private bounded email pilot state

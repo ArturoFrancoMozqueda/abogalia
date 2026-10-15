@@ -11,7 +11,8 @@
     "typecheck": "pnpm --filter @abogalia/web typecheck",
     "lint": "biome check .",
     "format": "biome check --write .",
-    "check": "pnpm lint && pnpm typecheck && pnpm build"
+    "check:worker": "pnpm --filter @abogalia/web exec tsc --ignoreConfig --noEmit --strict --target ES2022 --module ESNext --lib ES2022,DOM,DOM.Iterable worker/index.ts && node --test --test-reporter=dot apps/web/worker/index.test.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm check:worker && pnpm build"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15"
