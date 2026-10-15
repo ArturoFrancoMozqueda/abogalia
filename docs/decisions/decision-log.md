@@ -147,3 +147,11 @@ condicionada al procedimiento de revisión; resolución excepcional de cierre de
 despacho a Arturo mediante capacidad separada y explícita sin contenido jurídico.
 Relevo ordinario requiere nominación/aceptación; retiro no espera cierre. No concede
 privilegios reales por sí sola ni resuelve el procedimiento jurídico pendiente.
+
+2026-10-15 — Arturo confirmó reutilizar el buzón controlado de Legalia para crear
+una cuenta APP dedicada al ensayo C02. Se prepara entrada humana oculta de
+contraseña y OTP, reutilizando el cupo máximo de seis solicitudes de D-036;
+no se publica la dirección ni se renueva presupuesto por esta confirmación.
+La herramienta de registro no activa flags ni acredita ejecución real por estar
+probada con transporte sintético. La cuenta APP no es una cuenta administrativa
+del proveedor y no recibe capacidades profesionales.

@@ -2,6 +2,12 @@
 
 ## Estado vigente al 2026-10-15
 
+Cuenta APP de ensayo: buzón controlado confirmado por Arturo. Registro privado
+por TTY preparado, con presupuesto SMTP original y veinte pruebas sintéticas;
+revisión A2 sin bloqueantes. Integración API/SQL:532 pruebas pasan. Ejecución humana
+con contraseña/OTP sigue pendiente, sin flags activados ni correos enviados en la
+preparación. [Instrucciones](operations/legalia-test-account-registration.md).
+
 Segunda tanda de agent teams completada sobre fe75a8b1f17b: retención coordinada
 local C02/C03 con9 pruebas nuevas de límites/concurrencia/FK; harness privado de
 aceptación de revocación con19 pruebas sintéticas; error de diccionario de mensajes
