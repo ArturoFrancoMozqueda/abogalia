@@ -65,3 +65,22 @@ de API pasan. Los negativos
 cubren input seguro/literal, permisos, links/tamaño, rol/TLS/destino, verificador,
 salida privada/nunca lectura.env y negativa de repetición/CA alterada/rol elevado.
 No acredita cambio de contraseña remoto: pendiente de input privado del operador.
+
+## Ejecución confirmada — 2026-10-15
+
+Arturo informó haber guardado el valor administrativo en el .env existente.
+Un proceso local privado trasladó únicamente esa variable a .env.database-setup,
+sin mostrar valores ni modificar las demás líneas. Ejecutor aprobado completó
+`runtime_password_set_and_verified`: contraseña exclusiva del runtime establecida
+y autenticación posterior con su rol correcto confirmada. No roles/grants nuevos.
+
+Otro proceso privado instaló únicamente ABOGALIA_DATABASE_DSN desde la salida
+privada verificada; mantuvo IDENTITY_ENABLED=0 y AUTH_EMAIL_READY=0. Se completaron
+ENVIRONMENT=development y WEB_ORIGIN=http://127.0.0.1:5190, vacías anteriormente,
+conforme al entorno local aprobado. Parser/validación completa del formato de
+configuración pasó en memoria, sin activar Identity ni imprimir valores.
+
+Esto confirma conexión y formato local; no acredita registro/correo/MFA/revocación
+Auth, retención ejecutada, aplicación remota C03 o despliegue. El operador conserva
+control del retiro del archivo administrativo temporal; no se elimina su copia
+sin coordinación. Los archivos privados siguen excluidos de Git y permiso0600.
