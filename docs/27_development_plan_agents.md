@@ -2,6 +2,14 @@
 
 ## Estado vigente al 2026-10-15
 
+Segunda tanda de agent teams completada sobre fe75a8b1f17b: retención coordinada
+local C02/C03 con9 pruebas nuevas de límites/concurrencia/FK; harness privado de
+aceptación de revocación con19 pruebas sintéticas; error de diccionario de mensajes
+corregido en Auth/C03 y22 comprobaciones del cliente. Integración:512 pruebas
+API/SQL pasan,31 de herramientas y lint/tipos/build web pasan. Revisión independiente
+sin bloqueantes para el alcance actual. No ejecución real del harness ni purga
+remota, scheduler o migración C03. Ver [órdenes y resultado](operations/legalia-agent-continuation.md).
+
 La configuración privada de C02 y la conexión del rol runtime con TLS verify-full
 están verificadas; publishable ya no requiere copia del operador. Identity y correo
 siguen desactivados hasta demostrar entrega OTP y revocación reales. C03 cuenta con

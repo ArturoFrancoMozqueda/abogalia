@@ -1,5 +1,21 @@
 # Checkpoint — Operación de retención Identity
 
+## Actualización C02/C03 — 2026-10-15
+
+La implementación local coordina sesiones/auditoría, agregados profesionales30d
+e historia mínima90d. La falta total o parcial del esquema C03 bloquea el ejecutor
+antes de escrituras y se informa mediante un estado fijo. Limpieza de sesiones
+e historia se confirma separadamente de la purga de cuentas: una dependencia de
+una cuenta no conserva por rollback los tokens vencidos de otras.
+Ver [diseño y evidencia actuales](../operations/legalia-coordinated-retention.md).
+
+Esta extensión conserva el alcance sintético local. El runner no acepta evidencia
+Auth ni borra cuentas vencidas: informa bloqueo y requiere al responsable. No se
+ejecutó contra Supabase, no hay scheduler operativo y no se ha verificado retiro
+Auth o restauración. Los apartados siguientes conservan el contrato histórico;
+los conteos/estados nuevos se documentan en la evidencia enlazada. No se reabren
+los plazos aprobados30/90 ni las responsabilidades asumidas por Arturo.
+
 Fecha: 2026-10-12. Tanda 03, C02, A2/A3. Estado: implementación local sintética
 autorizada por A0; operación real, eliminación de cuentas y scheduler pendientes.
 Base común `720c1cf`. Revisor independiente: A0. No cambios remotos.

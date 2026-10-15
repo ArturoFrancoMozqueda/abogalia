@@ -111,8 +111,9 @@ export function professionalMessage(error: unknown): string {
     RATE_LIMITED: "Espera un momento antes de volver a intentarlo.",
   };
   return error instanceof AuthError
-    ? (messages[error.code] ??
-        "No pudimos completar la solicitud. Actualiza antes de continuar.")
+    ? Object.hasOwn(messages, error.code)
+      ? messages[error.code]
+      : "No pudimos completar la solicitud. Actualiza antes de continuar."
     : "No pudimos confirmar el resultado. Actualiza antes de continuar.";
 }
 async function json(response: Response): Promise<unknown> {

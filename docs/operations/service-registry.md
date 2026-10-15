@@ -12,7 +12,7 @@ Abogalia siguientes conservan evidencia histórica y **no son destinos de runtim
 | Supabase proyecto | `spohytnxscljtitvmdab`, legalia | Healthy; us-east-1; PostgreSQL 17.11 |
 | Auth URL | `https://spohytnxscljtitvmdab.supabase.co` | Destino público; runtime reconciliado sin leer `.env` |
 | Identity PostgreSQL | Esquema privado `identity` | Instalado desde SQL Editor; once controles de roles/RLS/grants true |
-| Probe Auth | Rol independiente pendiente | `postgres` carece de USAGE grantable sobre `auth`; no elevar permisos |
+| Validación de sesión Auth | HTTP D-039 implementado localmente | Revocación real pendiente; no requiere rol probe SQL ni permisos sobre `auth` |
 | Resend | Cuenta independiente de Legalia creada por Arturo | SMTP guardado privadamente por Arturo; plantillas instaladas y verificadas en panel; entrega y dominio pendientes |
 
 Security Advisor muestra cero errores y advertencias tras restringir EXECUTE de la
@@ -23,6 +23,12 @@ El conector Supabase de esta sesión no pudo acceder al proyecto nuevo; no confu
 la sesión del panel con una nueva conexión MCP autorizada.
 Los nombres técnicos ABOGALIA_* y abogalia_identity_* se mantienen por compatibilidad;
 no representan reutilización de credenciales. [Evidencia vigente](legalia-supabase-setup.md).
+
+2026-10-15: conexión runtime con TLS verify-full y formato privado verificados.
+Una lectura remota exclusiva de catálogo confirmó identidad del rol runtime,
+ausencia de privilegios elevados/membresías ascendentes y tres tablas Identity
+propiedad del owner con RLS FORCE. C03 aún no instalado; ambos flags de activación
+y correo permanecen desactivados. Sin lectura de filas de usuarios ni mutaciones.
 
 ## Evidencia histórica de Abogalia
 

@@ -31,8 +31,9 @@ export class AuthError extends Error {
     public readonly status: number,
   ) {
     super(
-      messages[code] ??
-        "No pudimos completar la solicitud. Inténtalo de nuevo.",
+      Object.hasOwn(messages, code)
+        ? messages[code]
+        : "No pudimos completar la solicitud. Inténtalo de nuevo.",
     );
     this.name = "AuthError";
   }

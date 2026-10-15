@@ -1,5 +1,50 @@
 # Legalia — órdenes de continuación por agentes
 
+## Orden de implementación — 2026-10-15, base fe75a8b1f17b
+
+Arturo pidió continuar con agent teams. Checkout compartido en codex/identity-design;
+A0 controla integración, configuración global, revisión de secretos y publicación.
+No acceso a archivos privados ni operaciones remotas por los agentes.
+
+| Responsable | Capacidad y archivos propios | Aceptación |
+|---|---|---|
+| A2/A3 identity_security | C02/C03: clase PostgresIdentityMaintenance y resultado adyacente en identity/storage.py, scripts/run_identity_retention.py, pruebas dedicadas y legalia-coordinated-retention.md | Purga local coordinada30/90, RLS real, ausencia/parcial C03 bloquea explícitamente; dependencias de una cuenta no revierten limpieza de otras; sin prueba Auth real, runner no borra cuentas |
+| A4 identity_checkpoint | C02: scripts/verify_identity_auth_sessions.py, test_identity_auth_verification.py, legalia-real-session-acceptance.md | Harness separado con entrada privada TTY, destino fijo y tres sesiones; revocación local/global con JWT originales no vencidos; estados mínimos, sin correo ni cambios de flags |
+| A1/A5 identity_data | C03: cliente/formulario/rutas professional propias, legalia-professional-web-verification.md | QA reproducible de errores, concurrencia, MFA, cierre de sesión y accesibilidad; corregir solo defectos dentro del contrato aprobado |
+
+A4 revisa retención tras entrega A2; A1/A5 revisa el harness de A4, A0 integra.
+Pruebas del harness simuladas no son aceptación remota. Una cuenta confirmada y
+dedicada al ensayo es prerrequisito para ejecutarlo; no usar cuenta administrativa
+ni revocar sesiones globales por inferencia. No se reinicia el cupo de seis envíos.
+La retirada Auth fiable y restauraciones siguen pendientes de contrato operativo;
+no se inventa evidencia mediante UUIDs o ausencia de sesión.
+
+### Resultado de la orden
+
+Los tres agentes entregaron y congelaron sus cambios. A4 revisó retención y
+A1/A5 revisó el harness final; A0 revisó integración y el cliente web. Retención
+coordinada implementada únicamente en fixture: cortes30/90, fases separadas,
+revalidación de corte tras lock y tratamiento por cuenta de FK inmediato. El límite
+de un futuro FK diferido está documentado; no se incorpora tal FK al esquema.
+El runner no recibe prueba Auth y mantiene cuentas bloqueadas.
+
+Harness de sesiones listo con entrada oculta TTY, destino fijo y tres logins;
+separa aislamiento local de revocación global y no confunde JWT vencido o acuse
+de logout con ausencia confirmada. No ejecutado contra Legalia: una cuenta APP
+confirmada y dedicada sigue siendo prerrequisito. Cero envíos SMTP en esta tanda.
+
+Verificación final:512 pruebas API/SQL pasan en PostgreSQL aislado/transporte
+Auth simulado;31 pruebas de herramientas y22 comprobaciones cliente con fetch
+simulado pasan. Lint/formato/dependencias/importación API y lint/tipos/build web
+pasan. Una lectura remota exclusiva de catálogo confirmó runtime mínimo y RLS
+FORCE de tres tablas Identity, sin filas de usuarios. Configuración privada y
+flags no cambiados; migración C03 remota, correo/MFA/revocación real, retención
+periódica y restauración siguen pendientes. No CI remoto ni despliegue atribuidos.
+
+Evidencia: [retención](legalia-coordinated-retention.md),
+[sesiones](legalia-real-session-acceptance.md),
+[web](legalia-professional-web-verification.md).
+
 ## Estado vigente — 2026-10-15
 
 Esta actualización sustituye el estado operativo de los apartados históricos

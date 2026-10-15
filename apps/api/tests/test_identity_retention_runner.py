@@ -10,7 +10,7 @@ from uuid import uuid4
 import psycopg
 import pytest
 
-pytest_plugins = ["storage_fixtures"]
+pytest_plugins = ["storage_fixtures", "test_professional_contexts_storage"]
 SCRIPT = Path(__file__).parents[3] / "scripts/run_identity_retention.py"
 spec = importlib.util.spec_from_file_location("identity_retention_runner", SCRIPT)
 runner = importlib.util.module_from_spec(spec)
@@ -121,7 +121,9 @@ def totals(database):
         )
 
 
-def test_default_preview_read_only_exact_boundaries(isolated_database, store, clock, monkeypatch):
+def test_default_preview_read_only_exact_boundaries(
+    isolated_database, store, clock, monkeypatch, professional_database
+):
     seed_due(isolated_database, store, clock)
     before = totals(isolated_database)
     original = psycopg.Connection.execute
@@ -149,13 +151,18 @@ def test_default_preview_read_only_exact_boundaries(isolated_database, store, cl
             "audit_events": 1,
             "blocked_accounts": 1,
             "retention_compliant": False,
+            "professional_drafts": 0,
+            "professional_events": 0,
+            "blocked_accounts_missing_proof": 1,
+            "blocked_accounts_dependencies": 0,
+            "professional_schema": "ready",
         }
     )
     assert bool(not writes and totals(isolated_database) == before)
 
 
 def test_apply_cleans_independently_preserves_accounts_and_idempotent(
-    isolated_database, store, clock
+    isolated_database, store, clock, professional_database
 ):
     seed_due(isolated_database, store, clock)
     report, code = runner.run(["--apply", "--isolated-local"], environ=source_env(), clock=clock)
@@ -168,6 +175,11 @@ def test_apply_cleans_independently_preserves_accounts_and_idempotent(
             "audit_events": 1,
             "blocked_accounts": 1,
             "retention_compliant": False,
+            "professional_drafts": 0,
+            "professional_events": 0,
+            "blocked_accounts_missing_proof": 1,
+            "blocked_accounts_dependencies": 0,
+            "professional_schema": "ready",
         }
     )
     assert bool(totals(isolated_database) == (0, 3, 2))
@@ -176,7 +188,7 @@ def test_apply_cleans_independently_preserves_accounts_and_idempotent(
     assert bool(again["counts"]["audit_events"] == 0 and totals(isolated_database) == (0, 3, 2))
 
 
-def test_empty_apply_success_without_auth_claim(isolated_database, clock):
+def test_empty_apply_success_without_auth_claim(isolated_database, clock, professional_database):
     report, code = runner.run(["--apply", "--isolated-local"], environ=source_env(), clock=clock)
     assert bool(code == 0 and report["counts"]["retention_compliant"])
     assert bool(report["counts"]["accounts"] == 0)

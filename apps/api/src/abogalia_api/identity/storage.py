@@ -345,50 +345,144 @@ class PurgeResult:
     audit_events: int
     blocked_accounts: int
     retention_compliant: bool
+    professional_drafts: int = 0
+    professional_events: int = 0
+    blocked_accounts_missing_proof: int = 0
+    blocked_accounts_dependencies: int = 0
+    professional_schema: str = "ready"
 
 
 class PostgresIdentityMaintenance:
-    """Separate owner-role job; account blockage never keeps expired custody or audit."""
+    """Coordinated local maintenance; retirement assertions remain fixture-only.
+
+    Cleanup phases commit independently. Unexpected later failures can therefore
+    leave partial cleanup; callers must never interpret an error as a rollback.
+    This class does not authenticate provider retirement evidence or operate Auth.
+    """
 
     def __init__(self, dsn: str, clock: Clock | None = None):
         self._dsn = dsn
         self._clock = clock or (lambda: datetime.now(UTC))
 
+    @staticmethod
+    def professional_schema(conn: psycopg.Connection) -> str:
+        with conn.cursor(row_factory=dict_row) as cursor:
+            row = cursor.execute(
+                "SELECT to_regclass('identity.professional_drafts') IS NOT NULL AS drafts, "
+                "to_regclass('identity.professional_events') IS NOT NULL AS events"
+            ).fetchone()
+        if row["drafts"] and row["events"]:
+            return "ready"
+        return "partial" if row["drafts"] or row["events"] else "absent"
+
+    @staticmethod
+    def _guard(conn: psycopg.Connection) -> None:
+        conn.execute("SET LOCAL statement_timeout = '10s'")
+        conn.execute("SET LOCAL lock_timeout = '5s'")
+        _require_role(conn, "abogalia_identity_owner")
+        if PostgresIdentityMaintenance.professional_schema(conn) != "ready":
+            raise StorageUnavailable
+
     def purge(self, *, retired_subjects: set[str]) -> PurgeResult:
+        # Legacy synthetic tests may exercise confirmed-account deletion. A set of
+        # UUIDs is not a production evidence mechanism; the local runner sends none.
         retired = {_uuid(subject) for subject in retired_subjects}
         now = _time(self._clock())
+        cutoff = now - timedelta(days=30)
         try:
             with psycopg.connect(
                 self._dsn, autocommit=True, row_factory=dict_row, **_credentials(self._dsn)
             ) as conn:
                 with conn.transaction():
-                    conn.execute("SET LOCAL statement_timeout = '10s'")
-                    conn.execute("SET LOCAL lock_timeout = '5s'")
-                    _require_role(conn, "abogalia_identity_owner")
-                    due = conn.execute(
-                        "SELECT subject FROM identity.users WHERE state = 'closed' "
-                        "AND closed_at <= %s ORDER BY subject FOR UPDATE",
-                        (now - timedelta(days=30),),
+                    self._guard(conn)
+                    # Keep the same user -> child lock order as Identity. A blocked
+                    # account or its FK must never roll back this committed phase.
+                    conn.execute(
+                        "SELECT subject FROM identity.users WHERE state != 'active' OR subject IN "
+                        "(SELECT subject FROM identity.app_sessions WHERE created_at <= %s "
+                        "OR last_activity_at <= %s) ORDER BY subject FOR UPDATE",
+                        (now - ABSOLUTE, now - INACTIVE),
                     ).fetchall()
-                    subjects = {str(row["subject"]) for row in due}
-                    confirmed = sorted(subjects & retired)
-                    blocked = len(subjects - retired)
                     sessions = conn.execute(
                         "DELETE FROM identity.app_sessions WHERE created_at <= %s "
                         "OR last_activity_at <= %s OR subject IN "
                         "(SELECT subject FROM identity.users WHERE state != 'active')",
                         (now - ABSOLUTE, now - INACTIVE),
                     ).rowcount
-                    accounts = conn.execute(
-                        "DELETE FROM identity.users WHERE state = 'closed' AND closed_at <= %s "
-                        "AND subject = ANY(%s::uuid[])",
-                        (now - timedelta(days=30), confirmed),
-                    ).rowcount
                     events = conn.execute(
                         "DELETE FROM identity.audit WHERE occurred_at <= %s",
                         (now - timedelta(days=90),),
                     ).rowcount
-                    return PurgeResult(sessions, accounts, events, blocked, blocked == 0)
+                    professional_events = conn.execute(
+                        "DELETE FROM identity.professional_events WHERE occurred_at <= %s",
+                        (now - timedelta(days=90),),
+                    ).rowcount
+                with conn.transaction():
+                    self._guard(conn)
+                    candidates = conn.execute(
+                        "SELECT u.subject FROM identity.users u WHERE EXISTS "
+                        "(SELECT 1 FROM identity.professional_drafts d "
+                        "WHERE d.owner_user_id=u.subject "
+                        "AND COALESCE(d.withdrawn_at,d.profile_updated_at)<=%s) "
+                        "ORDER BY u.subject FOR UPDATE",
+                        (cutoff,),
+                    ).fetchall()
+                    professional_drafts = 0
+                    for row in candidates:
+                        # A concurrent real edit may have committed while user lock
+                        # was awaited. Recheck current versions and cutoff together.
+                        professional_drafts += conn.execute(
+                            "DELETE FROM identity.professional_drafts WHERE owner_user_id=%s "
+                            "AND COALESCE(withdrawn_at,profile_updated_at)<=%s",
+                            (row["subject"], cutoff),
+                        ).rowcount
+                with conn.transaction():
+                    self._guard(conn)
+                    due = conn.execute(
+                        "SELECT subject FROM identity.users WHERE state='closed' "
+                        "AND closed_at<=%s ORDER BY subject FOR UPDATE",
+                        (cutoff,),
+                    ).fetchall()
+                    accounts = blocked = missing_proof = dependencies = 0
+                    for row in due:
+                        subject = str(row["subject"])
+                        missing = subject not in retired
+                        dependency = conn.execute(
+                            "SELECT EXISTS(SELECT 1 FROM identity.professional_drafts "
+                            "WHERE owner_user_id=%s) AS present",
+                            (subject,),
+                        ).fetchone()["present"]
+                        missing_proof += int(missing)
+                        dependencies += int(dependency)
+                        if missing or dependency:
+                            blocked += 1
+                            continue
+                        try:
+                            with conn.transaction():
+                                # An immediate FK failure affects only this account,
+                                # not cleanup already confirmed above. A future
+                                # deferred constraint could abort the account phase.
+                                accounts += conn.execute(
+                                    "DELETE FROM identity.users WHERE subject=%s "
+                                    "AND state='closed' AND closed_at<=%s AND NOT EXISTS "
+                                    "(SELECT 1 FROM identity.professional_drafts d "
+                                    "WHERE d.owner_user_id=identity.users.subject)",
+                                    (subject, cutoff),
+                                ).rowcount
+                        except psycopg.errors.ForeignKeyViolation:
+                            dependencies += 1
+                            blocked += 1
+                    return PurgeResult(
+                        sessions,
+                        accounts,
+                        events,
+                        blocked,
+                        blocked == 0,
+                        professional_drafts,
+                        professional_events,
+                        missing_proof,
+                        dependencies,
+                    )
         except psycopg.Error:
             raise StorageUnavailable from None
 

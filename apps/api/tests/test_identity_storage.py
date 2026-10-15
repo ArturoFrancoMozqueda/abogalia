@@ -15,7 +15,7 @@ from abogalia_api.identity.storage import (
     PostgresSessionStore,
 )
 
-pytest_plugins = ["storage_fixtures"]
+pytest_plugins = ["storage_fixtures", "test_professional_contexts_storage"]
 
 
 def make_record(clock, **kwargs):
@@ -243,7 +243,7 @@ def test_revoke_serializes_and_refresh_cannot_resurrect(store, clock):
 
 
 def test_closed_account_not_reactivated_and_retention_fails_without_auth_retirement(
-    store, clock, isolated_database
+    store, clock, isolated_database, professional_database
 ):
     record = make_record(clock)
     store.create(record)
@@ -328,7 +328,9 @@ def test_concurrent_create_waiting_for_revoke_cannot_reintroduce_session(store, 
         assert bool(tx.record is None)
 
 
-def test_blocked_account_does_not_retain_other_tokens_or_old_audit(store, clock, isolated_database):
+def test_blocked_account_does_not_retain_other_tokens_or_old_audit(
+    store, clock, isolated_database, professional_database
+):
     a, b = make_record(clock), make_record(clock, suffix="two")
     store.create(a)
     store.create(b)

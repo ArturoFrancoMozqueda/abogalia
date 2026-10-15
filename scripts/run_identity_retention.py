@@ -16,6 +16,12 @@ class RetentionError(Exception):
     """Fixed diagnostic boundary; never include configuration or database values."""
 
 
+class ProfessionalSchemaUnavailable(RetentionError):
+    def __init__(self, status):
+        self.status = status if status in ("absent", "partial") else "unavailable"
+        super().__init__("Professional retention schema unavailable")
+
+
 class Parser(argparse.ArgumentParser):
     def error(self, message):
         raise RetentionError from None
@@ -60,10 +66,16 @@ def local_dsn(source):
 
 def preview(dsn, now):
     import psycopg
-    from abogalia_api.identity.storage import ABSOLUTE, INACTIVE, _require_role
+    from abogalia_api.identity.storage import (
+        ABSOLUTE,
+        INACTIVE,
+        PostgresIdentityMaintenance,
+        _credentials,
+        _require_role,
+    )
 
     with psycopg.connect(  # noqa: SIM117 - Explicit connection/transaction lifecycle.
-        dsn, autocommit=True, connect_timeout=5, password="", passfile=os.devnull
+        dsn, autocommit=True, connect_timeout=5, **_credentials(dsn)
     ) as conn:
         with conn.transaction():
             conn.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
@@ -79,6 +91,9 @@ def preview(dsn, now):
             ).fetchone()[0]
             if owner != "abogalia_identity_owner":
                 raise RetentionError
+            schema = PostgresIdentityMaintenance.professional_schema(conn)
+            if schema != "ready":
+                raise ProfessionalSchemaUnavailable(schema)
             sessions = conn.execute(
                 "SELECT count(*) FROM identity.app_sessions WHERE created_at <= %s "
                 "OR last_activity_at <= %s OR subject IN "
@@ -93,12 +108,32 @@ def preview(dsn, now):
                 "SELECT count(*) FROM identity.audit WHERE occurred_at <= %s",
                 (now - timedelta(days=90),),
             ).fetchone()[0]
+            professional_drafts = conn.execute(
+                "SELECT count(*) FROM identity.professional_drafts WHERE "
+                "COALESCE(withdrawn_at,profile_updated_at)<=%s",
+                (now - timedelta(days=30),),
+            ).fetchone()[0]
+            professional_events = conn.execute(
+                "SELECT count(*) FROM identity.professional_events WHERE occurred_at<=%s",
+                (now - timedelta(days=90),),
+            ).fetchone()[0]
+            dependencies = conn.execute(
+                "SELECT count(*) FROM identity.users u WHERE state='closed' AND closed_at<=%s "
+                "AND EXISTS(SELECT 1 FROM identity.professional_drafts d WHERE d.owner_user_id=u.subject "
+                "AND COALESCE(d.withdrawn_at,d.profile_updated_at)>%s)",
+                (now - timedelta(days=30), now - timedelta(days=30)),
+            ).fetchone()[0]
             return {
                 "sessions": sessions,
                 "accounts": 0,
                 "audit_events": events,
                 "blocked_accounts": blocked,
                 "retention_compliant": blocked == 0,
+                "professional_drafts": professional_drafts,
+                "professional_events": professional_events,
+                "blocked_accounts_missing_proof": blocked,
+                "blocked_accounts_dependencies": dependencies,
+                "professional_schema": "ready",
             }
 
 
@@ -129,7 +164,9 @@ def run(argv=None, *, environ=None, clock=None):
             owner_dsn = make_conninfo(dsn, options="-c role=abogalia_identity_owner")
             # No subject assertion or Auth evidence is accepted by this tool.
             counts = asdict(
-                PostgresIdentityMaintenance(owner_dsn, lambda: now).purge(retired_subjects=set())
+                PostgresIdentityMaintenance(owner_dsn, lambda: now).purge(
+                    retired_subjects=set()
+                )
             )
         return {
             "status": "applied" if args.apply else "dry_run",
@@ -137,6 +174,12 @@ def run(argv=None, *, environ=None, clock=None):
             "counts": counts,
             "diagnostics": "suppressed",
         }, (3 if args.apply and not counts["retention_compliant"] else 0)
+    except ProfessionalSchemaUnavailable as error:
+        return {
+            "status": "professional_schema_unavailable",
+            "professional_schema": error.status,
+            "diagnostics": "suppressed",
+        }, 2
     except Exception:  # noqa: BLE001 - Boundary emits fixed metadata only.
         return {"status": "retention_runner_failed", "diagnostics": "suppressed"}, 2
 
