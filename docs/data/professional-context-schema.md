@@ -7,10 +7,86 @@ documento ni campos pendientes elegidos silenciosamente**. LEGAL REVIEW REQUIRED
 
 ## Alcance, propiedad y cardinalidad
 
+### Persistencia incremental coordinada (D-041, 2026-10-14)
+
+Arturo aprobó Q-C03-01..03 A: invitaciones24h, recibos terminales30d e historia90d;
+revisor manual Arturo con correo confirmado/MFA y capacidad limitada, sin self-review;
+cierre excepcional con capacidad distinta y sin acceso jurídico. Esta tanda sigue
+limitada al agregado privado draft/preparing: esas aprobaciones no incorporan aquí
+tablas de invitación, roles de revisor o transiciones de despacho.
+
+Propuesta física antes de SQL: `identity.professional_drafts` representa el agregado
+en una fila, con profile_id PK, owner_user_id UNIQUE, context_id UNIQUE, display_name,
+declared_area nullable, profile_state/context_state, profile_version/context_version,
+created_at, profile_updated_at/context_updated_at y withdrawn_at/closed_at nullable.
+kind=practice es constante comprobada. CHECK liga draft/preparing o withdrawn/closed
+y fecha de retiro igual: un UPDATE no puede dejar retiro parcial. Owner referencia
+identity.users con RESTRICT, nunca cascada de datos o historia.
+
+`identity.professional_events` contiene solo actor, profile_id/context_id lógicos,
+transición, fecha y ambas versiones. Su identificador interno no contiene PII; sin
+FK a cuenta/agregado, no pierde historia90d por borrado30d. No texto del formulario,
+tokens, email, IP ni copias históricas de nombre/área. El runtime no lee ni modifica
+historia; su inserción se liga al sujeto verificado y objeto propio.
+
+Mismos roles existentes owner/runtime; ningún rol nuevo, grant público ni Data API.
+FORCE RLS por subject GUC transaccional local. SELECT/INSERT propios y UPDATE solo
+campos mutables; IDs, owner, kind y created_at sin UPDATE. Runtime sin DELETE/TRUNCATE,
+sin capacidad DDL o lectura global. Política owner separada para mantenimiento, no
+para tráfico API. Cuenta no puede borrarse antes de eliminar su agregado elegible;
+los eventos lógicos90d sobreviven sin presentar UUID como anonimización.
+
+Interfaz acordada con A4: `PostgresProfessionalContextStore(conn, *, subject, clock=None)` no acepta DSN ni abre
+conexión; usa la misma conexión de SessionTransaction validada C02. Operaciones
+create/read/edit/withdraw toman sujeto de ese principal, reloj inyectado y CAS;
+lectura/edición bloquean la fila del agregado y creación se serializa con usuario
+Identity. Métodos read()->agregado|None, create(fields), edit(fields, expected_version),
+withdraw(expected_version, expected_context_version) devuelven agregado; create
+genera IDs servidor y repetición informa STATE_CONFLICT sin restituir withdrawn.
+Errores SQL se convierten a mensaje fijo sin query/params/diagnósticos.
+
+La unidad de negocio usa savepoint separado después de guardar refresh consumido;
+se mantiene hasta revalidación Auth de frontera. Error de dominio o frontera negativa/
+indeterminada revierte agregado/eventos, conserva custodia renovada y no extiende
+actividad. Contrato A4: tx.business()->CM(conn); authenticated(business=True) entrega
+(record, conn), conserva savepoint durante yield y frontera, libera o rollback antes
+touch/delete de Identity. Defaults de Auth existentes mantienen (record, tx).
+No acceder a `_conn` desde rutas ni usar otra conexión/commit independiente.
+
+Purga futura owner: agregado draft actualizado<=now-30d o withdrawn<=now-30d,
+eventos occurred_at<=now-90d. Lectura/no-op/reintento retiro no reinician plazo.
+Worker Identity vigente debe permanecer gated para borrar cuenta cuando exista
+este agregado: antes comprobar/purgar C03 elegible a30d; si no elegible, reportar
+cuenta bloqueada, nunca afirmar purge completo ni usar cascade. Su extensión no
+forma parte de este store. Prueba negativa exige FK RESTRICT y eventos intactos.
+Responsable operativo inicial: Arturo (D-036/D-041). No existe job C03 ejecutado
+ni cumplimiento periódico comprobado; alertar bloqueo/omisión de30/90d a Arturo.
+Una cuenta closed pierde Auth inmediatamente; no se reabre el agregado profesional
+ni se mantiene acceso para superar FK. La operación debe retirar y purgar C03
+cuando sea elegible antes de borrar cuenta, sin borrar historia90d ni terceros.
+Scheduler/credencial de mantenimiento/retirada Auth siguen pendientes: almacenar
+campos no demuestra cumplimiento operacional. LEGAL REVIEW REQUIRED.
+
+Fuentes oficiales consultadas: [RLS PostgreSQL17](https://www.postgresql.org/docs/17/ddl-rowsecurity.html),
+[transacciones/savepoints psycopg3](https://www.psycopg.org/psycopg3/docs/basic/transactions.html),
+[CLI migration new](https://supabase.com/docs/reference/cli/supabase-migration-new).
+Changelog Supabase leído2026-10-14; aviso TLS futuro HTTP no cambia estas reglasSQL.
+
+Evidencia local actual: migración creada mediante CLI2.121.0 por A0 en
+`supabase/migrations/20261014210931_professional_private_drafts.sql`; no nombre manual.
+Store y19 pruebas SQLruntime reales pasan; suite fresh467 ejecutada por A4 tras
+integrar sus32 pruebas API. Primer snapshot propio fresh432 pasó con16 de storage;
+se añadieron3 negativos rol/unidad terminada, cuenta closed y edición concurrente.
+A4 revisó store/migración independiente sin bloqueantes. A2 revisó rutas/service
+incluida frontera business; fixtures Auth simulados no son aceptación
+desplegada. Migración no aplicada remota, no grants/provisioning de proveedor.
+DDL falla si faltan roles/esquema esperado o ya existen tablas; sin IF NOT EXISTS
+que oculte deriva. Roles existentes no se modifican por resolver un error.
+
 ### Primer incremento coordinado: agregado privado inactivo
 
-A0/A1 concretaron un subconjunto que puede implementarse como **dominio puro**,
-sin persistencia, HTTP o migración en esta tanda. Crear atómicamente Profile draft
+A0/A1 concretaron primero un subconjunto implementado como **dominio puro**;
+la persistencia/API posterior se delimita en la actualización D-041 arriba. Crear atómicamente Profile draft
 y práctica preparing para un User; GET/PATCH/withdraw propios, con Auth/MFA y CSRF
 cuando exista API. No constituye habilitación profesional o declaración verificada.
 Endpoints de submit/review/publication/activate/firm/membership/invitation permanecen

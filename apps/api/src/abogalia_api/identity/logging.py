@@ -1,4 +1,4 @@
-"""Prevent rejected Auth URLs from becoming an access-log credential sink."""
+"""Prevent rejected private URLs from becoming an access-log credential sink."""
 
 import logging
 from urllib.parse import unquote
@@ -11,7 +11,7 @@ class AuthAccessFilter(logging.Filter):
             line = record.args[2]
             if isinstance(line, str):
                 decoded = unquote(line)
-                if "/api/auth" in decoded:
+                if any(prefix in decoded for prefix in ("/api/auth", "/api/professional")):
                     return False
         return True
 

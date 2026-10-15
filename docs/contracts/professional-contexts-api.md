@@ -1,5 +1,13 @@
 # Contrato API — Profesionales y contextos (C03)
 
+Actualización 2026-10-14 — D-041: Arturo aprobó Q-C03-01..03 A. Las tablas
+históricas de alternativas se conservan como antecedente; no requieren nueva
+aprobación. TTL interno 24h, recibo terminal 30d y eventos 90d; bootstrap manual
+review_professionals y resolución excepcional de cierre con capacidad separada.
+No se han concedido capacidades reales ni definido el procedimiento jurídico de
+revisión. Este incremento frontend solo prepara perfil privado y práctica inactiva;
+no implementa invitaciones, review, publicación, despachos o clientes.
+
 Fecha: 2026-10-14. Base asignada `338617`. Autor A1/A5; revisión A0/A2 pendiente.
 **PC-01..PC-05 A aprobadas por Arturo el 2026-10-14** según orden de A0. Este
 contrato concreta esas decisiones; no instala endpoints, tablas, permisos o UI.
@@ -80,6 +88,7 @@ email, CURP, RFC, domicilio, foto, especialidad verificada o experiencia certifi
 Vistas privadas mínimas:
 
 ```typescript
+type DraftFields = { display_name: string; declared_area: string | null };
 type ProfileState = "draft" | "submitted" | "under_review" | "changes_requested"
   | "rejected" | "enabled" | "suspended" | "withdrawn";
 type ContextState = "preparing" | "active" | "suspended" | "closure_requested" | "closed";
@@ -175,7 +184,7 @@ habilitada. Estado, capacidades y pertenencia se verifican además del gate.
 | POST `/api/professional/contexts/{context_id}/invitations` | `{expected_version:number,recipient_user_id:string,capabilities:Capability[]}` | manage_context, UUID existente confirmado y destino permitido; 201 invitación mínima pending; Q-C03-01 |
 | GET `/api/professional/invitations` | Paginación | Solo invitaciones dirigidas al actor; 200 `{invitations:[{id,version,context_id,context_title,state,capabilities}],next_cursor}`; Q-C03-01 |
 | POST `/api/professional/invitations/{invitation_id}/accept` | `{expected_version:number}` | Destinatario propio, vigente, profile enabled, sin slot ocupado; 200 MembershipView active; consume invitación una sola vez; Q-C03-01 |
-| POST `/api/professional/invitations/{invitation_id}/decline` | `{expected_version:number}` | Destinatario propio pending → 200 `{id,version,state:"declined"}`; Q-C03-01 |
+| POST `/api/professional/invitations/{invitation_id}/decline` | `{expected_version:number}` | Destinatario propio pending → 200 `{id,version,state:"rejected"}`; Q-C03-01 |
 | POST `/api/professional/invitations/{invitation_id}/revoke` | `{expected_version:number}` | Administrador del contexto pending → 200 `{id,version,state:"revoked"}`; Q-C03-01 |
 | POST `/api/professional/memberships/{membership_id}/suspend` | `{expected_version:number}` | Administrador del contexto sobre otro miembro; 200 MembershipView suspended, retira capacidades efectivas; último admin según cierre abajo |
 | POST `/api/professional/memberships/{membership_id}/end` | `{expected_version:number}` | Administrador sobre otro; 200 MembershipView ended con continuidad de gobierno evaluada |
@@ -285,7 +294,7 @@ Estas **tres preguntas** preparan una decisión revisable; no están aplicadas.
 
 | ID | Pregunta | A propuesta para revisar | B alternativa |
 |---|---|---|---|
-| Q-C03-01 | ¿Qué vigencia y retención tendrán las invitaciones internas por UUID confirmado? | TTL 24 horas; terminal accepted/declined/revoked/expired conserva recibo mínimo 30 días y audit sin contenido 90 días; sin SMTP/búsqueda/email, destinatario comparte su UUID propio y servidor comprueba User activo/correo confirmado | TTL 7 días, mismo recibo mínimo/retención y canal interno. Si se aplaza la elección, creación/aceptación siguen cerradas |
+| Q-C03-01 | ¿Qué vigencia y retención tendrán las invitaciones internas por UUID confirmado? | TTL 24 horas; terminal accepted/rejected/revoked/expired conserva recibo mínimo 30 días y audit sin contenido 90 días; sin SMTP/búsqueda/email, destinatario comparte su UUID propio y servidor comprueba User activo/correo confirmado | TTL 7 días, mismo recibo mínimo/retención y canal interno. Si se aplaza la elección, creación/aceptación siguen cerradas |
 | Q-C03-02 | ¿Cómo se identifica y habilita al revisor de producto de Arturo? | Grant manual específico `review_professionals` a una identidad de aplicación confirmada/aal2 nominada por Arturo, con auditoría/retirada, sin autoalta, self-review o permisos de proveedor; procedimiento de correspondencia titular y fuente oficial revisado antes de decisiones enabled | Mantener revisión/submit/habilitación/publicación cerradas; continuar guardando borradores privados sin revisor real |
 | Q-C03-03 | ¿Quién resuelve el cierre si no existe relevo aceptado y cómo se registra su responsabilidad? | Nominación y aceptación in-app de miembro para administración/cierre; excepcionalmente Arturo puede resolver gobierno con capacidad separada `resolve_context_closure` concedida expresamente, sin leer contenido jurídico ni facultad automática de reviewer; registro mínimo/versionado, retención del acuerdo según fin de vínculo 30 días y eventos 90 | No habilitar despacho activo hasta tener responsable de cierre aceptado y mecanismo para pérdida simultánea de administradores. Account-close/retirada siguen efectivos; cierre final queda pendiente, sin custodio implícito |
 
@@ -294,6 +303,33 @@ no conceden roles por escribirlos aquí. Fuente/criterio profesional, disputas y
 datos reales requieren **LEGAL REVIEW REQUIRED**. Resolver parámetros y modelo
 por entidad antes de SQL; el primer incremento no depende de estos grants/invites.
 
-Verificación documental: contratos C02/PC-01..05 reconciliados; no SessionView
-extendida, secretos/PII reales, código, migración, envío o commit. Revisión A2/A0
-antes de considerar una ruta implementable; no afirmar API existente.
+Verificación de esta tanda: contratos C02/PC-01..05 reconciliados sin ampliar
+SessionView. El dominio puro `apps/api/src/abogalia_api/professional_contexts/domain.py`
+y sus 20 pruebas sintéticas están preparados y revisados independientemente por A2,
+sin bloqueantes. Validan propiedad, UUID no nulo, CAS de ambas versiones, retiro
+atómico, inmutabilidad, minimización y fronteras de 30/90 días. El texto privado se
+normaliza a NFC y se recorta; una edición sin cambio efectivo no produce evento ni
+extiende retención. La práctica preparing acompaña el vencimiento del borrador
+(última edición real + 30 días); closed acompaña withdrawn_at + 30 días.
+
+Esto no implementa HTTP, Auth, persistencia, unicidad global por User ni borrado:
+el adaptador futuro debe autenticar el actor, aplicar MFA/CSRF y garantizar esas
+restricciones transaccionales. El cálculo de vencimiento no ejecuta una purga.
+No secretos/PII reales, migración, envío o commit en esta entrega. Las rutas y las
+pantallas descritas siguen sin implementar.
+
+## Evidencia frontend del primer incremento
+
+Preparadas `/profesional` y `/profesional/contextos` con cliente mismo origen,
+sesión C02 y gate aal2. Guardado privado y retiro con ambas versiones; 409 bloquea
+escrituras hasta actualizar, 401/MFA limpia contenido y muestra acceso/MFA. No se
+reintentan mutaciones; CSRF se obtiene antes de cada escritura y permanece en
+memoria. Las vistas rechazan permisos profesionales y estados fuera del subset.
+Consulta propia sin efectos de edición; retiro informa 30d de datos/90d de historia,
+sin prometer borrado inmediato.
+
+Once comprobaciones sintéticas del cliente pasan con fetch simulado: respuestas
+privadas, rechazo de estados/capacidades incompatibles, mismo origen, CSRF,
+CAS de retiro, 401/403/409/503 y redacción/red sin retry. No constituyen navegador
+ni integración de Auth/DB reales. La integración de rutas global y verificación
+navegador quedan a cargo de A0; lint/tipos/build locales pasan con ambas rutas registradas por A0.

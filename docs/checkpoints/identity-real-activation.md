@@ -1,5 +1,49 @@
 # Checkpoint — Activación real de Identity C02
 
+## Estado vigente — 2026-10-15
+
+Este apartado prevalece sobre las descripciones históricas siguientes, que se
+conservan sin borrar su evidencia. D-036/D-038/D-039 y las decisiones posteriores
+siguen aprobadas dentro de su alcance; no requieren nueva aprobación por
+aparecer como Proposed en los antecedentes. **C02 no está operativamente cerrado**.
+
+| Control | Estado actual |
+|---|---|
+| Destino | Legalia `spohytnxscljtitvmdab`; el proyecto anterior es solo antecedente y Kova queda fuera de alcance |
+| Base privada y runtime | Roles/esquema Identity aplicados. Credencial/contraseña runtime y conexión privada DB configuradas y verificadas; TLS `verify-full` verificado |
+| Material de configuración | Publishable y claves necesarias presentes y validadas privadamente por el coordinador; sin reproducir valores, direcciones personales o archivos privados |
+| Activación | `ABOGALIA_IDENTITY_ENABLED=0` y `ABOGALIA_AUTH_EMAIL_READY=0`; ambos gates siguen cerrados |
+| Sesiones | Validación activa HTTP D-039 implementada; prueba de revocación real pendiente. No DSN probe SQL Auth requerido ni fallback JWT local |
+| Correo | SMTP y plantillas guardados; entrega real, OTP y su recorrido con el proveedor pendientes. No hay evidencia de éxito por tener configuración guardada |
+| MFA | Implementación local disponible; recorrido MFA real pendiente |
+| C03 relacionado | Perfil privado/práctica inactiva con API, SQL y web implementados localmente. Migración remota C03 no aplicada; no habilitación profesional o permisos reales |
+| Retención y retirada | Ejecución periódica pendiente; plazos aprobados no acreditan purga ejecutada ni retirada confirmada en Auth |
+
+La configuración privada anterior ya no es un bloqueo pendiente de introducción
+por Arturo. Lo que resta es demostrar los recorridos y negativos reales antes de
+activar los gates, sin saltar validación HTTP, CSRF, MFA, aislamiento o custodia.
+La implementación HTTP sustituye la propuesta histórica de probe SQL; no solicitar
+privilegios sobre `auth.sessions` para este mecanismo ni credenciales amplias.
+
+El coordinador comunicó las verificaciones privadas de DB/TLS/configuración;
+esta actualización es documental y no vuelve a leer secretos ni conecta al
+proveedor. La navegación anónima local `/profesional` → `/acceso` con Identity
+apagada acredita ese control de acceso, no un login positivo real. Las pruebas
+locales con transporte Auth simulado se distinguen de las pruebas del proveedor.
+
+La operación real conserva el buzón controlado y los límites de ensayo aprobados,
+sin dirección personal en el repositorio ni envío general a terceros. D-041 aprueba
+los detalles de invitaciones internas, revisor y relevo C03; no concede capacidades
+reales ni define por sí sola un procedimiento de cotejo profesional. Mantener
+**LEGAL REVIEW REQUIRED**, sin ampliar tratamiento jurídico, hosting o gasto.
+
+Criterio de cierre pendiente: evidencia de entrega/OTP, MFA y revocación con el
+proveedor real; operación de retención/retirada y sus fallos verificada. No convertir
+readiness/configuración en Done. El borrado físico, el retiro Auth y la aplicación
+remota de C03 deben registrar su propia evidencia antes de declararse ejecutados.
+
+## Antecedentes del checkpoint
+
 ## Actualización vigente D-038: Legalia
 
 Arturo aprobó el nuevo destino `spohytnxscljtitvmdab`, organización

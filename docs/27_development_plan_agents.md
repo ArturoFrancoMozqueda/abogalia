@@ -1,5 +1,17 @@
 # Plan de desarrollo de Legalia por agentes
 
+## Estado vigente al 2026-10-15
+
+La configuración privada de C02 y la conexión del rol runtime con TLS verify-full
+están verificadas; publishable ya no requiere copia del operador. Identity y correo
+siguen desactivados hasta demostrar entrega OTP y revocación reales. C03 cuenta con
+API/SQL/web locales del borrador privado y práctica inactiva; D-041 ya resuelve las
+tres preguntas de invitación/revisor/cierre. No se aplicó su migración remota.
+484 pruebas API/SQL/herramientas pasan y lint/tipos/build web pasan. Retención C02/C03
+coordinada, operación periódica, prueba de retiro Auth y revisión jurídica siguen
+pendientes. Los apartados anteriores se conservan como evidencia histórica.
+Ver [incremento integrado](operations/legalia-professional-draft-increment.md).
+
 ## Estado vigente y reactivación (2026-10-14)
 
 Nombre vigente Legalia (D-038). Las secciones de preparación y destinos anteriores

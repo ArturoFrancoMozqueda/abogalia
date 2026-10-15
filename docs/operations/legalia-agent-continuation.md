@@ -1,5 +1,39 @@
 # Legalia — órdenes de continuación por agentes
 
+## Estado vigente — 2026-10-15
+
+Esta actualización sustituye el estado operativo de los apartados históricos
+siguientes, que se conservan como evidencia de cada tanda. Se basa en las
+verificaciones privadas comunicadas por A0; esta actualización documental no
+lee configuración privada ni repite conexiones o pruebas del proveedor.
+
+| Área | Estado verificado y límite actual |
+|---|---|
+| Configuración privada C02 | Credencial/contraseña del rol runtime y conexión DB configuradas y verificadas; TLS `verify-full` verificado. Publishable y claves necesarias presentes y validadas privadamente. No publicar valores ni diagnósticos crudos |
+| Gates de ejecución | `ABOGALIA_IDENTITY_ENABLED=0` y `ABOGALIA_AUTH_EMAIL_READY=0`; configuración lista no equivale a activación |
+| Validación de sesión | Mecanismo HTTP D-039 implementado localmente, con fallo cerrado. Sigue pendiente demostrar revocación con el proveedor real; sin fallback JWT local ni permisos SQL Auth adicionales |
+| Correo/Auth real | SMTP y plantillas guardados; entrega de correo, OTP, MFA y recorrido positivo real pendientes. No atribuir envío o acceso real a pruebas sintéticas |
+| C03 privado | API, SQL y web implementados y verificados localmente para borrador privado y práctica inactiva. Migración C03 remota no aplicada; sin habilitación profesional, publicación, despacho, invitaciones o capacidades reales |
+| Retención | Plazos aprobados conservados; ejecución periódica pendiente. Retiro lógico y cálculo de vencimiento no acreditan borrado físico ni retirada Auth del proveedor |
+
+D-040 y D-041 mantienen aprobados PC-01..05 A y Q-C03-01..03 A; las
+preguntas históricas no requieren volver a aprobarse. La identificación/concesión
+real del revisor, el procedimiento de revisión profesional y su validación
+jurídica no se resuelven por esa aprobación. **LEGAL REVIEW REQUIRED**.
+
+Próximo trabajo coordinado: verificar revocación HTTP, entrega/OTP/MFA reales y
+los demás gates antes de activar C02; revisar por separado la aplicación remota
+de C03 y la operación periódica de retención. Cada operación mantiene su alcance
+y evidencia propios. No ampliar privilegios ni activar flags para sortear un
+fallo. Hosting, pagos, IA y datos jurídicos no se habilitan por este estado.
+
+La verificación anónima local de `/profesional` → `/acceso` con Identity apagada
+no acredita autenticación positiva o persistencia profesional real. Consultar el
+[checkpoint vigente de activación](../checkpoints/identity-real-activation.md) y
+el [informe integrado](legalia-approved-implementation-batch.md).
+
+## Antecedentes de las órdenes y entregas
+
 2026-10-13, America/Mexico_City. Arturo pidió reactivar agentes y continuar el plan.
 Base común `eba6cbedb631`, `codex/identity-design`, checkout compartido con propiedad
 de archivos separada. Coordinador conserva integración/configuración global/locks

@@ -5,7 +5,9 @@ técnicas para evitar un renombrado general. El destino Supabase vigente es
 `spohytnxscljtitvmdab`; consultar la [instalación de Legalia](docs/operations/legalia-supabase-setup.md).
 El esquema privado está aplicado y SMTP/plantillas guardados. Auth real sigue
 pendiente de validación de revocación, configuración privada DB y entrega de correo.
-Las referencias históricas se conservan en los documentos de evidencia.
+La conexión runtime y TLS verify-full ya se verificaron el 2026-10-15; correo,
+MFA y revocación real siguen pendientes. Las referencias históricas se conservan
+en los documentos de evidencia.
 
 Atención legal clara y continua. Producto en construcción para clientes, abogados
 independientes y despachos pequeños en México.
@@ -73,7 +75,9 @@ CI remoto en esta entrega. La prueba navegador/API usa servicios locales reales.
 Identity cuenta con implementación local de acceso, recuperación, MFA TOTP y
 sesiones custodiadas por API, conforme al checkpoint aprobado. La operación con
 Supabase y correo reales sigue pendiente de configuración y verificación. Roles,
-contextos profesionales, asuntos, reservas, pagos e IA no están implementados.
+contextos profesionales completos, asuntos, reservas, pagos e IA siguen pendientes.
+C03 dispone de un incremento local de borrador profesional privado y práctica
+inactiva, con API, almacenamiento y web; su migración no está aplicada en Supabase.
 
 `make test-api` ejecuta pruebas contra un PostgreSQL temporal aislado (requiere
 `initdb` y `pg_ctl`). Usa datos sintéticos y un transporte Auth simulado; nunca

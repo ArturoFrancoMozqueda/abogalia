@@ -1,7 +1,15 @@
 # Recorridos de profesionales y contextos — C03
 
+Actualización 2026-10-14 — D-041: Arturo aprobó Q-C03-01..03 A. Las tablas
+históricas de alternativas se conservan como antecedente; no requieren nueva
+aprobación. TTL interno 24h, recibo terminal 30d y eventos 90d; bootstrap manual
+review_professionals y resolución excepcional de cierre con capacidad separada.
+No se han concedido capacidades reales ni definido el procedimiento jurídico de
+revisión. Este incremento frontend solo prepara perfil privado y práctica inactiva;
+no implementa invitaciones, review, publicación, despachos o clientes.
+
 Fecha: 2026-10-14; base `338617`, autor A1/A5. PC-01..PC-05 A Approved por Arturo;
-implementación UI aún no autorizada en esta entrega. Contrato de referencia:
+Implementación privada autorizada por A0 tras D-041; las familias futuras siguen gated. Contrato de referencia:
 [API C03](../contracts/professional-contexts-api.md) y
 [checkpoint](../checkpoints/professional-contexts.md). No nuevas decisiones de
 precio, proveedor, envío o datos jurídicos. Revisión A0/A2 antes de pantallas.
@@ -179,3 +187,23 @@ negativos de ámbito/rol/snapshot/invitación/slot y salida transaccional. Prueb
 de diseño no sustituyen proveedor, persistencia y runtime. Sin interfaz, datos
 reales, captura, envío, instalación, .env, consulta de proyecto o commit ejecutados
 en esta entrega documental.
+
+El dominio puro del agregado privado inactivo está preparado con 20 pruebas
+sintéticas y revisión independiente A2 sin bloqueantes. Esa evidencia cubre
+propiedad, CAS, retiro y plazos; no acredita pantallas, HTTP, Auth ni almacenamiento.
+El borrador y su práctica preparing comparten vencimiento de última edición real
+más 30 días; leer o guardar el mismo texto normalizado no reinicia el plazo.
+
+## Implementación privada preparada
+
+Las fuentes de las dos rutas y el formulario privado están preparadas. Reutilizan
+la cuenta/MFA C02; 401 y MFA requerido ocultan perfil y práctica. Errores tienen
+mensaje fijo y foco; los controles bloquean envíos duplicados y conflictos hasta
+actualizar. Navegar o pagehide cancela solicitudes y limpia contenido. La práctica
+solo se muestra inactiva/cerrada, sin actores, publicaciones o invitaciones ficticias.
+No hay almacenamiento en navegador ni telemetría de nombre/área. La revisión de
+React Best Practices cubrió efectos/cleanup, carreras, accesibilidad y tipos.
+
+Verificación: lint/tipos/build local y 11 checks cliente con transporte sintético;
+no recorrido de navegador ni proveedor real atribuido a esas pruebas. A0 registró
+rutas globales y coordina la verificación del navegador integrado.

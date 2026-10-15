@@ -190,6 +190,9 @@ export default function Account() {
             <strong>Cuenta:</strong> {session.user.email}
           </p>
           <p>Sesión activa.</p>
+          <p>
+            <Link to="/profesional">Preparar mi perfil profesional</Link>
+          </p>
           <section className="auth-section" aria-labelledby="mfa-title">
             <h2 id="mfa-title">Verificación en dos pasos</h2>
             <p>

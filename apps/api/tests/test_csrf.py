@@ -108,6 +108,10 @@ def test_access_log_filter_drops_auth_queries_before_formatting():
     assert not AuthAccessFilter().filter(record)
     record.args = ("127.0.0.1", "GET", "/api/%61uth/session?code=public-marker", "1.1", 403)
     assert not AuthAccessFilter().filter(record)
+    record.args = ("127.0.0.1", "GET", "/api/professional/profile?name=public-marker", "1.1", 403)
+    assert not AuthAccessFilter().filter(record)
+    record.args = ("127.0.0.1", "GET", "/api/%70rofessional/profile?name=public-marker", "1.1", 403)
+    assert not AuthAccessFilter().filter(record)
     record.args = ("127.0.0.1", "GET", "/api/health", "1.1", 200)
     assert AuthAccessFilter().filter(record)
 

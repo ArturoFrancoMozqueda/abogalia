@@ -6,6 +6,8 @@ export default [
   route("registro", "routes/register.tsx"),
   route("recuperar", "routes/recover.tsx"),
   route("cuenta", "routes/account.tsx"),
+  route("profesional", "routes/professional.tsx"),
+  route("profesional/contextos", "routes/professional-contexts.tsx"),
   ...(import.meta.env.DEV
     ? [route("dev/conexion", "routes/connection.tsx")]
     : []),

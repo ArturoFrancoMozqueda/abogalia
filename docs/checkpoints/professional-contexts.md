@@ -1,5 +1,9 @@
 # Checkpoint — Profesionales y contextos de Legalia (C03)
 
+Actualización2026-10-14: Q-C03-01..03 A aprobadas expresamente por Arturo (D-041).
+Las preguntas/opciones históricas no requieren nueva aprobación; implementación,
+procedimiento de revisión e identificación de su actor real siguen pendientes.
+
 Fecha: 2026-10-13. Estado: **Proposed / Awaiting decision** para C03.
 
 Actualización 2026-10-14: **Approved, PC-01..PC-05 A (D-040)** por Arturo.

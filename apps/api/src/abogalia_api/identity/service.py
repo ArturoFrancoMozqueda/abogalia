@@ -258,7 +258,7 @@ class IdentityService:
         }
 
     @contextmanager
-    def authenticated(self, reference, *, touch=False, revoke=False):
+    def authenticated(self, reference, *, touch=False, revoke=False, business=False):
         self.require_dependencies()
         pending_error = None
         infrastructure_error = None
@@ -308,43 +308,67 @@ class IdentityService:
                     else:
                         raise self._map_failure(exc, "AUTHENTICATION_REQUIRED") from None
             if result is not None:
+                unit = tx.business() if business else None
+                connection = unit.__enter__() if unit is not None else None
+                unit_open = unit is not None
                 try:
-                    yield result, tx
-                except Exception as exc:
-                    pending_error = exc
-                # External Auth revocation/time can change while a provider call
-                # runs, even with a local SQL row lock. Check the result frontier.
-                current = tx.record
-                try:
-                    valid = (
-                        current is not None
-                        and self._alive(current, self.clock())
-                        and current.token_expires_at > self.clock()
-                        and self._active_record(current, self.clock())
-                    )
-                except StorageUnavailable:
-                    infrastructure_error = unavailable()
-                    valid = None
-                if valid:
-                    completed = True
-                    if pending_error is None:
-                        # A failed action must not extend inactivity. Renewal has
-                        # already been saved without changing activity; commit it
-                        # even if the action later failed, since Auth consumed the
-                        # previous refresh token.
-                        if touch:
-                            current = replace(current, last_activity_at=self.clock())
-                            tx.save(current)
-                        if revoke:
-                            # Global logout finalizer runs after both checks and
-                            # commits local revocation before external signout.
-                            tx.revoke_subject(current.subject)
-                elif valid is False:
-                    tx.delete()
-                elif current is not None and current.digest != original_digest:
-                    # MFA consumed/rotated credentials, but no new cookie can be
-                    # delivered on 503. Preserve the existing opaque reference.
-                    tx.save(replace(current, digest=original_digest))
+                    try:
+                        yield result, connection if business else tx
+                    except Exception as exc:
+                        pending_error = exc
+                    # Roll back a failed SQL action before checking Auth, so an
+                    # aborted business statement cannot poison the outer session.
+                    if pending_error is not None and unit_open:
+                        unit.__exit__(
+                            RuntimeError, RuntimeError("Business operation aborted"), None
+                        )
+                        unit_open = False
+                    # External Auth revocation/time can change while a provider call
+                    # runs, even with a local SQL row lock. Check the result frontier.
+                    current = tx.record
+                    try:
+                        valid = (
+                            current is not None
+                            and self._alive(current, self.clock())
+                            and current.token_expires_at > self.clock()
+                            and self._active_record(current, self.clock())
+                        )
+                    except StorageUnavailable:
+                        infrastructure_error = unavailable()
+                        valid = None
+                    if unit_open:
+                        if valid and pending_error is None:
+                            unit.__exit__(None, None, None)
+                        else:
+                            unit.__exit__(
+                                RuntimeError, RuntimeError("Business operation aborted"), None
+                            )
+                        unit_open = False
+                    if valid:
+                        completed = True
+                        if pending_error is None:
+                            # A failed action must not extend inactivity. Renewal has
+                            # already been saved without changing activity; commit it
+                            # even if the action later failed, since Auth consumed the
+                            # previous refresh token.
+                            if touch:
+                                current = replace(current, last_activity_at=self.clock())
+                                tx.save(current)
+                            if revoke:
+                                # Global logout finalizer runs after both checks and
+                                # commits local revocation before external signout.
+                                tx.revoke_subject(current.subject)
+                    elif valid is False:
+                        tx.delete()
+                    elif current is not None and current.digest != original_digest:
+                        # MFA consumed/rotated credentials, but no new cookie can be
+                        # delivered on 503. Preserve the existing opaque reference.
+                        tx.save(replace(current, digest=original_digest))
+                finally:
+                    if unit_open:
+                        unit.__exit__(
+                            RuntimeError, RuntimeError("Business operation aborted"), None
+                        )
         # Raising inside the SQL context would roll back a necessary refresh.
         if infrastructure_error is not None:
             raise infrastructure_error from None

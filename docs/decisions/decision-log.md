@@ -138,3 +138,12 @@ salida/relevo y minimización/plazos nuevos 30/90 de datos e historia C03. Concr
 contratos/modelo/matriz y revisar antes de tablas; sedes, suplantación, revisión
 jurídica y decisiones ajenas a esos paquetes no se resuelven por inferencia.
 No autoaprobación del revisor ni acceso jurídico universal. Asked no equivale a Done.
+
+D-041 — Approved (2026-10-14): Arturo respondió Q-C03-01..03 A: invitaciones
+internas a cuenta confirmada, sin correo/búsqueda por email, vigencia24h y recibo
+terminal30d/audit mínimo90d; capacidad review_professionals asignada manualmente a
+su cuenta confirmada con MFA, sin self-review ni administración proveedor,
+condicionada al procedimiento de revisión; resolución excepcional de cierre de
+despacho a Arturo mediante capacidad separada y explícita sin contenido jurídico.
+Relevo ordinario requiere nominación/aceptación; retiro no espera cierre. No concede
+privilegios reales por sí sola ni resuelve el procedimiento jurídico pendiente.

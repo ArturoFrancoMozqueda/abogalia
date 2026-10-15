@@ -8,6 +8,8 @@ from abogalia_api.identity.config import Settings
 from abogalia_api.identity.logging import configure_identity_logging
 from abogalia_api.identity.runtime import load_runtime
 from abogalia_api.identity.service import AuthError, IdentityService
+from abogalia_api.professional_contexts.router import router as professional_router
+from abogalia_api.professional_contexts.service import ProfessionalService
 from abogalia_api.routes.auth import clear_cookies
 from abogalia_api.routes.auth import router as auth_router
 from abogalia_api.routes.health import router as health_router
@@ -20,8 +22,10 @@ def create_app(settings=None, store=None, probe=None, provider=None, clock=None)
         settings, store, probe = load_runtime()
     settings = settings or Settings()
     app.state.identity = IdentityService(settings, store, probe, provider, clock)
+    app.state.professional = ProfessionalService(app.state.identity)
     app.include_router(health_router)
     app.include_router(auth_router)
+    app.include_router(professional_router)
 
     def error_response(error):
         response = JSONResponse(error.body(), status_code=error.status)
@@ -41,7 +45,7 @@ def create_app(settings=None, store=None, probe=None, provider=None, clock=None)
 
     @app.exception_handler(StarletteHTTPException)
     async def http_error(request: Request, exc: StarletteHTTPException):
-        if request.url.path.startswith("/api/auth"):
+        if request.url.path.startswith(("/api/auth", "/api/professional")):
             return error_response(AuthError(403, "REQUEST_FORBIDDEN"))
         return JSONResponse({"detail": "Not found"}, status_code=exc.status_code)
 

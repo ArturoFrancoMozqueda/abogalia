@@ -17,7 +17,13 @@ display_name/declared_area privados, sin cédula/legal_name. Solo lectura, edici
 withdraw propias; versiones CAS de ambos objetos y retiro atómico. Actores/editors
 del borrador no son professional_work/manage_context. Dominio puro no demuestra
 autenticación/CSRF/RLS real: futuros adaptadores deben exigir esas fronteras.
-No SQL/HTTP/grants/publicación/revisión/activación/invitaciones/despachos todavía.
+Actualización D-041: persistencia/API propias privadas en implementación local,
+sin publicación/revisión/activación/invitaciones/despachos por este incremento.
+Modelo físico y unidad transaccional acordada constan en modelo C03 actualizado.
+Runtime exacto existente, FORCE RLS propietario y grants por columnas inmutables;
+sin DELETE/TRUNCATE, lectura audit, Data API, rol nuevo o managedmembership.
+Savepoint de negocio se mantiene hasta frontera Auth; error/indeterminación revierte
+agregado/eventos y conserva renovación consumida fuera del savepoint, sin actividad.
 
 | Actor/acción | Puede, bajo precondiciones | No puede |
 |---|---|---|
@@ -94,12 +100,22 @@ membresía finalizada30d e historia mínima90d. No auditoría con perfil/cédula
 ni cascada30d→90d. Consentimiento/publicación no autoriza todos los datos ni retención
 indefinida. UUID lógico90d sigue clasificado privado, no anonimización asegurada.
 
-InvitaciónTTL/retención/entrega, concesión del revisor inicial y workflow de relevo/
-responsable del cierre se remiten a A0/A1 antes de implementar esas transiciones.
+Q-C03-01..03 A aprobadas (D-041): TTL invitación24h, recibos terminales30d/events90d;
+revisor manual inicial Arturo con correo confirmado/MFA y capacidad review_professionals,
+sin autoevaluación/administración proveedor; cierre excepcional Arturo con capacidad
+separada y sin lectura jurídica. No se incorporan esas tablas/capacidades en este
+incremento ni se entrega invitación externa. Contratos posteriores de transición
+deben materializar aceptación/relevo/cierre, sin facultades implícitas.
 No hay endpoint de reviewer universal, credencial administrativa ni prueba inventada
 de retirada Auth. El gate C02 real se mantiene; scheduler/restore/credenciales
 permanecen pendientes aunque exista modelo aprobado. LEGAL REVIEW REQUIRED.
 
-Verificación actual documental: coherencia de capacidades/cardinalidad/salida
-multifunción y datos mínimos con PC A; sin código C03, SQL, claims de CI remoto,
-dato real, secreto o recurso Kova. Revisión A1/A0 antes grants y migraciones.
+Verificación local actual: store privado y19 negativos/positivos SQLruntime reales,
+32 pruebas API Auth simulado/SQL real de A4 dentro fresh467 pasada por A4, sin CI
+remoto/proveedor. Primer snapshot propio fresh432 pasó con16 de storage.
+A4 revisión independiente store/migración sin bloqueantes; A2 revisión API/frontera
+business sin bloqueantes. FK users RESTRICT
+falla cerrado ante purga cuenta antes agregado30d; eventoslógicos90d no cascada.
+Worker/job C03 aún no implementado: responsable Arturo, cumplimiento operacional
+pendiente. Authclosed deniega acceso, no resucita perfil. Revisión independiente
+A1/A4 requerida antes integrar/aplicar; no dato real, secreto o recurso Kova.

@@ -278,6 +278,21 @@ class _Transaction:
         if self._finished:
             raise StorageUnavailable
 
+    @contextmanager
+    def business(self) -> Iterator[psycopg.Connection]:
+        """Nested business savepoint; Auth owns its lifetime through final validation.
+
+        Refresh custody is saved outside this savepoint before entering it. A
+        caller error rolls back business writes without discarding consumed tokens.
+        No connection escapes a completed Identity transaction.
+        """
+        self._check()
+        try:
+            with self._conn.transaction():
+                yield self._conn
+        except psycopg.Error:
+            raise StorageUnavailable from None
+
     def save(self, record: SessionRecord) -> None:
         self._check()
         self._store._validate(record)
