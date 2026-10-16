@@ -7,9 +7,9 @@ registro de destinos, inyección privada, CI y ejecución. Kova queda fuera de a
 
 ## Artefactos y configuración
 
-- `apps/api/Dockerfile`: Python3.12.15 slim-bookworm oficial, fijado por digest de
-  índice OCI `sha256:34386ef0cb081344d7ec1c103ba398e6e9f64e9ab3a1509accc92a4e24a07258`.
-  Digest consultado en HTTPS en registry oficial `library/python`, tag3.12.15-slim-bookworm,
+- `apps/api/Dockerfile`: Python3.12.15 slim-trixie oficial, fijado por digest de
+  índice OCI `sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1`.
+  Digest consultado en HTTPS en registry oficial `library/python`, tag3.12.15-slim-trixie,
   el2026-10-15; índice incluye linux/amd64 y linux/arm64. Identidad pública del tag
   contrastada con [official-images](https://github.com/docker-library/official-images/blob/master/library/python).
   Fijar digest impide deriva del tag; no certifica ausencia de vulnerabilidades.
@@ -146,3 +146,8 @@ Fuentes oficiales consultadas2026-10-15: [FastAPI Fly](https://docs.fly.io/pytho
 [Uvicorn0.54.0](https://github.com/encode/uvicorn/blob/0.54.0/uvicorn/config.py).
 La web Uvicorn no respondió; se verificó código oficial de la versión fijada y
 fuente instalada local, sin leer configuración privada.
+
+2026-10-15: build Linux y arranque health-only pasaron en GitHub. Trivy0.76.0
+bloqueó la imagen Bookworm por vulnerabilidades HIGH/CRITICAL del sistema base;
+no se publicó imagen ni desplegó máquina. Se actualiza la base a Trixie oficial
+fijada por digest para repetir build/arranque/escaneo; resultado aún pendiente.
