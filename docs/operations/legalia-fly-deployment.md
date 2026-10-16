@@ -7,9 +7,9 @@ registro de destinos, inyección privada, CI y ejecución. Kova queda fuera de a
 
 ## Artefactos y configuración
 
-- `apps/api/Dockerfile`: Python3.12.15 slim-trixie oficial, fijado por digest de
-  índice OCI `sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1`.
-  Digest consultado en HTTPS en registry oficial `library/python`, tag3.12.15-slim-trixie,
+- `apps/api/Dockerfile`: Python3.12.15 Alpine3.24 oficial, fijado por digest de
+  índice OCI `sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4`.
+  Digest consultado en HTTPS en registry oficial `library/python`, tag3.12.15-alpine3.24,
   el2026-10-15; índice incluye linux/amd64 y linux/arm64. Identidad pública del tag
   contrastada con [official-images](https://github.com/docker-library/official-images/blob/master/library/python).
   Fijar digest impide deriva del tag; no certifica ausencia de vulnerabilidades.
@@ -151,3 +151,9 @@ fuente instalada local, sin leer configuración privada.
 bloqueó la imagen Bookworm por vulnerabilidades HIGH/CRITICAL del sistema base;
 no se publicó imagen ni desplegó máquina. Se actualiza la base a Trixie oficial
 fijada por digest para repetir build/arranque/escaneo; resultado aún pendiente.
+
+Trixie también pasó build/arranque pero conserva hallazgos HIGH sin corrección
+publicada; no se ignoraron ni se publicó. Se prepara Python3.12.15 oficial sobre
+Alpine3.24, digest verificado en registry y catálogo official-images, sin cambiar
+Python ni dependencias de aplicación. CI debe comprobar compatibilidad musl de
+ruedas con hashes, UID10001, libpq>=16, criptografía, arranque y escaneo completo.

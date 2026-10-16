@@ -37,6 +37,7 @@ jobs:
           docker build --platform linux/amd64 --tag "$IMAGE:$GITHUB_SHA" --label org.opencontainers.image.source=https://github.com/ArturoFrancoMozqueda/abogalia --label "org.opencontainers.image.revision=$GITHUB_SHA" apps/api
       - name: Verify production startup without credentials or network
         run: |
+          docker run --rm --network none --entrypoint python "$IMAGE:$GITHUB_SHA" -c 'import os; from psycopg.pq import version; from cryptography.fernet import Fernet; assert os.getuid() == 10001; assert version() >= 160000; Fernet(Fernet.generate_key()); print("Runtime dependencies and nonroot UID passed")'
           docker run --detach --name legalia-check --network none --env ABOGALIA_ENVIRONMENT=production --env ABOGALIA_IDENTITY_ENABLED=0 --env ABOGALIA_WEB_ORIGIN=https://legalia-web.legaliasupport.workers.dev "$IMAGE:$GITHUB_SHA"
           python3 - <<'PY'
           import subprocess, time

@@ -225,7 +225,7 @@ def test_cached_app_cannot_reuse_another_runtime(values, monkeypatch):
 
 def test_packaging_digest_hash_lock_nonroot_and_no_secret_context():
     docker = (API / "Dockerfile").read_text()
-    assert docker.startswith("FROM python:3.12.15-slim-trixie@sha256:")
+    assert docker.startswith("FROM python:3.12.15-alpine3.24@sha256:")
     assert "--require-hashes --only-binary=:all:" in docker
     assert "USER 10001:10001" in docker and '"abogalia_api.production"' in docker
     assert "COPY . " not in docker and "ARG " not in docker
