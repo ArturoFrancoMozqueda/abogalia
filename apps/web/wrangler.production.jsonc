@@ -1,0 +1,19 @@
+{
+  "name": "legalia-web",
+  "account_id": "68d5920648c2f57c6ab47e87a07de308",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-15",
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": false },
+  "assets": {
+    "directory": "build/client",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "html_handling": "none",
+    "not_found_handling": "none"
+  },
+  "vars": {
+    "LEGALIA_API_ORIGIN": "https://legalia-api.fly.dev"
+  }
+}

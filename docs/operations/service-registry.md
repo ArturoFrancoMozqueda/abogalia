@@ -15,6 +15,19 @@ sin Docker local, builder Fly/Depot ni credenciales runtime en CI. El workflow
 requiere escaneo de fuentes y ausencia de vulnerabilidades HIGH/CRITICAL antes
 de publicar la imagen. No implica haber ejecutado o superado estos controles.
 
+Despliegue ejecutado2026-10-15: `legalia-api` tiene exactamente una máquina
+started en iad, sharedcpu1x/1024MB; HTTPS `/api/health`200. Imagen pública
+`ghcr.io/arturofrancomozqueda/abogalia-api` del commit `21a925790406`, digest
+`sha256:d8f327c682a46c16924d42100f4d4fb7db3f2affced77c980e463022bbe599b3`.
+Build/UID10001/libpq/criptografía/arranque y escaneo HIGH/CRITICAL pasaron en
+[GitHub](https://github.com/ArturoFrancoMozqueda/abogalia/actions/runs/38837666268).
+Cinco variables runtime se inyectaron privadamente a Fly mediante stdin; no se
+alteró el `.env` ni se subió al build. IP compartida e IPv6, sin builder ni réplica.
+Auth anónimo200, CSRF200, cookies __Host/Secure/SameSiteStrict/host-only,
+sesión HttpOnly, POST sinCSRF403 y POST vacío conCSRF422 comprobados por HTTPS;
+no registro, correo o revocación reales ejecutados. Frontend aún no publicado:
+configuración de producción y dry-run listos; autorización Wrangler pendiente.
+
 Actualización hosting2026-10-15: Arturo eligió Cloudflare Workers Static Assets
 para frontend y Fly.io para FastAPI. Configuración y pruebas locales preparadas;
 cuenta Cloudflare, organización/appFly y hostnames reales todavía no confirmados.

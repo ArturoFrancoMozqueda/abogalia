@@ -2,8 +2,10 @@
 
 Hosting elegido: Cloudflare Workers Static Assets para frontend y Fly.io para
 FastAPI, con Supabase/Resend existentes. Paquete de despliegue preparado y probado
-localmente; cuentas/destinos, build de contenedor y despliegue remoto pendientes.
-Ver [Cloudflare](docs/operations/legalia-cloudflare-deployment.md) y
+localmente. API desplegada en Fly con unaVM1GB/iad y HTTPS comprobado;
+frontend Cloudflare aún pendiente de autorización de publicación.
+API de salud: https://legalia-api.fly.dev/api/health. Ver
+[Cloudflare](docs/operations/legalia-cloudflare-deployment.md) y
 [Fly](docs/operations/legalia-fly-deployment.md). La URL siguiente sigue siendo local.
 
 Registro y acceso habilitados localmente por instrucción expresa de Arturo:

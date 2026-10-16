@@ -1,5 +1,7 @@
 /** Static build plus same-origin API gateway. No credentials or logging. */
-export const APPROVED_API_ORIGINS: readonly string[] = Object.freeze([]);
+export const APPROVED_API_ORIGINS: readonly string[] = Object.freeze([
+  "https://legalia-api.fly.dev",
+]);
 
 export type WorkerEnv = {
   ASSETS: { fetch(request: Request): Promise<Response> };

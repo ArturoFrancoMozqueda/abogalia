@@ -22,8 +22,8 @@ function noStore(response) {
   );
 }
 
-test("production allowlist starts empty and does not proxy even an otherwise valid Fly host", async () => {
-  assert.equal(APPROVED_API_ORIGINS.length, 0);
+test("production allowlist confines requests to the provisioned Legalia API", async () => {
+  assert.deepEqual(APPROVED_API_ORIGINS, ["https://legalia-api.fly.dev"]);
   const response = await worker.fetch(
     request("/api/auth/session"),
     environment,

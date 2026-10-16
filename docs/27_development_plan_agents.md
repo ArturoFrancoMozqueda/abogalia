@@ -2,6 +2,13 @@
 
 ## Estado vigente al 2026-10-15
 
+API publicada en Fly: una máquina sharedcpu1x/1024MB en iad, HTTPS health200,
+CSRF/cookies/errores de entrada comprobados sin crear cuenta ni mandar correo.
+Imagen Linux Alpine3.24/Python3.12.15 pasó build/arranque/libpq/criptografía y
+escaneo HIGH/CRITICAL en GitHub; las imágenes Debian previas fueron bloqueadas.
+Frontend: cuenta/subdominio y backend reales registrados, configuración/dry-run
+preparados; autorización Wrangler y publicación aún pendientes. Ver registro.
+
 Hosting D-026 aprobado: Cloudflarefrontend/Flybackend. Paquete local con proxy
 same-origin, plantillaCloudflare cerrada hasta registrar destino real y contenedor
 FastAPI de un proceso/unaVM. 576 pruebas API/SQL y30 pruebas del Worker pasan;
