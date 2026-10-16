@@ -3,6 +3,10 @@
 Fecha: 2026-10-16. Estado: **Proposed / Requires Arturo**. Orden A1, baseline
 `4eb597c`, rama `codex/identity-design`; revisor A0/A2. Planificación solamente.
 
+Actualización A0,2026-10-16: prioridad elegida por Arturo: catálogo → búsqueda →
+solicitud dirigida. Ver [corte concreto](marketplace-first-slice.md). Solo la
+prioridad está aprobada; las reglas nuevas de este checkpoint siguen Proposed.
+
 ## Lo que entiendo
 
 Búsqueda gratuita está aprobada; cobertura nacional efectiva, especialidades,

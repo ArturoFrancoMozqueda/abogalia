@@ -62,8 +62,8 @@ exactas y revisión independiente al emitir cada orden. No son ejecuciones inici
 | N03 Mantenimiento/restore | A0/A3/A2 | Mecanismo fiable Auth, rol/ejecutor mínimo y esquema C03 compatible; resolver objetivos/custodia/retención de copias | Paquete operativo concreto para decisión, sin purga ni grants nuevos por inferencia; prueba aislada tras aprobación |
 | N04 C03 restante | A3 único escritor SQL → A4/A5; revisión A2 | PC-01..05/D-041 ya aprobados; concretar contratos/revisión y no confundir con producción instalada | Incrementos locales de invitación/membresía/salida/relevo con negativos y retención30/90; activación/publicación real espera gates aplicables |
 | N05 Confianza | A1/A2/C17 | Procedimiento de cotejo/suplantación/recurso y revisor alterno pendientes; facultades D-041 no se vuelven a votar | Proceso y matriz revisables; sin afirmar identidad profesional verificada por simple coincidencia de cédula |
-| N06 Atención directa | A1/A2 → A3 → A4/A5/A7 | Prioridad y checkpoints C04/C05 aprobados, modelo/matriz/retención concretos | Solicitud dirigida, respuesta, acuerdo versionado y siguiente acción; sin pago/IA/agenda/adjuntos implícitos |
-| N07 Descubrimiento/agenda | A1/A2 → A3/A4/A5/A7 | C06/C07, oferta y reglas/zonas/cambios aprobados | Corte público y reserva consistente; disponibilidad no revela otro asunto/contexto |
+| N06 Marketplace prioritario | A1/A2 → A3 → A4/A5/A7 | Prioridad elegida; C06/C04, modelo/matriz/retención concretos aún requieren aprobación | Catálogo, búsqueda y solicitud dirigida, respuesta/retirada; sin pago/agenda/IA/adjuntos implícitos |
+| N07 Continuidad/agenda | A1/A2 → A3/A4/A5/A7 | C05/C07 y reglas propias aprobados | Acuerdo/seguimiento o reserva según checkpoint; disponibilidad no revela otro asunto/contexto |
 | N08 Servicios/expansión | Equipos por capacidad | Checkpoints C08–C13 y sus proveedores/políticas; C18/C19 solo reapertura específica | Trabajo asignado con contratos propios; no habilitar un paquete por aprobación de otro |
 
 C02/C03 pueden seguir en trabajos locales ya aprobados y sin datos reales. Un
@@ -76,29 +76,26 @@ La migración C03 no se aplica en remoto por este planning. El mantenimiento coo
 falla cerrado con C03 ausente/parcial: esa dependencia debe resolverse en un paquete
 revisado, sin owner runtime, bypassRLS o modo identity_only silencioso.
 
-## Primera sesión de decisión preparada
+## Prioridad resuelta y siguiente paquete
 
-Se recomienda C04/C05 de atención directa con profesional elegido como primer corte;
-la prioridad sigue pendiente de Arturo. Se presentó una pregunta opcional para elegir
-entre esa secuencia y marketplace primero; una selección no aprueba todos sus contratos.
-No es un producto desechable: es un incremento permanente del producto completo.
+Arturo eligió **catálogo → búsqueda → solicitud a un profesional**. Sustituye
+la recomendación anterior C04/C05 primero; tampoco equivale a aceptar la alternativa
+amplia descubrimiento/consulta/pago del handoff histórico. Es un incremento
+permanente del producto completo, sin reserva ni pago como requisito de este corte.
 
-La primera sesión se limita a estas seis decisiones, con opciones desarrolladas en
-los handoffs/checkpoints. No se pide aprobar todos los plazos/proveedores de golpe:
+A0 reactivó tres agentes sobre referencia común `7b88b4e`, con propiedad exclusiva:
 
-1. Prioridad de la primera entrega (atención directa o descubrimiento/consulta/pago).
-2. Solicitud a un destinatario profesional o bandeja con delegación explícita.
-3. Responsable único y acuerdo versionado/portal mínimo, o colaboración multiactor.
-4. Matriz concreta por familia jurídica y proceso de aprobación de conservación/
-   divulgación; los números aún pendientes no se eligen al aprobar la dirección.
-5. Procedimiento de confianza y recurso/revisor alterno, sin repetir capacidad D-041.
-6. Paquete operativo mínimo de mantenimiento/retirada/restore, con campos y
-   parámetros concretos antes de ejecutar; Arturo/30/90 ya aprobados.
+| Agente | Archivo | Entrega |
+|---|---|---|
+| planning_attention | [Flujo](../ux/marketplace-first-flow.md) | Pantallas, campos mínimos y estados propuestos |
+| planning_services | [Contrato](../contracts/marketplace-first-api.md) | Proyección pública y comandos privados, límites e invariantes |
+| planning_operations | [Preparación](marketplace-first-readiness.md) | Evidencia de código disponible, dependencias y pruebas negativas |
+| A0 | [Checkpoint del corte](../checkpoints/marketplace-first-slice.md), plan y decisiones | Integración, preguntas concretas y publicación segura |
 
-AT-05/06 y decisiones de dinero/documentos/canales/IA van a sesiones posteriores,
-según dependencias y máximo5–8 decisiones por sesión. No son preguntas pendientes
-que obliguen a parar todo trabajo: se continúa diseño o implementación ya autorizada
-que no dependa de ellas. Ninguna respuesta por silencio o tiempo transcurrido.
+Las nuevas reglas del corte permanecen Proposed; C03 ya aprobado puede avanzar
+en su alcance local. Se agrupan decisiones pendientes del corte antes de tablas;
+no se vuelve a preguntar prioridad, búsqueda gratuita, hosting o capacidades D-041.
+C05/C07/C08 y decisiones de otros servicios se revisarán cuando correspondan.
 
 ## Validación de esta entrega
 

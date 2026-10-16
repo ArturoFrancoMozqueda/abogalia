@@ -1,5 +1,12 @@
 # Handoff A1 — Planificación de atención C04–C07
 
+Actualización A0,2026-10-16: Arturo resolvió la prioridad: **catálogo → búsqueda →
+solicitud a profesional**. AT-01 queda resuelta con este corte C06/C04, distinto
+de ambas secuencias amplias originales. AT-03/06 pasan a fases posteriores; AT-05
+se revisa ahora junto con AT-02/04. Las opciones originales se conservan como
+historia, sin aprobar sus reglas por la elección de prioridad. Ver el
+[checkpoint del corte](../checkpoints/marketplace-first-slice.md).
+
 Fecha: 2026-10-16. Base común `4eb597c`, rama `codex/identity-design`.
 Estado: **Proposed / Requires Arturo**, no implementación ni aprobación global.
 Orden recibida: terminar diseño pendiente de C04/C05/C06/C07, cinco archivos

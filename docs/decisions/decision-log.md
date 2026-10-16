@@ -202,3 +202,11 @@ cierre C00–C03 y secuencia completa. La solicitud no elige por sí sola reglas
 comerciales, permisos, retención, proveedores, gastos o activaciones pendientes.
 D-005 conserva aprobación por checkpoint; los trabajos locales ya aprobados pueden
 continuar en su alcance. Ver plan vigente e informe de integración de la tanda.
+
+2026-10-16 — Arturo eligió «Marketplace: catálogo, búsqueda y solicitud a
+profesional» como siguiente recorrido prioritario. Esta respuesta ordena C06/C04
+sobre sus dependencias C03; sustituye la recomendación previa de atención directa
+C04/C05 primero. No aprueba por inferencia reservas C07, pagos C08, taxonomías,
+permisos editoriales, contratos de datos o retención jurídica. Se reactiva el equipo
+para concretar UX, API y preparación operativa con archivos exclusivos, sin
+mutaciones remotas ni persistencia nueva del dominio por esta elección.

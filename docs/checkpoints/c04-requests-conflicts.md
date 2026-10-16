@@ -4,6 +4,10 @@ Fecha: 2026-10-16. Estado: **Proposed / Requires Arturo**. Trabajo A1 de
 planificación; no autoriza tablas, endpoints, pantallas de negocio o datos reales.
 Referencia común: `4eb597c`, rama `codex/identity-design`. Revisión: A0/A2.
 
+Actualización A0,2026-10-16: prioridad elegida por Arturo: catálogo → búsqueda →
+solicitud dirigida. Ver [corte concreto](marketplace-first-slice.md). Solo la
+prioridad está aprobada; las reglas nuevas de este checkpoint siguen Proposed.
+
 ## Lo que entiendo
 
 Una persona necesita compartir lo mínimo con un profesional elegido y recibir una

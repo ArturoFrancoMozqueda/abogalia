@@ -100,7 +100,7 @@ actores, estados, plazos y propiedad no se convierten en migraciones por estar
 escritas. Antes de tablas debe quedar aprobado el modelo, relaciones/propiedad,
 estados, clasificación, historia, retención y matriz por acción/objeto.
 
-## Secuencia de implementación propuesta
+## Secuencia de implementación priorizada
 
 La secuencia permite trabajar en paralelo sin crear funciones aisladas que nadie
 pueda usar. No fija fechas ni ratifica el alcance de una primera entrega pública.
@@ -108,12 +108,13 @@ pueda usar. No fija fechas ni ratifica el alcance de una primera entrega públic
 1. **Cerrar base operativa**: aceptación real C02 y primer incremento C03,
    procedimiento de revisión, plan de mantenimiento/retiro/restore. C14/C16/C17
    acompañan estos trabajos; no esperar al final para pensar en seguridad/operación.
-2. **Atención y seguimiento**: aprobar el corte C04/C05 y sus fronteras C03/C17;
-   destinatario, evaluación progresiva, acuerdo, responsable, próximo paso y cierre.
-   Recomendar atención directa primero es una propuesta, no descartar marketplace.
-3. **Descubrimiento y coordinación**: C06/C07 con profesionales habilitados,
-   búsqueda gratuita y reserva consistente entre práctica/despacho. No cobrar
-   automáticamente ni exponer información de terceros para resolver conflictos.
+2. **Marketplace elegido por Arturo**: catálogo → búsqueda → solicitud a un
+   profesional. Concretar el corte C06/C04 sobre publicación voluntaria C03;
+   priorización aprobada el2026-10-16, contratos/modelo/retención aún propuestos.
+   No exige reserva ni pago para completar este recorrido.
+3. **Atención y coordinación posterior**: C05 para acuerdo y seguimiento, C07
+   para reservas, mediante sus checkpoints. La solicitud inicial no acepta servicios
+   ni revela datos de terceros para resolver conflictos.
 4. **Transacción y continuidad**: C08/C11 tras decisiones comerciales; C09/C10
    según necesidades del recorrido. Storage, notificación, pago y suscripción son
    contratos separados, no una compra de suite ni un único permiso genérico.
@@ -128,9 +129,9 @@ pueda usar. No fija fechas ni ratifica el alcance de una primera entrega públic
 flowchart LR
   A[C00/C01 Base segura] --> B[C02 Identidad]
   B --> C[C03 Contextos y confianza]
-  C --> D[C04 Solicitud]
+  C --> F[C06 Catálogo y búsqueda]
+  F --> D[C04 Solicitud dirigida]
   D --> E[C05 Acuerdo y seguimiento]
-  C --> F[C06 Catálogo]
   C --> G[C07 Reserva y consulta]
   G --> H[C08 Pagos]
   E --> I[C09/C10 Documentos y avisos]
@@ -161,6 +162,9 @@ controla índice/decisiones/configuración y realiza commit/push revisados.
 | A0 | Este índice, archivo histórico, resumen de integración y decisiones | Cobertura20capacidades, referencias válidas, coherencia de aprobaciones y publicación segura |
 
 [Integración y órdenes siguientes](operations/legalia-planning-remaining-2026-10-16.md).
+El [corte marketplace prioritario](checkpoints/marketplace-first-slice.md) reúne
+las propuestas concretas de UX, contrato y dependencias de la siguiente tanda.
+Su prioridad está aprobada; sus nuevas reglas permanecen Proposed.
 Una tarea de implementación deberá especificar archivos/contrato/dependencias,
 checkpoint aprobado, criterios verificables y revisor independiente. A3 es el único
 escritor de migraciones. La siguiente tanda se reparte por capacidad aprobada,
@@ -174,8 +178,8 @@ bloque conforme se necesiten, sin pedir autorización global del producto.
 
 | Sesión | Qué resuelve | Qué habilita |
 |---|---|---|
-| S1 Atención y confianza | Corte inicial, revisión profesional operable, destinatario/conflicto, información progresiva, acuerdo/seguimiento y política de datos correspondiente | Primer incremento completo C03/C04/C05/C17 |
-| S2 Descubrimiento y agenda | Cobertura/taxonomía, publicación/filtros/ranking, reserva/zonas/cambios | C06/C07 |
+| S1 Marketplace y confianza | Prioridad ya elegida; concretar catálogo/filtros, destinatario e información progresiva, matriz/retención C04 y gates C03 | Primer recorrido C06/C04 con publicación C03 |
+| S2 Continuidad y agenda | Acuerdo/seguimiento, reserva/zonas/cambios y políticas propias | C05/C07 |
 | S3 Dinero | Contratante/cobrador, proveedor, momento/importes, reembolsos/disputas y suscripción/entitlements | C08/C11 |
 | S4 Documentos y avisos | Storage, límites/cuarentena, acceso/retención; dominio/remitente/contenido y preferencias | C09/C10 |
 | S5 Confianza posterior e IA | Elegibilidad/moderación; proveedor/tratamiento/topes de los dos flujos asistivos | C12/C13, en bloques separados si supera8 decisiones |
