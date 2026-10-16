@@ -10,6 +10,14 @@ import httpx
 from abogalia_api.identity.config import Settings
 
 
+def _error_code(data):
+    if not isinstance(data, dict):
+        return None
+    code = data.get("code")
+    # GoTrue can return HTTP status in code and its stable category in error_code.
+    return code if isinstance(code, str) else data.get("error_code")
+
+
 class ProviderFailure(Exception):
     def __init__(self, kind: str = "unavailable"):
         self.kind = kind
@@ -65,9 +73,7 @@ class SupabaseProvider:
                 if len(response.content) > 8192:
                     raise ProviderFailure()
                 error = response.json()
-                code = (
-                    error.get("code", error.get("error_code")) if isinstance(error, dict) else None
-                )
+                code = _error_code(error)
                 category = (
                     {
                         "user_already_exists": "duplicate",
@@ -143,7 +149,7 @@ class SupabaseProvider:
             if not isinstance(data, dict):
                 raise ProviderFailure()
             if response.status_code in (401, 403):
-                code = data.get("code", data.get("error_code"))
+                code = _error_code(data)
                 if code in ("session_not_found", "user_not_found"):
                     return None
                 raise ProviderFailure()

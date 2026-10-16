@@ -7,9 +7,7 @@ export type WorkerEnv = {
   ASSETS: { fetch(request: Request): Promise<Response> };
   LEGALIA_API_ORIGIN?: string;
 };
-type UpstreamInit = RequestInit & {
-  cf: { cacheTtl: number; cacheEverything: boolean };
-};
+type UpstreamInit = RequestInit;
 type UpstreamFetch = (
   request: Request,
   init: UpstreamInit,
@@ -93,8 +91,7 @@ function approvedOrigin(
   }
 }
 
-// Explicit injection is for synthetic tests; the default export uses the empty
-// reviewed list above until A0 records the actually provisioned Legalia origin.
+// Explicit injection is for synthetic tests; production uses the reviewed origin.
 export function createWorker(
   approved: readonly string[] = APPROVED_API_ORIGINS,
   upstreamFetch: UpstreamFetch = fetch,
@@ -132,8 +129,8 @@ export function createWorker(
           init.signal?.throwIfAborted();
           const response = await upstreamFetch(new Request(target, init), {
             redirect: "manual",
+            // Workers rejects cacheTtl overrides together with no-store.
             cache: "no-store",
-            cf: { cacheTtl: 0, cacheEverything: false },
           });
           // Neither follow upstream redirects with credentials nor leak Location to browser.
           if (response.status >= 300 && response.status < 400) {

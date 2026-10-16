@@ -114,7 +114,8 @@ test("fixed host/path/query and original Origin/cookie/CSRF/SecFetch survive; sp
     seen = upstream;
     assert.equal(options.redirect, "manual");
     assert.equal(options.cache, "no-store");
-    assert.deepEqual(options.cf, { cacheTtl: 0, cacheEverything: false });
+    // Workers rejects a cf.cacheTtl override when cache is no-store.
+    assert.equal(options.cf, undefined);
     assert.equal(upstream.redirect, "manual");
     assert.equal(await upstream.text(), '{"public_synthetic":true}');
     return new Response('{"accepted":true}', {
