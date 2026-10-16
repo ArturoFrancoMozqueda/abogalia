@@ -1,18 +1,18 @@
 # Legalia
 
-Hosting elegido: Cloudflare Workers Static Assets para frontend y Fly.io para
-FastAPI, con Supabase/Resend existentes. Paquete de despliegue preparado y probado
-localmente. API desplegada en Fly con unaVM1GB/iad y HTTPS comprobado;
-frontend Cloudflare aún pendiente de autorización de publicación.
-API de salud: https://legalia-api.fly.dev/api/health. Ver
-[Cloudflare](docs/operations/legalia-cloudflare-deployment.md) y
-[Fly](docs/operations/legalia-fly-deployment.md). La URL siguiente sigue siendo local.
+Hosting desplegado: frontend en Cloudflare Workers Static Assets Free y API
+FastAPI en una máquina Fly de 1 GB en iad, con Supabase/Resend propios.
+Abrir [Legalia](https://legalia-web.legaliasupport.workers.dev/) o
+[crear cuenta](https://legalia-web.legaliasupport.workers.dev/registro).
+La web y `/api/health` públicos responden; cookies seguras, CSRF y ausencia de
+caché comprobados por HTTPS. Ver [Cloudflare](docs/operations/legalia-cloudflare-deployment.md)
+y [Fly](docs/operations/legalia-fly-deployment.md).
 
-Registro y acceso habilitados localmente por instrucción expresa de Arturo:
-http://127.0.0.1:5190/registro. API8090 y frontend5190 usan Supabase real;
-confirmación de correo, CSRF y MFA permanecen activos. Esta habilitación no
-acredita entrega de correo o revocación real ni publicación en Internet.
-Ver [estado de activación](docs/checkpoints/identity-real-activation.md).
+Registro/acceso habilitados por Arturo. La entrega de correo, MFA, revocación,
+retención operativa y restauración reales siguen pendientes; C02 no está terminado.
+Sin dominio propio, Resend conserva la restricción de destinatario de su remitente
+de prueba. La publicación no habilita todavía contratar servicios jurídicos.
+El entorno local permanece en http://127.0.0.1:5190.
 
 Nombre anterior: Abogalia. Se conservan rutas de repositorio, paquetes y variables
 técnicas para evitar un renombrado general. El destino Supabase vigente es
@@ -83,8 +83,9 @@ make check
 
 Incluye lint, formato, integridad de dependencias Python, importación de la API,
 tipos TypeScript y build con prerenderizado. El workflow está preparado para main
-y pull requests. La rama codex/identity-design ya fue publicada; no se ha confirmado
-CI remoto en esta entrega. La prueba navegador/API usa servicios locales reales.
+y pull requests. La rama codex/identity-design ya fue publicada. El workflow de imagen Linux
+pasó build, arranque y escaneo HIGH/CRITICAL antes de publicar; no equivale a
+atribuir todo make check al CI remoto. También se verificó navegador/API publicados.
 
 Identity cuenta con implementación local de acceso, recuperación, MFA TOTP y
 sesiones custodiadas por API, conforme al checkpoint aprobado. La operación con

@@ -179,3 +179,11 @@ y costo» a una única máquinaFly sharedcpu1x/1GB en Virginia, baseUS$6.70 por3
 encendida más transferencia/impuestos, con CloudflareFree y sin réplicas ni
 servicios pagados extra. Presupuesto de esta configuración Approved; no se vuelve
 a preguntar por ese mismo gasto. No acredita aprovisionamiento o despliegue.
+
+2026-10-15 — Arturo autorizó Wrangler para la cuenta propia de Legalia con lectura
+de usuario/cuenta, acceso persistente y publicación de Workers. Tras comprobar que
+Workers Write no permite publicar scripts, aprobó expresamente sustituirlo por
+Workers Scripts Write conservando esos otros tres permisos. Autenticación y deploy
+completados; no se ampliaron permisos a rutas, KV, logs u otros servicios. Web y
+API públicas verificadas conforme al hosting y presupuesto aprobados; C02 sigue
+pendiente de aceptación operativa y dominio de correo propio.

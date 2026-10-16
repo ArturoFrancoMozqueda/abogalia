@@ -1,5 +1,19 @@
 # FastAPI en Fly — paquete de producción preparado
 
+## Estado publicado — 2026-10-15
+
+API https://legalia-api.fly.dev, una máquina started sharedcpu1x/1024MB en iad,
+sin volúmenes, builder o réplica. Imagen Alpine3.24/Python3.12.15 del commit
+75feda74c617 pasó CI, arranque UID10001/libpq/criptografía y Trivy HIGH/CRITICAL;
+no se publicaron las imágenes Debian bloqueadas. Ver service-registry para digest.
+Cinco variables runtime importadas privadamente por stdin, sin incluir `.env` en
+CI, imagen, argumentos o repo. Health y controles HTTPS directos y mediante
+Cloudflare comprobados. Conexión desde VM a PostgreSQL con TLS, rol runtime mínimo
+y RLS FORCE comprobada con lectura exclusiva de catálogos.
+La aceptación de correo/MFA/revocación y restauración permanece pendiente.
+Los apartados siguientes conservan evidencia de la preparación e intentos anteriores.
+
+
 2026-10-15. Hosting Cloudflare Static Assets + Fly aprobado por Arturo. Esta entrega
 prepara fuentes locales; no crea app/organización, contrata recursos, instala CLI,
 accede a credenciales, construye/publica imagen ni despliega. El coordinador controla

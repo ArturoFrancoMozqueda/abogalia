@@ -2,6 +2,24 @@
 
 ## Destino vigente: Legalia (2026-10-13)
 
+Estado vigente de hosting2026-10-15: frontend publicado en
+https://legalia-web.legaliasupport.workers.dev/ (Worker `legalia-web`, Cloudflare Free).
+Proxy a https://legalia-api.fly.dev con health200, sesión/CSRF/cookies seguras y
+rechazos comprobados por HTTPS. Supabase Site URL coincide con el frontend público;
+confirmado tras nueva navegación. API: unaVM1GB/iad, sin réplicas ni builder.
+Desde la VM se comprobó conexión TLS al rol runtime mínimo y RLS FORCE de Identity,
+solo catálogos y sin filas de usuarios. Autorización Wrangler propia sustituida por
+Workers Scripts Write + lectura cuenta/usuario y acceso persistente, aprobada por Arturo.
+Correo/MFA/revocación, scheduler de retención y restauración reales pendientes.
+Las comprobaciones iniciales siguientes conservan su estado histórico.
+
+Actualización API tras verificación end-to-end: imagen del commit `75feda74c617`,
+digest `sha256:c7607a6f48c3eae4bb62b1021ef63b427dcd676d0d0736cd69159063026f755b`,
+[build/escaneo publicado](https://github.com/ArturoFrancoMozqueda/abogalia/actions/runs/38841098668).
+Desplegada sin añadir máquinas; una started/1GB/iad confirmada después, salud pública200.
+Corrige code numérico + error_code de GoTrue conservando categorías permitidas y
+rechazo seguro ante errores desconocidos. 587 pruebas API/SQL pasan;30 del Worker.
+
 Comprobación2026-10-15: Fly autenticado con la identidad propia de Legalia;
 la API de organizaciones identifica slug técnico `personal`, nombre `Legalia`,
 mientras el panel usa `/dashboard/legalia`. App `legalia-api` creada y hostname
