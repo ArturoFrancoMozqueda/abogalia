@@ -1,0 +1,72 @@
+name: Legalia API image
+
+on:
+  push:
+    branches: [codex/identity-design]
+    paths: [apps/api/**, scripts/check_secrets.py, scripts/install_gitleaks.py, .github/workflows/legalia-api-image.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: legalia-api-image-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  image:
+    if: github.repository == 'ArturoFrancoMozqueda/abogalia'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE: ghcr.io/arturofrancomozqueda/abogalia-api
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Check sources for secrets
+        run: |
+          python3 scripts/install_gitleaks.py --destination "$RUNNER_TEMP/abogalia-scanner"
+          python3 scripts/check_secrets.py --binary "$RUNNER_TEMP/abogalia-scanner/gitleaks" --history
+      - name: Build the confined API context
+        run: |
+          docker build --platform linux/amd64 --tag "$IMAGE:$GITHUB_SHA" --label org.opencontainers.image.source=https://github.com/ArturoFrancoMozqueda/abogalia --label "org.opencontainers.image.revision=$GITHUB_SHA" apps/api
+      - name: Verify production startup without credentials or network
+        run: |
+          docker run --detach --name legalia-check --network none --env ABOGALIA_ENVIRONMENT=production --env ABOGALIA_IDENTITY_ENABLED=0 --env ABOGALIA_WEB_ORIGIN=https://legalia-web.legaliasupport.workers.dev "$IMAGE:$GITHUB_SHA"
+          python3 - <<'PY'
+          import subprocess, time
+          probe = 'import urllib.request; r=urllib.request.urlopen("http://127.0.0.1:8080/api/health", timeout=2); assert r.status == 200'
+          for attempt in range(20):
+              result = subprocess.run(['docker', 'exec', 'legalia-check', 'python', '-c', probe], capture_output=True)
+              if result.returncode == 0:
+                  break
+              time.sleep(1)
+          else:
+              raise SystemExit('Production container health check failed; diagnostics suppressed')
+          print('Production container health check passed')
+          PY
+      - name: Install pinned image scanner
+        run: |
+          curl --fail --silent --show-error --location https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_Linux-64bit.tar.gz --output "$RUNNER_TEMP/trivy.tar.gz"
+          printf '%s  %s\n' e24b1c51293c1b15e4ba8d45bbc7891ba053f90278ec2698f3562c993e145fe7 "$RUNNER_TEMP/trivy.tar.gz" | sha256sum --check --status
+          mkdir "$RUNNER_TEMP/legalia-trivy"
+          tar -xzf "$RUNNER_TEMP/trivy.tar.gz" -C "$RUNNER_TEMP/legalia-trivy" trivy
+      - name: Scan image before publication
+        run: |
+          "$RUNNER_TEMP/legalia-trivy/trivy" image --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --format table "$IMAGE:$GITHUB_SHA"
+      - name: Publish reviewed image to GHCR
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+          docker push "$IMAGE:$GITHUB_SHA"
+      - name: Remove temporary container and registry session
+        if: always()
+        run: |
+          docker rm --force legalia-check >/dev/null 2>&1 || true
+          docker logout ghcr.io >/dev/null 2>&1 || true

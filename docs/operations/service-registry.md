@@ -2,6 +2,19 @@
 
 ## Destino vigente: Legalia (2026-10-13)
 
+Comprobación2026-10-15: Fly autenticado con la identidad propia de Legalia;
+la API de organizaciones identifica slug técnico `personal`, nombre `Legalia`,
+mientras el panel usa `/dashboard/legalia`. App `legalia-api` creada y hostname
+asignado `legalia-api.fly.dev`; aún sin máquinas ni despliegue. No se deben usar
+recursos de otro usuario aunque su organización también se llame personal.
+Cloudflare: cuenta `68d5920648c2f57c6ab47e87a07de308`, subdominio existente
+`legaliasupport.workers.dev`, cuota Free100000/día comprobados en panel.
+`legalia-web` es el nombre previsto; todavía no hay Worker publicado.
+Build de imagen previsto en runner estándar Linux del repositorio público y GHCR,
+sin Docker local, builder Fly/Depot ni credenciales runtime en CI. El workflow
+requiere escaneo de fuentes y ausencia de vulnerabilidades HIGH/CRITICAL antes
+de publicar la imagen. No implica haber ejecutado o superado estos controles.
+
 Actualización hosting2026-10-15: Arturo eligió Cloudflare Workers Static Assets
 para frontend y Fly.io para FastAPI. Configuración y pruebas locales preparadas;
 cuenta Cloudflare, organización/appFly y hostnames reales todavía no confirmados.
