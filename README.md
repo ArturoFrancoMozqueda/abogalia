@@ -7,6 +7,8 @@ Abrir [Legalia](https://legalia-web.legaliasupport.workers.dev/) o
 La web y `/api/health` públicos responden; cookies seguras, CSRF y ausencia de
 caché comprobados por HTTPS. Ver [Cloudflare](docs/operations/legalia-cloudflare-deployment.md)
 y [Fly](docs/operations/legalia-fly-deployment.md).
+[Revisión de skills y buenas prácticas Cloudflare](docs/operations/legalia-cloudflare-skills-review.md),
+con tipos generados y pruebas aisladas en workerd.
 
 Registro/acceso habilitados por Arturo. La entrega de correo, MFA, revocación,
 retención operativa y restauración reales siguen pendientes; C02 no está terminado.

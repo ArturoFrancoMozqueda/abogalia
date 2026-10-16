@@ -1,5 +1,12 @@
 # Plan de desarrollo de Legalia por agentes
 
+## Revisión de hosting al 2026-10-16
+
+Skills oficiales Cloudflare instaladas fuera del repo; revisión aplicada al Worker.
+Tipos generados y9 pruebas workerd añadidas a las30 Node, con fixtures locales y
+sin proveedor/secrets. Se conservan plan, rutas y privacidad aprobados.
+[Informe y excepciones operativas](operations/legalia-cloudflare-skills-review.md).
+
 ## Estado vigente al 2026-10-15
 
 Web publicada en [Legalia](https://legalia-web.legaliasupport.workers.dev/),

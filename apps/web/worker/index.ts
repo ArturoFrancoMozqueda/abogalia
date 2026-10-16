@@ -3,10 +3,7 @@ export const APPROVED_API_ORIGINS: readonly string[] = Object.freeze([
   "https://legalia-api.fly.dev",
 ]);
 
-export type WorkerEnv = {
-  ASSETS: { fetch(request: Request): Promise<Response> };
-  LEGALIA_API_ORIGIN?: string;
-};
+export type WorkerEnv = Env;
 type UpstreamInit = RequestInit;
 type UpstreamFetch = (
   request: Request,
@@ -183,4 +180,4 @@ export function createWorker(
     },
   };
 }
-export default createWorker();
+export default createWorker() satisfies ExportedHandler<WorkerEnv>;
