@@ -1,4 +1,10 @@
-# Abogalia — Documentación Maestra del Proyecto
+# Legalia — documentación maestra
+
+Estado vigente, tareas y dependencias: [plan por agentes](27_development_plan_agents.md).
+La visión funcional siguiente describe el producto objetivo, no capacidades ya
+publicadas. Abogalia es el nombre histórico; Legalia es el nombre aprobado.
+Los checkpoints distinguen aprobación de implementación y aceptación real.
+
 
 Abogalia es una plataforma digital para conectar personas con abogados verificados y proporcionar a abogados independientes y despachos las herramientas necesarias para gestionar prospectos, consultas, clientes y operación comercial.
 

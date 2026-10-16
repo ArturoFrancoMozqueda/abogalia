@@ -1,5 +1,10 @@
 # Legalia — órdenes de continuación por agentes
 
+Orden vigente2026-10-16: [planning completo restante](legalia-planning-remaining-2026-10-16.md).
+Las tandas siguientes conservan evidencia histórica; hosting ya desplegado y
+configuración vigente se consultan en el registro de servicios y el plan actual.
+
+
 ## Hosting aprobado — 2026-10-15, base4d0b227c0618
 
 Arturo eligió Cloudflare Workers Static Assets para frontend y Fly.io para FastAPI.

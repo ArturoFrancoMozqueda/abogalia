@@ -1,5 +1,21 @@
 # Checkpoint — Activación real de Identity C02
 
+## Estado vigente — 2026-10-16
+
+Registro y acceso están habilitados en la web pública de Legalia por las
+instrucciones posteriores de Arturo y el despliegue autorizado del2026-10-15.
+[Hosting y evidencia](../operations/service-registry.md). La configuración necesaria
+ya se preparó y la conexión runtime/TLS/RLS se verificó; no pedir copiar de nuevo
+publishable, DSN o credenciales, ni leer sus valores.
+C02 sigue pendiente de aceptación real de correo/OTP/MFA/revocación y operación de
+retención/retiro Auth/restauración. El remitente sin dominio conserva sus restricciones.
+No se crea una cuenta ni envía correo en esta actualización documental.
+
+El relato de activación local y los estados anteriores siguientes se conservan
+como evidencia histórica. Sus flags0, ausencia de hosting o condición de esperar
+antes de activar no describen el despliegue público vigente ni reabren aprobaciones.
+
+
 ## Activación local por instrucción expresa — 2026-10-15
 
 Arturo indicó «No importa que habilites el acceso general ya hazlo». Esta instrucción
@@ -23,10 +39,10 @@ Launcher corregido para cargar src antes de validar configuración activada;
 regresión en shell sinPYTHONPATH pasa. Integración533 pruebas pasan y revisión
 independiente A2 sin bloqueantes. Los estados desactivados siguientes son históricos.
 
-## Estado vigente — 2026-10-15
+## Estado histórico previo a la activación — 2026-10-15
 
-Este apartado prevalece sobre las descripciones históricas siguientes, que se
-conservan sin borrar su evidencia. D-036/D-038/D-039 y las decisiones posteriores
+Este apartado conserva la preparación previa y no prevalece sobre la activación
+posterior registrada arriba. D-036/D-038/D-039 y las decisiones posteriores
 siguen aprobadas dentro de su alcance; no requieren nueva aprobación por
 aparecer como Proposed en los antecedentes. **C02 no está operativamente cerrado**.
 

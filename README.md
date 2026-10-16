@@ -40,6 +40,13 @@ claves ni infraestructura de ejecución.
 | `apps/api` | FastAPI y módulos de negocio futuros |
 | `docs` | Producto, checkpoints, decisiones y registro de servicios |
 
+## Plan de trabajo
+
+El [plan vigente por agentes](docs/27_development_plan_agents.md) cubre C00–C19,
+con estado real, dependencias, checkpoints, tareas y sesiones de decisión.
+[Integración del planning restante](docs/operations/legalia-planning-remaining-2026-10-16.md).
+Los diseños pendientes no son funciones disponibles ni autorización para usar datos reales.
+
 ## Desarrollo local
 
 Requisitos: Node 24, pnpm 11.25.0 y Python 3.12. Dependencias aisladas en cada
@@ -143,9 +150,9 @@ confirmada de la identidad del proveedor siguen pendientes. LEGAL REVIEW REQUIRE
 ## Artefacto web
 
 `pnpm build` genera archivos en `apps/web/build/client`, incluida la portada HTML
-prerenderizada. No se requiere un servidor Node de producción. Rutas futuras que
-no se prerendericen necesitan fallback SPA y rutas `/api/*` hacia FastAPI en el
-hosting elegido; esa configuración aún está pendiente.
+prerenderizada. No se requiere un servidor Node de producción. Las rutas privadas actuales usan el fallback SPA y `/api/*` se envía a FastAPI
+mediante el Worker desplegado. Los assets públicos existentes se sirven directamente
+para ahorrar cuota. Las rutas futuras deberán integrarse y verificarse expresamente.
 
 ## Servicios y decisiones
 
