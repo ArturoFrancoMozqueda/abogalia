@@ -9,6 +9,9 @@ caché comprobados por HTTPS. Ver [Cloudflare](docs/operations/legalia-cloudflar
 y [Fly](docs/operations/legalia-fly-deployment.md).
 [Revisión de skills y buenas prácticas Cloudflare](docs/operations/legalia-cloudflare-skills-review.md),
 con tipos generados y pruebas aisladas en workerd.
+[Optimización Free y observabilidad preparada](docs/operations/legalia-cloudflare-quota-observability.md):
+assets públicos servidos directamente, API privada sin caché y salud a demanda;
+logs y trazas permanecen desactivados.
 
 Registro/acceso habilitados por Arturo. La entrega de correo, MFA, revocación,
 retención operativa y restauración reales siguen pendientes; C02 no está terminado.

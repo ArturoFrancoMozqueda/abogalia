@@ -1,5 +1,11 @@
 # Legalia — preparación de Cloudflare Workers Static Assets
 
+Estado2026-10-16: [optimización publicada](legalia-cloudflare-quota-observability.md),
+run_worker_first=["/*", "!/assets/*"]. API/HTML siguen por el Worker; los archivos
+públicos de assets existentes lo evitan y conservan cabeceras mediante _headers.
+Las descripciones iniciales de Worker-first total siguientes son históricas.
+
+
 ## Despliegue comprobado — 2026-10-15
 
 Frontend publicado: https://legalia-web.legaliasupport.workers.dev/.

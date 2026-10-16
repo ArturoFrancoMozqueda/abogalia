@@ -55,3 +55,24 @@ Fuentes oficiales: [routing/binding](https://developers.cloudflare.com/workers/s
 [headers](https://developers.cloudflare.com/workers/static-assets/headers/),
 [billing](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/),
 [Workers Logs y límites actuales](https://developers.cloudflare.com/workers/observability/logs/workers-logs/).
+
+## Ejecución comprobada
+
+Publicado2026-10-16 en Worker `legalia-web`, cuenta propia del registro de servicios,
+con fuente `25e37a0`. Wrangler retornó éxito y la URL pública esperada; no se
+provisionó recurso ni se amplió permiso. Panel actualizado muestra Worker existente,
+cuota100000/día y cero eventos de observabilidad; no se activó Paid.
+
+`pnpm check` pasó lint/tipos/build y33+9+11 pruebas. Ruff y cuatro pruebas del
+checker pasaron. Dry-run producción correcto. Scanner redactado:217fuentes y
+historia,18archivos del cliente,2del bundleWorker, todos con cero hallazgos.
+
+Después de publicar, el checker devolvió web/access/api=true. GET a JS/CSS reales
+respondió200 con nosniff/no-referrer y sin Set-Cookie; sesión anónima200/no-store.
+La portada se comprobó visualmente en navegador. No se leyó dato real de usuario,
+se creó cuenta ni envió correo. Bypass de ejecución probado con router local real
+mediante marcador exclusivo del fixture; ahorro real por tráfico no medido y no
+se infiere porcentaje a partir del contador agregado del panel.
+
+Panel Workers plans comprobado después del despliegue: Free, $0, Current plan.
+No se pulsó Upgrade ni se cambió la suscripción.

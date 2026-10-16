@@ -1,5 +1,13 @@
 # Plan de desarrollo de Legalia por agentes
 
+## Cuota y observabilidad al 2026-10-16
+
+Optimización publicada: JS/CSS existentes bajo `/assets/` evitan el Worker;
+API/HTML/privacidad conservados. Cloudflare Free, sin servicios nuevos.
+33 pruebas Node,9 workerd,11 router y4 del checker pasan, además de tipos/build.
+Observabilidad preparada sin captura ni persistencia; checker de salud a demanda.
+[Evidencia](operations/legalia-cloudflare-quota-observability.md).
+
 ## Revisión de hosting al 2026-10-16
 
 Skills oficiales Cloudflare instaladas fuera del repo; revisión aplicada al Worker.

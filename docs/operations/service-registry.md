@@ -2,6 +2,14 @@
 
 ## Destino vigente: Legalia (2026-10-13)
 
+2026-10-16: optimización publicada en el mismo `legalia-web`, Cloudflare Free.
+Solo archivos públicos existentes `/assets/*` evitan el Worker; API/HTML conservan
+su ruta y no-store privado. Headers estáticos nosniff/no-referrer comprobados.
+Logs/traces/persistencia explícitamente desactivados; proyección de eventos y
+chequeo público a demanda preparados. Sin nuevos servicios, permisos o gasto.
+[Evidencia y límites](legalia-cloudflare-quota-observability.md).
+
+
 Estado vigente de hosting2026-10-15: frontend publicado en
 https://legalia-web.legaliasupport.workers.dev/ (Worker `legalia-web`, Cloudflare Free).
 Proxy a https://legalia-api.fly.dev con health200, sesión/CSRF/cookies seguras y

@@ -1,5 +1,9 @@
 # Revisión de Cloudflare y skills oficiales — 2026-10-16
 
+Actualización posterior: [optimización de cuota y observabilidad preparada](legalia-cloudflare-quota-observability.md)
+publicada2026-10-16; el resto de esta revisión conserva la evidencia anterior.
+
+
 ## Resultado y alcance
 
 Se instalaron las 19 skills oficiales de `cloudflare/skills` en el directorio local
