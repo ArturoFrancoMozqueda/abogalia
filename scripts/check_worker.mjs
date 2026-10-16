@@ -1,6 +1,6 @@
 /** Local Workers validation. Clean environment, loopback fixtures, no credentials. */
 import { spawn } from "node:child_process";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -59,6 +59,7 @@ try {
     "--test",
     "--test-reporter=dot",
     "apps/web/worker/index.test.mjs",
+    "apps/web/worker/observability.test.mjs",
   ]);
   stage = "workerd";
   backend = createServer(async (req, res) => {
@@ -97,6 +98,22 @@ try {
     await readFile(join(root, "apps/web/wrangler.production.jsonc"), "utf8"),
   );
   const config = join(temporary, "wrangler.jsonc");
+  const assets = join(temporary, "assets");
+  await mkdir(join(assets, "assets"), { recursive: true });
+  await mkdir(join(assets, "api"));
+  for (const [name, content] of [
+    ["assets/synthetic.js", "/* PUBLIC_SYNTHETIC_ASSET */"],
+    ["assets/synthetic.css", "/* PUBLIC_SYNTHETIC_CSS */"],
+    ["index.html", "<html>PUBLIC_SYNTHETIC_HOME</html>"],
+    ["__spa-fallback.html", "<html>PUBLIC_SYNTHETIC_SHELL</html>"],
+    ["api/health", "STATIC_API_SHADOW_MUST_NEVER_WIN"],
+    ["registro", "STATIC_PRIVATE_SHADOW_MUST_NEVER_WIN"],
+  ])
+    await writeFile(join(assets, name), content);
+  await writeFile(
+    join(assets, "_headers"),
+    await readFile(join(root, "apps/web/public/_headers")),
+  );
   await writeFile(
     config,
     JSON.stringify({
@@ -106,6 +123,7 @@ try {
       compatibility_flags: production.compatibility_flags || [],
       observability: { enabled: false },
       workers_dev: false,
+      assets: { ...production.assets, directory: assets },
       vars: { FIXTURE_ORIGIN: `http://127.0.0.1:${backendPort}` },
     }),
   );
@@ -150,12 +168,73 @@ try {
   const result = await response.json();
   if (!response.ok || result.passed !== 9 || result.failed !== 0)
     throw new Error("Runtime regression");
+  let routingChecks = 0;
+  const local = `http://127.0.0.1:${workerPort}`;
+  for (const path of ["/assets/synthetic.js", "/assets/synthetic.css"]) {
+    stage = "asset-bypass";
+    const asset = await fetch(local + path + "?synthetic=PUBLIC_FIXTURE", {
+      headers: { Cookie: "PUBLIC_FIXTURE", Authorization: "PUBLIC_FIXTURE" },
+    });
+    if (
+      !asset.ok ||
+      asset.headers.has("X-Synthetic-Worker") ||
+      asset.headers.has("Set-Cookie") ||
+      asset.headers.get("X-Content-Type-Options") !== "nosniff" ||
+      asset.headers.get("Referrer-Policy") !== "no-referrer" ||
+      !(await asset.text()).includes("PUBLIC_SYNTHETIC")
+    )
+      throw new Error("Static bypass failed");
+    routingChecks++;
+  }
+  for (const path of [
+    "/acceso",
+    "/registro",
+    "/recuperar",
+    "/cuenta",
+    "/profesional",
+    "/profesional/contextos",
+  ]) {
+    stage = "private-route";
+    const shell = await fetch(local + path);
+    if (
+      !shell.ok ||
+      shell.headers.get("X-Synthetic-Worker") !== "invoked" ||
+      shell.headers.get("Cache-Control") !== "private, no-store" ||
+      !(await shell.text()).includes("PUBLIC_SYNTHETIC_SHELL")
+    )
+      throw new Error("Private route failed");
+    routingChecks++;
+  }
+  stage = "api-before-assets";
+  const health = await fetch(local + "/api/health", {
+    headers: { Accept: "text/html", "Sec-Fetch-Mode": "navigate" },
+  });
+  if (
+    !health.ok ||
+    health.headers.get("X-Synthetic-Worker") !== "invoked" ||
+    (await health.json()).ok !== true
+  )
+    throw new Error("API shadowed");
+  routingChecks++;
+  stage = "asset-unknown-and-method";
+  if (
+    (await fetch(local + "/assets/missing.js")).status !== 404 ||
+    (
+      await fetch(local + "/assets/synthetic.js", {
+        method: "POST",
+        body: "{}",
+      })
+    ).status !== 405
+  )
+    throw new Error("Static error changed");
+  routingChecks += 2;
   console.log(
     JSON.stringify({
       status: "passed",
       generated_types: true,
-      node_tests: 30,
+      node_tests: 33,
       workerd_tests: 9,
+      routing_tests: routingChecks,
     }),
   );
 } catch {

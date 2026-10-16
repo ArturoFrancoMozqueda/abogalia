@@ -25,6 +25,18 @@ export default {
       );
     };
     const worker = createWorker([API], nativeFetch);
+    if (new URL(request.url).pathname !== "/run") {
+      // Local routing proof only: this marker is never part of production code.
+      const synthetic = new URL(request.url);
+      synthetic.protocol = "https:";
+      const result = await worker.fetch(new Request(synthetic, request), {
+        ASSETS: bindings.ASSETS,
+        LEGALIA_API_ORIGIN: API,
+      });
+      const response = new Response(result.body, result);
+      response.headers.set("X-Synthetic-Worker", "invoked");
+      return response;
+    }
     const env = {
       LEGALIA_API_ORIGIN: API,
       ASSETS: {

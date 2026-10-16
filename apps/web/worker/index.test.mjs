@@ -311,7 +311,7 @@ test("unknown route stays asset404 and static mutation does not reach binding", 
   assert.equal(calls, 1);
 });
 
-test("versioned Wrangler template keeps worker-first, no HTML automatic fallback and closed destinations", () => {
+test("versioned Wrangler template bypasses only public assets, preserves private routing and closed destinations", () => {
   const source = readFileSync(
     new URL("../wrangler.jsonc", import.meta.url),
     "utf8",
@@ -320,7 +320,7 @@ test("versioned Wrangler template keeps worker-first, no HTML automatic fallback
   assert.deepEqual(config.assets, {
     directory: "build/client",
     binding: "ASSETS",
-    run_worker_first: true,
+    run_worker_first: ["/*", "!/assets/*"],
     html_handling: "none",
     not_found_handling: "none",
   });

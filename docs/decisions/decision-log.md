@@ -187,3 +187,10 @@ Workers Scripts Write conservando esos otros tres permisos. Autenticación y dep
 completados; no se ampliaron permisos a rutas, KV, logs u otros servicios. Web y
 API públicas verificadas conforme al hosting y presupuesto aprobados; C02 sigue
 pendiente de aceptación operativa y dominio de correo propio.
+
+2026-10-16 — Arturo pidió optimizar la cuota de Cloudflare manteniendo Free y
+preparar observabilidad sin secretos ni datos de usuarios. Autoriza excluir solo
+los archivos públicos `/assets/*` de Worker-first, conservando API/shells/headers,
+y preparar proyección cerrada y comprobación pública a demanda. No activa captura,
+persistencia, logs/traces automáticos, scheduler, retención nueva, servicio pagado
+o permisos adicionales. Ver checkpoint cloudflare-quota-observability.
