@@ -210,3 +210,18 @@ C04/C05 primero. No aprueba por inferencia reservas C07, pagos C08, taxonomías,
 permisos editoriales, contratos de datos o retención jurídica. Se reactiva el equipo
 para concretar UX, API y preparación operativa con archivos exclusivos, sin
 mutaciones remotas ni persistencia nueva del dominio por esta elección.
+
+2026-10-17 — Arturo aprobó expresamente el directorio y el flujo de solicitud
+propuestos en marketplace-first-slice: proyección profesional+contexto con etiqueta
+pública autorizada, búsqueda nombre/ámbito80 caracteres combinados, orden estable
+y paginación20/máximo50, sin historial de búsquedas en aplicación; solicitud dirigida
+con cliente confirmado/sesión activa, MFA profesional, relato1..2000/body8192,
+borrador solo en memoria, envío explícito, respuesta can_continue_evaluation o
+cannot_assist y retirada, sin contratar ni correo automático. Continuar agentes
+para C03 y marketplace. La política jurídica C04 aún requiere decisión antes de
+tablas/persistencia; no activa revisión real ni concede capacidades por sí misma.
+
+2026-10-17 — Arturo recordó que todo trabajo debe permanecer en el entorno y
+servicios designados de Legalia. Se mantienen repositorio propio, Cloudflare Free,
+Fly existente, Supabase spohytnxscljtitvmdab y Resend propios; desarrollo/pruebas
+sintéticos aislados del mismo repositorio, sin recursos Kova ni nuevos proveedores.

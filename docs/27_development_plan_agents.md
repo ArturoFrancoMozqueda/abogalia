@@ -1,7 +1,8 @@
 # Plan vigente de Legalia por agentes
 
-Actualizado2026-10-16. Coordinador A0. Rama `codex/identity-design`;
-referencia común de esta tanda `4eb597c`, checkout limpio antes de delegar.
+Actualizado2026-10-17. Coordinador A0. Tanda actual `feature/marketplace-c03`;
+base `main` integrada en `a6f172c`, checkout limpio antes de delegar.
+La tanda documental anterior usó `codex/identity-design` sobre `4eb597c`.
 Arturo pidió reactivar Agent Teams y terminar el planning restante. Se concretan
 los bloques C00–C19 y sus tareas; no se interpreta como aprobación de reglas
 comerciales, nuevos permisos, datos, retención, proveedor o gasto pendientes.
@@ -38,10 +39,10 @@ C18/C19 son visión futura, no backlog de implementación autorizado en esta ent
 | C00 | Fundación | Monorepo y build implementados | Conservar reproducibilidad y contratos; no confundir health con Auth/DB |
 | C01 | Desarrollo seguro | Escáner redactado, dependencias fijadas, checks locales; build/escaneo de imagen remoto probado | Comprobar CI completo en PR/main y controles de publicación; no atribuir ejecución remota no realizada |
 | C02 | Identity | API/web/sesiones locales y esquema remoto; Auth/SMTP preparados; registro/acceso públicos habilitados expresamente | Cuenta APP controlada, entrega OTP, MFA, revocación local/global reales; retiro Auth fiable, mantenimiento/retención periódica y restore |
-| C03 | Contextos profesionales | PC-01..05 y D-041 aprobados; dominio y primer incremento privado local | Esquema remoto no aplicado; completar/revisar gates de confianza, membresía, relevo y publicación; procedimiento jurídico y capacidades reales pendientes |
+| C03 | Contextos profesionales | PC-01..05/D-041 aprobados; draft privado persistido y dominio puro de revisión/publicación local | Esquema remoto no aplicado; completar/revisar gates de confianza, membresía, relevo y publicación; procedimiento jurídico y capacidades reales pendientes |
 | C04 | Solicitudes/conflicto | Checkpoint preparado para decisión | Datos progresivos, destinatario, conflicto y respuesta antes de tablas/UX sustantiva |
 | C05 | Relación/acuerdos/seguimiento | Checkpoint preparado para decisión | Alcance, propiedad, aceptación, responsable y cierre de la relación |
-| C06 | Catálogo/búsqueda | Búsqueda gratuita aprobada; checkpoint de implementación preparado | Oferta publicable, taxonomía/cobertura/filtros/ranking e invalidación pública |
+| C06 | Catálogo/búsqueda | Directorio aprobado; API local con fuente real cerrada503, pruebas sintéticas | Adapter C03 vigente y UI/recorrido reales; filtros adicionales requieren decisión propia |
 | C07 | Agenda/reserva/consulta | Checkpoint preparado para decisión | Disponibilidad compartida sin fuga, zona horaria, aceptación y cambios/ausencias |
 | C08 | Pagos/reembolsos | Diseño propuesto | Quién cobra/contrata, proveedor, momento, conciliación y excepciones |
 | C09 | Documentos básicos | Diseño propuesto; sin IA documental | Propiedad/acceso, storage, límites, cuarentena, eliminación y restore |
@@ -110,7 +111,8 @@ pueda usar. No fija fechas ni ratifica el alcance de una primera entrega públic
    acompañan estos trabajos; no esperar al final para pensar en seguridad/operación.
 2. **Marketplace elegido por Arturo**: catálogo → búsqueda → solicitud a un
    profesional. Concretar el corte C06/C04 sobre publicación voluntaria C03;
-   priorización aprobada el2026-10-16, contratos/modelo/retención aún propuestos.
+   priorización aprobada el2026-10-16 y directorio/flujo aprobados el2026-10-17;
+   retención/modelo físico C04 y operación real aún pendientes.
    No exige reserva ni pago para completar este recorrido.
 3. **Atención y coordinación posterior**: C05 para acuerdo y seguimiento, C07
    para reservas, mediante sus checkpoints. La solicitud inicial no acepta servicios
@@ -164,10 +166,14 @@ controla índice/decisiones/configuración y realiza commit/push revisados.
 [Integración y órdenes siguientes](operations/legalia-planning-remaining-2026-10-16.md).
 El [corte marketplace prioritario](checkpoints/marketplace-first-slice.md) reúne
 las propuestas concretas de UX, contrato y dependencias de la siguiente tanda.
-Su prioridad está aprobada; sus nuevas reglas permanecen Proposed.
+Directorio y flujo aprobados el2026-10-17; retención jurídica aún pendiente.
+Tanda local: dominio de revisión/publicación C03, API pública del directorio con
+fuente real todavía cerrada y revisión independiente, sin SQL C04 ni nuevos servicios.
 Una tarea de implementación deberá especificar archivos/contrato/dependencias,
 checkpoint aprobado, criterios verificables y revisor independiente. A3 es el único
-escritor de migraciones. La siguiente tanda se reparte por capacidad aprobada,
+escritor de migraciones. El [incremento actual](operations/legalia-c03-marketplace-increment-2026-10-17.md)
+detalla714 pruebas locales y las piezas C03/C04 que aún faltan.
+La siguiente tanda se reparte por capacidad aprobada,
 no por una lista libre de pantallas, tablas o endpoints.
 
 ## Sesiones de decisión

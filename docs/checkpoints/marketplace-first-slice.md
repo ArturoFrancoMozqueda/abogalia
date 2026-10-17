@@ -1,6 +1,7 @@
 # Checkpoint — Primer recorrido marketplace de Legalia
 
-Fecha2026-10-16. **Prioridad Approved; reglas nuevas Proposed / Requires Arturo.**
+Fecha2026-10-16. Actualizado2026-10-17. **Directorio y flujo Approved por Arturo;
+retención jurídica y habilitación real pendientes.**
 Referencia común `7b88b4e`; A0 integra, tres agentes preparan contratos y revisión.
 
 ## Lo que entiendo
@@ -28,7 +29,8 @@ posteriores y no transforma toda la visión marketplace en alcance aprobado.
 
 ## Decisiones pendientes
 
-Paquetes para revisar con Arturo; ninguno se da por aceptado por priorizar:
+Arturo aprobó expresamente los paquetes1 y2 el2026-10-17. El paquete3 no está
+aprobado; la aprobación del flujo no fija su retención ni autoriza sus tablas.
 
 1. **Directorio inicial:** campos públicos C03, búsqueda por nombre/ámbito declarado,
    orden alfabético estable y consulta máxima80 caracteres; sin patrocinio ni
@@ -56,7 +58,8 @@ El [flujo UX](../ux/marketplace-first-flow.md) concreta pantallas y campos.
 El [contrato API](../contracts/marketplace-first-api.md) delimita proyección pública,
 comandos privados, versiones y errores. La [matriz de preparación](../operations/marketplace-first-readiness.md)
 identifica código existente, dependencias y tareas locales ya autorizadas C03.
-Los números y endpoints de esos documentos son propuestas, no cambios desplegados.
+Los parámetros del directorio y del flujo aprobados rigen la implementación local;
+los documentos no acreditan endpoints desplegados o persistencia jurídica autorizada.
 
 Secuencia: completar habilitación/publicación C03 con negativos; entregar catálogo
 y búsqueda sobre proyección vigente; añadir solicitud C04 tras aprobar su modelo,
@@ -98,7 +101,8 @@ jurídica ni garantiza que un profesional acepte.
 1. Integrar contratos y revisión independiente de esta tanda documental.
 2. Continuar C03 local en el alcance ya aprobado, mediante órdenes con archivos
    exclusivos y criterios de la matriz; mantener gates de operación real.
-3. Aprobar reglas nuevas del corte y la política C04 antes de su persistencia.
+3. Resolver la política C04/modelo/matriz antes de su persistencia. Directorio y
+   flujo ya aprobados; no volver a preguntarlos.
 4. Un único responsable de migraciones; API/web en archivos separados y revisión
    independiente. Probar aislamiento, autoaprobación, retirada concurrente,
    repetición de envío, cambios de versión, errores y restauración.

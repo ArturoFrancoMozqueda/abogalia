@@ -46,6 +46,10 @@ El [plan vigente por agentes](docs/27_development_plan_agents.md) cubre C00–C1
 con estado real, dependencias, checkpoints, tareas y sesiones de decisión.
 [Integración del planning restante](docs/operations/legalia-planning-remaining-2026-10-16.md).
 Los diseños pendientes no son funciones disponibles ni autorización para usar datos reales.
+[Incremento C03/directorio2026-10-17](docs/operations/legalia-c03-marketplace-increment-2026-10-17.md):
+dominio de revisión/publicación y API de directorio implementados localmente; fuente
+real aún cerrada (503), sin perfiles publicados ni solicitudes persistidas.
+[Decisiones de retención pendientes](docs/operations/marketplace-retention-decision.md).
 
 ## Desarrollo local
 
