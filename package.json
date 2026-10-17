@@ -1,0 +1,21 @@
+{
+  "name": "abogalia",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter @abogalia/web dev",
+    "build": "pnpm --filter @abogalia/web build",
+    "typecheck": "pnpm --filter @abogalia/web typecheck",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "check:worker": "node scripts/check_worker.mjs",
+    "types:worker": "node scripts/check_worker.mjs --update-types",
+    "check": "pnpm lint && pnpm typecheck && pnpm check:worker && pnpm build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15"
+  }
+}

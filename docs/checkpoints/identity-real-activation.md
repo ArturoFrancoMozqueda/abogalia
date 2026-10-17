@@ -1,0 +1,216 @@
+# Checkpoint — Activación real de Identity C02
+
+## Estado vigente — 2026-10-16
+
+Registro y acceso están habilitados en la web pública de Legalia por las
+instrucciones posteriores de Arturo y el despliegue autorizado del2026-10-15.
+[Hosting y evidencia](../operations/service-registry.md). La configuración necesaria
+ya se preparó y la conexión runtime/TLS/RLS se verificó; no pedir copiar de nuevo
+publishable, DSN o credenciales, ni leer sus valores.
+C02 sigue pendiente de aceptación real de correo/OTP/MFA/revocación y operación de
+retención/retiro Auth/restauración. El remitente sin dominio conserva sus restricciones.
+No se crea una cuenta ni envía correo en esta actualización documental.
+
+El relato de activación local y los estados anteriores siguientes se conservan
+como evidencia histórica. Sus flags0, ausencia de hosting o condición de esperar
+antes de activar no describen el despliegue público vigente ni reabren aprobaciones.
+
+
+## Activación local por instrucción expresa — 2026-10-15
+
+Arturo indicó «No importa que habilites el acceso general ya hazlo». Esta instrucción
+posterior permite activar ahora registro/acceso/correo en la UI local con Supabase
+real, antes de completar la aceptación remota. Se activaron los dos flags privados
+Identity/email y se arrancaron API8090 y web5190 ligados a127.0.0.1. El nombre
+legado AUTH_EMAIL_READY expresa aquí habilitación solicitada, no entrega probada.
+Las condiciones históricas de esperar esa prueba antes de activar quedan
+sustituidas solo para esta operación local. C02 no está operativamente cerrado.
+
+Se mantienen validación activa de sesión, confirmación de correo, MFA profesional,
+CSRF, custodia cifrada, TLS y permisos/RLS. No se cambian grants o configuración
+del proveedor ni se publica un despliegue. El remitente del proveedor mantiene sus
+restricciones de destinatario; activar UI no elimina esa restricción.
+
+Comprobación ejecutada por HTTP local: página /registro200, bootstrapCSRF200 con
+origen correcto, sesión anónima200, mutación sinCSRF403 y formulario vacío con
+CSRF422. Sin envíos de correo ni creación de cuenta en esta comprobación. Entrega,
+OTP/MFA, revocación real, retención periódica y migración C03 remota pendientes.
+Launcher corregido para cargar src antes de validar configuración activada;
+regresión en shell sinPYTHONPATH pasa. Integración533 pruebas pasan y revisión
+independiente A2 sin bloqueantes. Los estados desactivados siguientes son históricos.
+
+## Estado histórico previo a la activación — 2026-10-15
+
+Este apartado conserva la preparación previa y no prevalece sobre la activación
+posterior registrada arriba. D-036/D-038/D-039 y las decisiones posteriores
+siguen aprobadas dentro de su alcance; no requieren nueva aprobación por
+aparecer como Proposed en los antecedentes. **C02 no está operativamente cerrado**.
+
+| Control | Estado actual |
+|---|---|
+| Destino | Legalia `spohytnxscljtitvmdab`; el proyecto anterior es solo antecedente y Kova queda fuera de alcance |
+| Base privada y runtime | Roles/esquema Identity aplicados. Credencial/contraseña runtime y conexión privada DB configuradas y verificadas; TLS `verify-full` verificado |
+| Material de configuración | Publishable y claves necesarias presentes y validadas privadamente por el coordinador; sin reproducir valores, direcciones personales o archivos privados |
+| Activación | `ABOGALIA_IDENTITY_ENABLED=0` y `ABOGALIA_AUTH_EMAIL_READY=0`; ambos gates siguen cerrados |
+| Sesiones | Validación activa HTTP D-039 implementada; prueba de revocación real pendiente. No DSN probe SQL Auth requerido ni fallback JWT local |
+| Correo | SMTP y plantillas guardados; entrega real, OTP y su recorrido con el proveedor pendientes. No hay evidencia de éxito por tener configuración guardada |
+| MFA | Implementación local disponible; recorrido MFA real pendiente |
+| C03 relacionado | Perfil privado/práctica inactiva con API, SQL y web implementados localmente. Migración remota C03 no aplicada; no habilitación profesional o permisos reales |
+| Retención y retirada | Ejecución periódica pendiente; plazos aprobados no acreditan purga ejecutada ni retirada confirmada en Auth |
+
+La configuración privada anterior ya no es un bloqueo pendiente de introducción
+por Arturo. Lo que resta es demostrar los recorridos y negativos reales antes de
+activar los gates, sin saltar validación HTTP, CSRF, MFA, aislamiento o custodia.
+La implementación HTTP sustituye la propuesta histórica de probe SQL; no solicitar
+privilegios sobre `auth.sessions` para este mecanismo ni credenciales amplias.
+
+El coordinador comunicó las verificaciones privadas de DB/TLS/configuración;
+esta actualización es documental y no vuelve a leer secretos ni conecta al
+proveedor. La navegación anónima local `/profesional` → `/acceso` con Identity
+apagada acredita ese control de acceso, no un login positivo real. Las pruebas
+locales con transporte Auth simulado se distinguen de las pruebas del proveedor.
+
+La operación real conserva el buzón controlado y los límites de ensayo aprobados,
+sin dirección personal en el repositorio ni envío general a terceros. D-041 aprueba
+los detalles de invitaciones internas, revisor y relevo C03; no concede capacidades
+reales ni define por sí sola un procedimiento de cotejo profesional. Mantener
+**LEGAL REVIEW REQUIRED**, sin ampliar tratamiento jurídico, hosting o gasto.
+
+Criterio de cierre pendiente: evidencia de entrega/OTP, MFA y revocación con el
+proveedor real; operación de retención/retirada y sus fallos verificada. No convertir
+readiness/configuración en Done. El borrado físico, el retiro Auth y la aplicación
+remota de C03 deben registrar su propia evidencia antes de declararse ejecutados.
+
+## Antecedentes del checkpoint
+
+## Actualización vigente D-038: Legalia
+
+Arturo aprobó el nuevo destino `spohytnxscljtitvmdab`, organización
+`tagovxtvdicxjweeerwi`, y pidió instalar lo ya aprobado. Owner/runtime y esquema
+privado están implementados y verificados por once controles de catálogo. Auth
+JWT900/OTP600/6d y origen local guardados. Probe y SMTP/credenciales aún bloquean
+activación. [Evidencia vigente](../operations/legalia-supabase-setup.md).
+Los destinos y términos piloto siguientes son históricos; no son configuración
+vigente ni autorización para modificar el proyecto anterior. El producto se llama
+Legalia; no se eliminaron controles de seguridad por el cambio de nombre.
+
+Fecha: 2026-10-12. Estado: Proposed / Awaiting decision para la operación remota.
+Base local revisada: `720c1cf`, rama `codex/identity-design`. La petición de Arturo
+ordena avanzar con Supabase real, correo y retención y presentar decisiones;
+no resuelve proveedores, remitente, gasto, permisos operativos nuevos ni hosting.
+
+## Aprobación operativa vigente
+
+Arturo aprobó los tres paquetes y parámetros recomendados (D-036). Activación en
+proyecto existente, Resend SMTP Free, OTP600s/pausa60s/máximo6 mensajes de ensayo
+y tratamiento documentado quedan Approved; falta ejecución/verificación. Arturo
+es responsable de cierre/retiro Auth y fallos de retención. Se conservan los límites
+de permisos mínimos, sin hosting nuevo ni borrado sin evidencia. Los apartados
+Proposed siguientes describen preparación anterior; no reabren estas aprobaciones.
+La elección del mecanismo técnico de retirada/mantenimiento no admite credenciales
+amplias en runtime ni una lista de UUIDs como prueba. D-037 pide env privado y push
+revisado de fuentes; nunca valores privados en Git.
+
+## Lo que entiendo
+
+C02 tiene UX/API y sesiones persistentes verificadas localmente. Falta recorrer
+registro, confirmación, acceso, recuperación, MFA y revocación con el proveedor
+real y un buzón controlado, sin clientes reales ni publicar credenciales.
+El piloto recomendado mantiene web/API locales y usa el proyecto Supabase
+existente de Abogalia. Supabase/correo real no equivale a publicar el producto.
+
+## Decisiones tomadas
+
+- D-028: Supabase Auth. Proyecto `xggefantvuwpilksfdoy`, organización
+  `jdmkzzkgnzwldthjqtgx`, Free/us-east-1, propios de Abogalia.
+- D-031: correo/contraseña confirmado, custodia API/cookie opaca, JWT de 15 minutos,
+  MFA TOTP y límites propios de 12 h/30 min. Sin roles por metadata.
+- D-032: cuenta/evidencia mínima de membresía 30 días; auditoría 90 días.
+- D-027: administración posprojectsupport, recursos y credenciales por producto.
+- El 2026-10-12 el conector confirmó proyecto/organización y ACTIVE_HEALTHY.
+  JWKS público respondió con una clave ES256. No se probaron login o correo real.
+
+## Decisiones pendientes
+
+1. **Piloto y datos:** D-035 aprueba frontend/API locales con Supabase real; propongo
+   PostgreSQL del proyecto existente para el esquema privado Identity; sin crear
+   otra base alojada ni hosting. Solo identidad sintética de Arturo, sin clientes.
+   La aprobación local no selecciona ni publica hosting.
+2. **Correo:** D-034 aprueba Resend SMTP Free sin overages automáticos. Arturo
+   informó que no existe dominio; evaluar remitente de ensayo de Resend limitado
+   al buzón de la cuenta. Arturo indicó su buzón privadamente; falta verificar
+   asociación/configuración. Dominio/subdominio y
+   From definitivo, tratamiento SMTP y cuota/TTL OTP siguen pendientes.
+3. **Operación remota concreta:** revisar y autorizar creación de roles mínimos,
+   aplicación de `apps/api/migrations/001_identity.sql` y permisos probe limitados
+   a `auth.sessions(id,user_id)`; sin acceso browser/Data API, BYPASSRLS o service_role.
+   Antes de ejecutar hay que comprobar privilegios del operador y propiedad actual;
+   no elevarlos por un error. La migración local probada no es prueba remota.
+4. **Retirada y retención:** quién tramita cierre/retirada Auth, prueba confiable de
+   retirada, responsable del job y alerta de fallos; consultar checkpoint de retención.
+   No volver a decidir 30/90 ni añadir retención jurídica.
+
+## Diseño propuesto
+
+Secuencia: decisiones → revisión de catálogo sin filas de usuario → preparación de
+roles/DSN desde mecanismo privado del operador → esquema privado probado → Auth
+configurado → SMTP/DNS y plantillas OTP → preflight → recorrido real controlado.
+Todo cambio remoto debe limitarse a los destinos y artefactos revisados.
+
+Auth: confirmar correo; mantener desactivados métodos no aprobados; verificar JWT
+900 s mediante configuración sin abrir pantallas de claves. Habilitar TOTP según
+contrato; recuperación/unenroll MFA permanecen cerrados. Códigos de seis dígitos en
+cuerpo de formulario; nada de enlaces con tokens o redirecciones con credenciales.
+TTL de OTP, cuotas y password policy se revisan con el checkpoint de correo.
+
+La API usa DSN runtime mínimo y otro DSN probe; las credenciales y claves de
+cifrado/CSRF se inyectan fuera de Git. Un operador configura credenciales sin
+pasarlas al chat, herramientas con salida visible o argumentos de comandos.
+No se pide al agente leer archivos dotenv ni claves existentes.
+
+## Datos afectados
+
+Piloto: identificador Auth, email del buzón controlado, sesiones cifradas y eventos
+mínimos de acceso. Supabase Auth y SMTP procesan datos de autenticación; no reciben
+información jurídica. No existen membresías o perfiles profesionales en esta tanda.
+Datos y correo del proveedor tienen sus propios contratos/retención; 30/90 de
+Abogalia no afirma que se hayan cambiado políticas del proveedor o de backups.
+
+## Seguridad
+
+Bloquear acceso si configuración/grants/probe/JWT/correo no están verificados.
+No registrar cuerpos, tokens, códigos, cookies ni cabeceras privadas. No abrir
+pantallas de claves; no contar usuarios o leer sesiones reales para diagnosticar.
+La revisión de catálogo solicitada mediante el conector no produjo una evidencia
+interpretable; su resultado se deja no confirmado y no se infieren grants ausentes.
+No continuar con privilegios amplios ni desactivar RLS por este límite.
+
+Solo buzón controlado con autorización de envío explícita y cupo de prueba
+acordado. No avisos a terceros o clientes. LEGAL REVIEW REQUIRED antes de piloto
+con personas/datos reales; el ensayo sintético no acredita cumplimiento legal.
+
+## Impacto futuro
+
+El piloto valida C02 sin seleccionar hosting. Un despliegue HTTPS deberá verificar
+Secure/__Host, mismo origen y protección de caché. Job remoto, cierre de cuentas,
+verificación profesional y contenido jurídico conservan sus propios contratos.
+No declarar C02 Done mientras falten operación/retención y negativos del proveedor.
+
+## Implementación propuesta
+
+A4 entrega preflight seguro y pruebas; A5 entrega plantillas y contrato de correo;
+A2 entrega dry-run/purga local y contrato operativo; A0 integra, mantiene migración
+única y registra decisiones. El trabajo parte del commit común local; archivos
+exclusivos en el checkout coordinador, sin copiar secretos o alterar cambios ajenos.
+
+Entrega revisable: [correo](identity-email-operations.md),
+[retención](identity-retention-operations.md),
+[preflight](../operations/identity-real-readiness.md).
+No se ha contratado SMTP, cambiado DNS/Auth, aplicado grants/migración remota,
+creado usuario real, enviado correo o programado tarea de producción.
+
+Fuentes verificadas: [sesiones Supabase](https://supabase.com/docs/guides/auth/sessions),
+[SMTP Supabase](https://supabase.com/docs/guides/auth/auth-smtp),
+[plantillas](https://supabase.com/docs/guides/auth/auth-email-templates),
+[SMTP Resend](https://resend.com/docs/send-with-smtp),
+[planes](https://resend.com/pricing).

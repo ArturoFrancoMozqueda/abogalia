@@ -2,9 +2,13 @@
 
 ## Propósito
 
-Este documento no define un stack final.
+React para frontend y FastAPI como backend están aprobados en D-025 y [ADR-001](decisions/ADR-001-react-fastapi.md). Este documento conserva preguntas de la arquitectura completa; no constituye aprobación de proveedores, identidad o datos.
 
 La arquitectura técnica se decidirá mediante sesiones de diseño, pruebas de concepto y Architecture Decision Records.
+
+La recomendación concreta actual está en [checkpoint de suite inicial pequeña](checkpoints/platform-foundation-low-cost.md): React en Cloudflare Free, una API FastAPI pequeña en Fly y Supabase/Resend Free en recursos propios; Vercel y Render se conservan como alternativas. Estado de servicios Discussing, D-026; la selección de React + FastAPI está Approved. La [comparación actualizada](26_services_and_tiers.md) distingue cuotas de hosting y consumo. No hay implementación. La propuesta previa de backend TypeScript integrado en Workers queda como alternativa.
+
+La comparación debe incorporar las lecciones verificadas de Kova solicitadas por Arturo: [evidencia, opciones y orden de preparación](25_kova_lessons_and_setup_order.md). Su arquitectura es React/Vite + FastAPI + Supabase PostgreSQL, con autenticación propia; no se asume Supabase Auth. La experiencia de Kova informa la decisión, pero no aprueba copiar sus proveedores o contratar recursos. Los dos flujos de IA y React + FastAPI están aprobados; identidad, datos y servicios siguen pendientes.
 
 ## Principios
 
