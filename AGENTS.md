@@ -38,6 +38,14 @@ Hosting, presupuesto, pagos, modelo de tenants y proveedor de IA siguen pendient
 - Kova queda fuera del alcance: no leer sus secretos o datos, modificar sus recursos
   ni reutilizar sus credenciales. Confirmar producto, entorno y destino antes de
   cualquier operación externa; un conector autenticado no autoriza una mutación.
+- Antes de toda mutación externa, comprobar cuenta/organización, proyecto/app y
+  entorno contra el destino vigente de Legalia en docs/operations/service-registry.md.
+  Cloudflare: cuenta 68d5920648c2f57c6ab47e87a07de308 / Worker legalia-web;
+  Fly: organización propia de Legalia / app legalia-api; Supabase: proyecto
+  spohytnxscljtitvmdab; Resend: cuenta propia de Legalia. No usar el perfil CLI
+  predeterminado sin verificar destino. Si falta comprobación o hay discrepancia,
+  detener esa operación y continuar solo trabajo local independiente. Nunca hacer
+  cambios en cuentas, proyectos, Workers, zonas o cualquier entorno de Kova.
 - Ante posible exposición: detener publicación y la operación afectada, informar
   solo proveedor/variable/ubicación y coordinar revocación o rotación mediante el
   responsable autorizado. Nunca repetir el valor, ni siquiera parcialmente.

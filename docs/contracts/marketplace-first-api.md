@@ -1,5 +1,13 @@
 # Contrato propuesto — Catálogo → búsqueda → solicitud a profesional
 
+Actualización2026-10-17: Arturo aprobó expresamente el directorio y el flujo
+propuestos. Campos públicos/contexto, búsqueda80, paginación20/máximo50, relato2000,
+borrador en memoria, solicitante confirmado sin MFA profesional obligatorio y
+respuesta estandarizada quedan aprobados. La retención jurídica/tablaC04 y
+operación real C02/C03 siguen pendientes; referencias de aprobación futura en la
+propuesta original se leen subordinadas a esta actualización.
+
+
 Fecha: 2026-10-16. Baseline de inspección: `7b88b4e`, rama `codex/identity-design`.
 **Proposed; requiere checkpoint y parámetros aprobados antes de código/tablas.**
 Arturo eligió este recorrido inicial. La elección no aprueba taxonomía, publicación,

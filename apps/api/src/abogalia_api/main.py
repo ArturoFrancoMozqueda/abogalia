@@ -8,6 +8,8 @@ from abogalia_api.identity.config import Settings
 from abogalia_api.identity.logging import configure_identity_logging
 from abogalia_api.identity.runtime import load_runtime
 from abogalia_api.identity.service import AuthError, IdentityService
+from abogalia_api.marketplace.directory import DirectoryService
+from abogalia_api.marketplace.router import router as directory_router
 from abogalia_api.professional_contexts.router import router as professional_router
 from abogalia_api.professional_contexts.service import ProfessionalService
 from abogalia_api.routes.auth import clear_cookies
@@ -15,7 +17,9 @@ from abogalia_api.routes.auth import router as auth_router
 from abogalia_api.routes.health import router as health_router
 
 
-def create_app(settings=None, store=None, probe=None, provider=None, clock=None) -> FastAPI:
+def create_app(
+    settings=None, store=None, probe=None, provider=None, clock=None, *, directory_source=None
+) -> FastAPI:
     configure_identity_logging()
     app = FastAPI(title="Abogalia API", version="0.1.0")
     if all(value is None for value in (settings, store, probe, provider, clock)):
@@ -23,9 +27,12 @@ def create_app(settings=None, store=None, probe=None, provider=None, clock=None)
     settings = settings or Settings()
     app.state.identity = IdentityService(settings, store, probe, provider, clock)
     app.state.professional = ProfessionalService(app.state.identity)
+    # No runtime source until C03 persistence and trust activation are reviewed.
+    app.state.directory = DirectoryService(source=directory_source)
     app.include_router(health_router)
     app.include_router(auth_router)
     app.include_router(professional_router)
+    app.include_router(directory_router)
 
     def error_response(error):
         response = JSONResponse(error.body(), status_code=error.status)
@@ -45,6 +52,10 @@ def create_app(settings=None, store=None, probe=None, provider=None, clock=None)
 
     @app.exception_handler(StarletteHTTPException)
     async def http_error(request: Request, exc: StarletteHTTPException):
+        if request.url.path.startswith("/api/public/professionals"):
+            code = "RESOURCE_UNAVAILABLE" if exc.status_code == 404 else "REQUEST_FORBIDDEN"
+            status = 404 if exc.status_code == 404 else 403
+            return error_response(AuthError(status, code))
         if request.url.path.startswith(("/api/auth", "/api/professional")):
             return error_response(AuthError(403, "REQUEST_FORBIDDEN"))
         return JSONResponse({"detail": "Not found"}, status_code=exc.status_code)

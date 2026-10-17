@@ -1,5 +1,13 @@
 # Primer flujo marketplace — Catálogo → búsqueda → solicitud dirigida
 
+Actualización2026-10-17: Arturo aprobó expresamente el directorio y el flujo
+propuestos. Campos públicos/contexto, búsqueda80, paginación20/máximo50, relato2000,
+borrador en memoria, solicitante confirmado sin MFA profesional obligatorio y
+respuesta estandarizada quedan aprobados. La retención jurídica/tablaC04 y
+operación real C02/C03 siguen pendientes; referencias de aprobación futura en la
+propuesta original se leen subordinadas a esta actualización.
+
+
 Fecha: 2026-10-16. Referencia común `7b88b4e`; rama `codex/identity-design`.
 Orden A1: este archivo exclusivamente, revisión A0/A2. **Propuesta UX verificable**;
 no modifica checkpoints ni convierte nuevos datos/permisos en decisiones aprobadas.

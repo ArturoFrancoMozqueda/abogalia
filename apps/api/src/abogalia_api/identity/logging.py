@@ -11,7 +11,15 @@ class AuthAccessFilter(logging.Filter):
             line = record.args[2]
             if isinstance(line, str):
                 decoded = unquote(line)
-                if any(prefix in decoded for prefix in ("/api/auth", "/api/professional")):
+                if any(
+                    prefix in decoded
+                    for prefix in (
+                        "/api/auth",
+                        "/api/professional",
+                        "/api/public/professionals",
+                        "/api/legal-requests",
+                    )
+                ):
                     return False
         return True
 
